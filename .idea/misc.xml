@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_14" project-jdk-name="14" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/out" />
+  </component>
+  <component name="SbtLocalSettings">
+    <option name="modificationStamps">
+      <map>
+        <entry key="$USER_HOME$/IdeaProjects/Simple-Spark-App" value="1486079110138" />
+        <entry key="$USER_HOME$/IdeaProjects/hello" value="1455836381608" />
+        <entry key="$USER_HOME$/IdeaProjects/play-grammars" value="1457551052651" />
+        <entry key="$USER_HOME$/IdeaProjects/products" value="1455912188017" />
+        <entry key="$USER_HOME$/play-scala-intro" value="1455307704380" />
+        <entry key="$USER_HOME$/reactive-stocks" value="1455631339167" />
+      </map>
+    </option>
+    <option name="externalProjectsViewState">
+      <projects_view />
+    </option>
+  </component>
+</project>
