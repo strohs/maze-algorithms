@@ -5,10 +5,11 @@ use std::ops::{Index, IndexMut};
 use std::collections::hash_map::Keys;
 
 
-/// holds distances between cells of a grid.
-/// Distances is essentially a wrapper over a HashMap
+/// holds distances information from the root cell, to every other cell in the grid.
 #[derive(Debug)]
 pub struct Distances {
+    // Distances is essentially a wrapper over a HashMap
+
     // root is the starting position in the grid
     root: Pos,
     // stores the 'distance' from the cell at the given Pos, to the root cell.
@@ -24,6 +25,10 @@ impl Distances {
             root,
             cells,
         }
+    }
+
+    pub fn get(&self, pos: &Pos) -> Option<&u32> {
+        self.cells.get(pos)
     }
 
     /// insert the cell position and distance

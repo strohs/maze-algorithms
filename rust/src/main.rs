@@ -7,6 +7,7 @@ mod position;
 use crate::generator::{binary_tree, sidewinder};
 use crate::grid::Grid;
 use std::env;
+use crate::position::Pos;
 
 /// use this to configure the maze dimensions and launch the maze generation algorithm(s)
 /// To run from the command line:  `cargo run <width> <height>`
@@ -24,12 +25,13 @@ fn main() {
 
     // generate a maze using binary tree algorithm
     println!("binary tree {} {}", &width, &height);
-    let grid = binary_tree::generate(height, width);
+    let mut grid = binary_tree::generate(height, width);
     println!("{}", &grid);
 
-    println!("sidewinder {} {}", &width, &height);
-    let grid = sidewinder::generate(height, width);
-    println!("{}", &grid);
+
+    // println!("sidewinder {} {}", &width, &height);
+    // let grid = sidewinder::generate(height, width);
+    // println!("{}", &grid);
 
     // // binary tree
     // let maze = binary_tree::generate(width, height);

@@ -9,11 +9,8 @@ use std::slice::{ChunksExact, ChunksExactMut, Iter, IterMut};
 use std::path::Path;
 use std::fs::File;
 use std::io::BufWriter;
+use crate::solver::distances::Distances;
 
-// /// A one-way link (from --> to) between two positions in the Grid
-// /// Link.0 is the "from" cell, Link.1 is the "to" cell
-// #[derive(Debug, Copy, Clone, Eq, PartialEq, Hash)]
-// struct Link(Pos, Pos);
 
 /// Grid represents a two-dimensional grid of `GridCell`s.
 /// It also contains a hashmap of "links", or passages, between cells. If two cells are linked,
@@ -31,6 +28,7 @@ pub struct Grid {
 }
 
 impl Grid {
+    
     /// returns a grid with capacity for rows * cols  GridCells
     pub fn new(rows: usize, cols: usize) -> Self {
         let cells = Grid::build_grid_cells(rows, cols);
@@ -205,6 +203,35 @@ impl Grid {
             }
         }
         grid
+    }
+
+    /// find the distances from the `root` (cell Pos) to all other cells in the `grid`
+    pub fn distances(&self, root: Pos) -> Distances {
+        let mut distances = Distances::new(root);
+        let mut frontier = vec![root];
+
+        let mut new_frontier = vec![];
+        while !frontier.is_empty() {
+
+
+            for cur_pos in frontier.pop() {
+                // if the current cells has links to other cells...
+                if let Some(linked_cells) = self.links(&cur_pos) {
+                    // for each linked cell...
+                    for linked_pos in linked_cells {
+                        // only visit cells that have not already been visited
+                        if distances.get(linked_pos).is_none() {
+                            // the linked cells distance is 1 + the previous cell's distance
+                            distances.insert(*linked_pos, distances[cur_pos] + 1);
+                            new_frontier.push(*linked_pos);
+                        }
+                    }
+                }
+            }
+            frontier.append(&mut new_frontier);
+        }
+
+        distances
     }
 }
 
@@ -388,4 +415,5 @@ mod tests {
         assert!(grid.links.contains_key(&from));
         assert!(grid.links.get(&from).unwrap().contains(&to2));
     }
+
 }
