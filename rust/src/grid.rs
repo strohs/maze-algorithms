@@ -1,16 +1,19 @@
 use crate::grid_cell::GridCell;
 use crate::position::Pos;
 use rand::{thread_rng, Rng};
-use std::collections::HashSet;
+use std::collections::{HashMap};
 use std::fmt::{Display, Formatter};
 use std::iter::Skip;
 use std::ops::{Index, IndexMut};
 use std::slice::{ChunksExact, ChunksExactMut, Iter, IterMut};
+use std::path::Path;
+use std::fs::File;
+use std::io::BufWriter;
 
-/// A one-way link (from --> to) between two positions in the Grid
-/// Link.0 is the "from" cell, Link.1 is the "to" cell
-#[derive(Debug, Copy, Clone, Eq, PartialEq, Hash)]
-struct Link(Pos, Pos);
+// /// A one-way link (from --> to) between two positions in the Grid
+// /// Link.0 is the "from" cell, Link.1 is the "to" cell
+// #[derive(Debug, Copy, Clone, Eq, PartialEq, Hash)]
+// struct Link(Pos, Pos);
 
 /// Grid represents a two-dimensional grid of `GridCell`s.
 /// It also contains a hashmap of "links", or passages, between cells. If two cells are linked,
@@ -24,7 +27,7 @@ pub struct Grid {
     // stores the cells of this grid in a 1-dimensional array
     grid: Vec<GridCell>,
     // stores the links (passages) between cells
-    links: HashSet<Link>,
+    links: HashMap<Pos, Vec<Pos>>,
 }
 
 impl Grid {
@@ -35,7 +38,7 @@ impl Grid {
             rows,
             cols,
             grid: cells,
-            links: HashSet::new(),
+            links: HashMap::new(),
         };
 
         grid
@@ -57,45 +60,62 @@ impl Grid {
     //     }
     // }
 
-    // /// creates a uni-directional link between `from` cell and `to` cell. If the
-    // /// `bidi` (bi-directional) parameter is true, then another link is created from the
-    // /// `to` cell to the `from` cell.
-    // pub fn link(&mut self, from: &GridCell, to: &GridCell, bidi: bool) {
-    //     self.links.insert(Link(from.pos(), to.pos()));
-    //     if bidi {
-    //         self.links.insert(Link(to.pos(), from.pos()));
-    //     }
-    // }
 
-    // pub fn link_by_pos(&mut self, from: Pos, to: Pos, bidi: bool) {
-    //     self.links.insert(Link(from, to));
-    //     if bidi {
-    //         self.links.insert(Link(to, from));
-    //     }
-    // }
+    /// links (carves a passage between) `from` to `to`. If bidi (bidirectional) is `true` than
+    /// an additional link is created between `to` and `from`
+    pub fn link(&mut self, from: &Pos, to: &Pos, bidi: bool) {
+        self.link_by_pos(from, to);
+        if bidi {
+            self.link_by_pos(to, from);
+        }
+    }
 
     /// creates a uni-directional link between `from` cell and `to` cell. If the
     /// `bidi` (bi-directional) parameter is true, then another link is created from the
     /// `to` cell to the `from` cell.
-    pub fn link(&mut self, from: &Pos, to: &Pos, bidi: bool) {
-        self.links.insert(Link(*from, *to));
+    fn link_by_pos(&mut self, from: &Pos, to: &Pos) {
+        let links = self.links.entry(*from)
+            .or_insert(vec![]);
+        links.push(*to);
+    }
+
+    /// removes the link between `from` and `to`, if there is one. If `bidi` is `true`,
+    /// the link between `to` and `from` is removed as well, (assuming there is one). If the links
+    /// did not exist, then nothing happens
+    pub fn unlink(&mut self, from: &Pos, to: &Pos, bidi: bool) {
+        self.unlink_by_pos(from, to);
         if bidi {
-            self.links.insert(Link(*to, *from));
+            self.unlink_by_pos(to, from);
         }
     }
 
     /// remove the link between `from` cell and `to` cell. If `bidi` (bi-directional) is true,
     /// then the link between `to` and `from` is removed.
-    pub fn unlink(&mut self, from: &Pos, to: &Pos, bidi: bool) {
-        self.links.remove(&Link(*from, *to));
-        if bidi {
-            self.links.remove(&Link(*to, *from));
+    fn unlink_by_pos(&mut self, from: &Pos, to: &Pos) {
+        if let Some(to_links) = self.links.get_mut(from) {
+            // search for the to Pos index within from's vec of links
+            if let Some((to_idx, p)) = to_links.iter().enumerate().find(|&(i, p)| *p == *to) {
+                // remove the to_pos from the vec of links
+                to_links.remove(to_idx);
+                // if there are no more links that from is pointing to, then remove from from the HashMap
+                if to_links.is_empty() {
+                    self.links.remove(from);
+                }
+            }
         }
     }
 
-    /// returns `true` if there is a link between cells at the given positions
+    /// returns `true` if there is a link from `from`, to `to`
     pub fn has_link(&self, from: &Pos, to: &Pos) -> bool {
-        self.links.contains(&Link(*from, *to))
+        self.links
+            .get(from)
+            .map_or(false, |tos| tos.contains(to))
+    }
+
+
+    /// returns a borrowed Vector of `Pos`, that the given `pos` links to.
+    pub fn links(&self, pos: &Pos) -> Option<&Vec<Pos>> {
+        self.links.get(pos)
     }
 
     /// returns a reference to a random GridCell in this grid
@@ -130,10 +150,6 @@ impl Grid {
         pos.r * self.cols + pos.c
     }
 
-    /// converts a one-dimensional index into a two dimensional row,column index
-    // fn idx_2d(&self, idx: usize) -> Pos {
-    //     Pos::new(idx / self.cols, idx % self.cols)
-    // }
 
     /// returns Some(Pos) if the given position has a neighbor to the north, else None
     /// the returned position is the position of the North neighbor
@@ -209,20 +225,8 @@ impl IndexMut<Pos> for Grid {
     }
 }
 
-// /// allows indexing into this grid using [] syntax. I.e.  grid[[row, col]]
-// /// If the specified indices are out of bounds, `None` is returned
-// impl Index<[usize; 2]> for Grid {
-//     type Output = GridCell;
-//
-//     fn index(&self, rc_index: [usize; 2]) -> &Self::Output {
-//         let idx = self.idx1d(&Pos::new(rc_index[0], rc_index[1]));
-//         &self.grid[idx]
-//     }
-// }
 
-/// Prints the grid to STDOUT as ascii characters
-/// the grid is iterated cell by cell in row order. At each cell, we only check if an
-/// eastern wall and/or southern wall should be drawn.
+/// pretty prints the grid to standard out
 impl Display for Grid {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         // write the top wall of the grid
@@ -258,9 +262,11 @@ impl Display for Grid {
     }
 }
 
+
 #[cfg(test)]
 mod tests {
     use crate::grid::{Grid, Pos};
+    use std::path::Path;
 
     #[test]
     fn should_create_new_grid() {
@@ -309,12 +315,6 @@ mod tests {
     }
 
     #[test]
-    fn can_index_into_grid_with_brackets() {
-        let grid = Grid::new(3, 3);
-        assert_eq!(grid[[1, 1]].pos(), Pos::new(1, 1));
-    }
-
-    #[test]
     fn grid_size_is_15() {
         let grid = Grid::new(3, 5);
         assert_eq!(grid.size(), 15);
@@ -326,5 +326,66 @@ mod tests {
         let ri = grid.row_iter();
         // should return three total rows
         assert_eq!(ri.len(), 3);
+    }
+
+    #[test]
+    fn should_bidi_link_one_from_pos_to_one_to_pos() {
+        let mut grid = Grid::new(3, 3);
+        let from = Pos::new(0, 0);
+        let to = Pos::new(0, 1);
+        grid.link(&from, &to, true);
+        assert!(grid.links.contains_key(&from));
+        assert!(grid.links.get(&from).unwrap().contains(&to));
+        assert!(grid.links.contains_key(&to));
+        assert!(grid.links.get(&to).unwrap().contains(&from));
+    }
+
+    #[test]
+    fn should_bidi_link_one_from_position_to_two_to_positions() {
+        let mut grid = Grid::new(3, 3);
+        let from = Pos::new(0, 0);
+        let to1 = Pos::new(0, 1);
+        let to2 = Pos::new(1, 0);
+        grid.link(&from, &to1, true);
+        grid.link(&from, &to2, true);
+        assert!(grid.links.contains_key(&from));
+        assert!(grid.links.get(&from).unwrap().contains(&to1));
+        assert!(grid.links.get(&from).unwrap().contains(&to2));
+        assert!(grid.links.contains_key(&to1));
+        assert!(grid.links.get(&to1).unwrap().contains(&from));
+        assert!(grid.links.get(&to2).unwrap().contains(&from));
+    }
+
+    #[test]
+    fn should_unlink_one_to_one() {
+        let mut grid = Grid::new(3, 3);
+        let from = Pos::new(0, 0);
+        let to = Pos::new(0, 1);
+        grid.link(&from, &to, true);
+        assert!(grid.links.contains_key(&from));
+        assert!(grid.links.get(&from).unwrap().contains(&to));
+        assert!(grid.links.contains_key(&to));
+        assert!(grid.links.get(&to).unwrap().contains(&from));
+        grid.unlink(&from, &to, true);
+        assert_eq!(grid.links.contains_key(&from), false);
+        assert_eq!(grid.links.contains_key(&to), false);
+    }
+
+
+    #[test]
+    fn should_unlink_a_pos_containing_two_pos() {
+        let mut grid = Grid::new(3, 3);
+        let from = Pos::new(0, 0);
+        let to1 = Pos::new(0, 1);
+        let to2 = Pos::new(1, 0);
+        grid.link(&from, &to1, true);
+        grid.link(&from, &to2, true);
+        assert!(grid.links.contains_key(&from));
+        assert!(grid.links.get(&from).unwrap().contains(&to1));
+        assert!(grid.links.get(&from).unwrap().contains(&to2));
+        grid.unlink(&from, &to1, true);
+        // the grid should still contain a link from `from` to `to2`
+        assert!(grid.links.contains_key(&from));
+        assert!(grid.links.get(&from).unwrap().contains(&to2));
     }
 }

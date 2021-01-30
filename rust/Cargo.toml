@@ -8,6 +8,9 @@ edition = "2018"
 
 [dependencies]
 rand = "0.7.3"
+# generating and drawing images, TBD
+#image = "0.23.12"
+#imageproc = "0.22.0"
 
 # termion is for linux, mac_os only
 # termion = "1.5.5"

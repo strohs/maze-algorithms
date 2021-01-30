@@ -1,5 +1,5 @@
-/// holds a (row, column) position in a rectangular Grid
-///
+
+/// `Pos`ition holds a (row, column) position in a rectangular Grid
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct Pos {
     pub r: usize,
@@ -12,6 +12,12 @@ impl Pos {
         Self { r: row, c: col }
     }
 
+    /// returns an iterator over Positions, starting at Pos(0,0) and iterating (in row order)
+    /// up to Pos(max_row, max_col) exclusive.
+    ///
+    /// # Example
+    /// Pos.iter(3,3) would yield:
+    /// Pos(0,0), Pos(0,1), Pos(0,2), Pos(1,0), Pos(1,1), Pos(1,2), Pos(2,0), Pos(2,1), Pos(2,2)
     pub fn iter(max_row: usize, max_col: usize) -> PositionIter {
         PositionIter::new(max_row, max_col)
     }
@@ -67,7 +73,7 @@ mod tests {
     use crate::position::Pos;
 
     #[test]
-    fn should_iterate_to_last() {
+    fn should_iterate_to_last_pos() {
         assert_eq!(Pos::iter(3, 3).last().unwrap(), Pos::new(2, 2));
     }
 }

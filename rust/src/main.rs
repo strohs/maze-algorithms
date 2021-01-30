@@ -1,4 +1,5 @@
 mod generator;
+mod solver;
 mod grid;
 mod grid_cell;
 mod position;
@@ -9,7 +10,7 @@ use std::env;
 
 /// use this to configure the maze dimensions and launch the maze generation algorithm(s)
 /// To run from the command line:  `cargo run <width> <height>`
-/// width and height will default to 20 if not specified
+/// width and height will default to 10 if not specified
 fn main() {
     let args: Vec<String> = env::args().collect();
     let (width, height) = match args.len() {
