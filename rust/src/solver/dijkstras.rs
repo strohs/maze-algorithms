@@ -7,7 +7,7 @@ use std::fmt::Write;
 
 /// find the distances from a `root` (cell Pos) to all other cells in the `grid`
 /// returns a `Distances` struct containing the computed distances for each cell
-pub fn distances(grid: &Grid, root: Pos) -> Distances {
+fn distances(grid: &Grid, root: Pos) -> Distances {
     let mut distances = Distances::new(root);
     let mut frontier = vec![root];
 
@@ -43,21 +43,25 @@ pub fn find_shortest_path(maze: &Grid, start: Pos, goal: Pos) -> Distances {
     // compute distances for all cells in the maze beginning at start Pos
     let maze_dist = distances(maze, start);
 
-    // start from the goal and work backwards
+    // start from the goal and work backwards towards start
     let mut current = goal;
 
-    // bread_crumbs will only contain positions that are on the shortest path from goal to start
-    let mut bread_crumbs = Distances::new(start);
-    bread_crumbs.insert(current, maze_dist[current]);
+    // curr_path will only contain positions that are on the shortest path from goal to start
+    let mut curr_path = Distances::new(start);
+    // insert the current cell into curr_path
+    curr_path.insert(current, maze_dist[current]);
 
     loop {
         if current == start {
             break;
         }
+        // get the positions of all neighbors to the current cell's position
         if let Some(neighbor_links) = maze.links(&current) {
             for neighbor_pos in neighbor_links {
+                // if the neighbor's distance is less than the current cell's distance, insert
+                // the neighbor cell into curr_path, and make that neighbor the current cell
                 if maze_dist[*neighbor_pos] < maze_dist[current] {
-                    bread_crumbs.insert(*neighbor_pos, maze_dist[*neighbor_pos]);
+                    curr_path.insert(*neighbor_pos, maze_dist[*neighbor_pos]);
                     current = *neighbor_pos;
                     break;
                 }
@@ -65,13 +69,13 @@ pub fn find_shortest_path(maze: &Grid, start: Pos, goal: Pos) -> Distances {
         }
     }
 
-    bread_crumbs
+    curr_path
 }
 
 
-/// pretty prints path information (as asterisks) on top of the passed in `grid` and returns
+/// pretty prints the path (as asterisks) on top of the passed in `grid` and returns
 /// it as a String
-pub fn display_shortest_path(grid: &Grid, path: &Distances) -> String {
+pub fn display_path(grid: &Grid, path: &Distances) -> String {
     let mut buf = String::new();
     // write the top wall of the grid
     buf.push_str(&format!("+{}\n", "---+".repeat(grid.cols)));

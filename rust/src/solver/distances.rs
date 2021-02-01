@@ -7,7 +7,8 @@ use std::collections::hash_map::Keys;
 use crate::grid::Grid;
 
 
-/// holds distances information from the root cell, to every other cell in the grid.
+/// Distances is a helper struct that holds how far every cell in a Grid os from a `root` cell.
+/// These distances are used by certain shortest-path algorithms (like Dijkstra's)
 #[derive(Debug)]
 pub struct Distances {
     // Distances is essentially a wrapper over a HashMap
@@ -18,9 +19,13 @@ pub struct Distances {
     cells: HashMap<Pos, u32>,
 }
 
+
 impl Distances {
+    /// returns a new Distance struct with the specified `root` Position as the root of
+    /// the returned distance struct.
     pub fn new(root: Pos) -> Self {
         let mut cells = HashMap::new();
+        // the root is inserted into the hashmap with a distance of 0 from itself
         cells.insert(root, 0);
 
         Self {
@@ -29,6 +34,8 @@ impl Distances {
         }
     }
 
+    /// returns the distance information for the cell at the specified `pos`. Returns `None` if
+    /// the cell is not contained within Distances
     pub fn get(&self, pos: &Pos) -> Option<&u32> {
         self.cells.get(pos)
     }
@@ -38,13 +45,14 @@ impl Distances {
         self.cells.insert(cell_pos, distance);
     }
 
-    /// returns an iterator over the `Pos`itions in stored within the Distances HashMap
-    pub fn keys(&self) -> Keys<'_, Pos, u32> {
-        self.cells.keys()
-    }
+    // /// returns an iterator over the `Pos`itions in stored within the Distances HashMap
+    // pub fn keys(&self) -> Keys<'_, Pos, u32> {
+    //     self.cells.keys()
+    // }
 }
 
-/// index Distances using a `Pos`. This passes through to cells' HashMap `Index` implementation
+/// index Distances using a `Pos`ition struct.
+/// This implementation passes to a cell's HashMap `Index` implementation
 impl Index<Pos> for Distances {
     type Output = u32;
 
@@ -54,7 +62,9 @@ impl Index<Pos> for Distances {
 }
 
 
-/// pretty prints the grid along with its cell distances information,  into the supplied `buf`fer.
+
+/// pretty prints the `grid` with each cells distance amount displayed within the Cell.
+/// returns a `String` that can then be printed
 pub fn display_distances(grid: &Grid, distances: &Distances) -> String {
     let mut buf = String::new();
     // write the top wall of the grid

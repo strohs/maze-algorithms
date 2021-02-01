@@ -9,7 +9,7 @@ use crate::grid::Grid;
 use std::env;
 use crate::position::Pos;
 use crate::solver::distances::display_distances;
-use crate::solver::dijkstras::{distances, find_shortest_path, display_shortest_path};
+use crate::solver::dijkstras::{find_shortest_path, display_path};
 
 /// use this to configure the maze dimensions and launch the maze generation algorithm(s)
 /// To run from the command line:  `cargo run <width> <height>`
@@ -29,14 +29,17 @@ fn main() {
     println!("binary tree {}x{}", &width, &height);
     let mut grid = binary_tree::generate(height, width);
     println!("{}", &grid);
+    // find shortest path from northwest corner to southwest corner
+    println!("binary tree {}x{} shortest path", &width, &height);
+    let shortest_path = find_shortest_path(&grid, Pos::new(0, 0), Pos::new(height-1, 0));
+    println!("{}\n\n\n", display_path(&grid, &shortest_path));
 
 
     println!("sidewinder {}x{}", &width, &height);
     let grid = sidewinder::generate(height, width);
     println!("{}", &grid);
-    // find shortest path
-    let start = Pos::new(0, 0);
-    let goal = Pos::new(9, 0);
-    let shortest_path = find_shortest_path(&grid, start, goal);
-    println!("{}", display_shortest_path(&grid, &shortest_path));
+    // find shortest path from northwest corner to southwest corner
+    println!("sidewinder {}x{} shortest path", &width, &height);
+    let shortest_path = find_shortest_path(&grid, Pos::new(0, 0), Pos::new(height-1, 0));
+    println!("{}\n\n\n", display_path(&grid, &shortest_path));
 }
