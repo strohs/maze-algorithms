@@ -1,5 +1,6 @@
 
-/// `Pos`ition holds a (row, column) position in a rectangular Grid
+/// `Pos`ition holds a (row, column) index within a rectangular Grid.
+/// Positions are 0-based indices
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct Pos {
     pub r: usize,
@@ -12,7 +13,7 @@ impl Pos {
         Self { r: row, c: col }
     }
 
-    /// returns an iterator over Positions, starting at Pos(0,0) and iterating (in row order)
+    /// returns an iterator over Positions, starting at Pos(0,0) and iterating, in row order,
     /// up to Pos(max_row, max_col) exclusive.
     ///
     /// # Example
@@ -31,7 +32,6 @@ impl From<(usize, usize)> for Pos {
 }
 
 pub struct PositionIter {
-    max_row: usize,
     max_col: usize,
     cur_idx: usize,
     max_idx: usize,
@@ -42,7 +42,6 @@ impl PositionIter {
     pub fn new(max_row: usize, max_col: usize) -> Self {
         Self {
             cur_idx: 0,
-            max_row,
             max_col,
             max_idx: max_row * max_col,
         }

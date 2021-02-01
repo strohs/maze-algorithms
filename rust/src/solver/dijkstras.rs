@@ -2,8 +2,6 @@ use crate::grid::Grid;
 use crate::solver::distances::Distances;
 use crate::position::Pos;
 
-use std::fmt::Write;
-
 
 /// find the distances from a `root` (cell Pos) to all other cells in the `grid`
 /// returns a `Distances` struct containing the computed distances for each cell
@@ -95,7 +93,7 @@ pub fn display_path(grid: &Grid, path: &Distances) -> String {
             // the body of the cell will display the distance from the root
             // determine if an eastern wall should be drawn
             match cell.east() {
-                Some(east_pos) if grid.has_link(&cell.pos(), &east_pos) => top.push_str(&format!("  {} ", body)),
+                Some(east_pos) if grid.has_link(&cell.pos(), &east_pos) => top.push_str(&format!(" {}  ", body)),
                 _ => top.push_str(&format!(" {} |", body )),
             }
 

@@ -1,10 +1,10 @@
-use std::collections::HashSet;
+
 use std::hash::{Hash, Hasher};
 
 use crate::position::Pos;
 
 /// Holds the position of a cell within a Grid as well as the positions of neighboring cells.
-/// Two grid cells are considered equal if their respective positions are equal
+/// Two grid cells are considered equal if their respective positions (row,col values) are equal
 #[derive(Debug, Copy, Clone)]
 pub struct GridCell {
     // position of this cell within a grid
@@ -72,7 +72,6 @@ impl GridCell {
     }
 
     /// returns a vector containing the positions of grid cells that are neighbors of this cell
-    #[allow(dead_code)]
     pub fn neighbors(&self) -> Vec<Pos> {
         let mut neighbors = Vec::with_capacity(4);
         if self.north.is_some() {

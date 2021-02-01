@@ -3,13 +3,8 @@ use crate::position::Pos;
 use rand::{thread_rng, Rng};
 use std::collections::{HashMap};
 use std::fmt::{Display, Formatter};
-use std::iter::Skip;
 use std::ops::{Index, IndexMut};
-use std::slice::{ChunksExact, ChunksExactMut, Iter, IterMut};
-use std::path::Path;
-use std::fs::File;
-use std::io::BufWriter;
-use crate::solver::distances::Distances;
+use std::slice::{ChunksExact, Iter};
 
 
 /// Grid represents a two-dimensional grid of `GridCell`s.
@@ -32,7 +27,7 @@ impl Grid {
     /// returns a grid with capacity for rows * cols  GridCells
     pub fn new(rows: usize, cols: usize) -> Self {
         let cells = Grid::build_grid_cells(rows, cols);
-        let mut grid = Self {
+        let grid = Self {
             rows,
             cols,
             grid: cells,
@@ -92,7 +87,7 @@ impl Grid {
     fn unlink_by_pos(&mut self, from: &Pos, to: &Pos) {
         if let Some(to_links) = self.links.get_mut(from) {
             // search for the to Pos index within from's vec of links
-            if let Some((to_idx, p)) = to_links.iter().enumerate().find(|&(i, p)| *p == *to) {
+            if let Some((to_idx, _p)) = to_links.iter().enumerate().find(|&(_i, p)| *p == *to) {
                 // remove the to_pos from the vec of links
                 to_links.remove(to_idx);
                 // if there are no more links that from is pointing to, then remove from from the HashMap
@@ -116,21 +111,21 @@ impl Grid {
         self.links.get(pos)
     }
 
-    /// returns a reference to a random GridCell in this grid
-    pub fn random_cell(&self) -> &GridCell {
+    /// returns a the position of a random cell in the grid
+    pub fn random_pos(&self) -> Pos {
         let ridx = thread_rng().gen_range(0, self.grid.len());
-        &self.grid[ridx]
+        self.idx2d(ridx)
     }
 
-    /// returns an immutable iterator over this Grid's GridCells in row order
-    pub fn iter_cells(&self) -> Iter<'_, GridCell> {
-        self.grid.iter()
-    }
-
-    /// returns a mutable iterator over all the GridCells in this Grid, in row order
-    pub fn iter_cells_mut(&mut self) -> IterMut<'_, GridCell> {
-        self.grid.iter_mut()
-    }
+    // /// returns an immutable iterator over this Grid's GridCells in row order
+    // pub fn iter_cells(&self) -> Iter<'_, GridCell> {
+    //     self.grid.iter()
+    // }
+    //
+    // /// returns a mutable iterator over all the GridCells in this Grid, in row order
+    // pub fn iter_cells_mut(&mut self) -> IterMut<'_, GridCell> {
+    //     self.grid.iter_mut()
+    // }
 
     /// returns an immutable iterator over the *rows* of this grid
     pub fn row_iter(&self) -> ChunksExact<'_, GridCell> {
@@ -138,9 +133,9 @@ impl Grid {
     }
 
     /// returns an mutable iterator over the *rows* of this grid
-    pub fn row_iter_mut(&mut self) -> ChunksExactMut<'_, GridCell> {
-        self.grid.chunks_exact_mut(self.cols)
-    }
+    // pub fn row_iter_mut(&mut self) -> ChunksExactMut<'_, GridCell> {
+    //     self.grid.chunks_exact_mut(self.cols)
+    // }
 
     /// returns a one-dimensional index based on the given row, col in `Pos`
     /// panics if any row,col in pos is negative
@@ -148,6 +143,12 @@ impl Grid {
         pos.r * self.cols + pos.c
     }
 
+    /// generates a Position from a 1D index
+    fn idx2d(&self, index: usize) -> Pos {
+        let row = index / self.cols;
+        let col = index % self.cols;
+        Pos::new(row, col)
+    }
 
     /// returns Some(Pos) if the given position has a neighbor to the north, else None
     /// the returned position is the position of the North neighbor

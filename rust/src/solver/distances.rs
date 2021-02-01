@@ -1,9 +1,6 @@
 use crate::position::Pos;
-use crate::grid_cell::GridCell;
 use std::collections::HashMap;
-use std::ops::{Index, IndexMut};
-use std::fmt::Write;
-use std::collections::hash_map::Keys;
+use std::ops::{Index};
 use crate::grid::Grid;
 
 
@@ -68,7 +65,7 @@ impl Index<Pos> for Distances {
 pub fn display_distances(grid: &Grid, distances: &Distances) -> String {
     let mut buf = String::new();
     // write the top wall of the grid
-    writeln!(buf, "+{}", "---+".repeat(grid.cols));
+    buf.push_str(&format!("+{}", "---+".repeat(grid.cols)));
 
     for row in grid.row_iter() {
         // top holds the cell 'bodies' (blank spaces) and eastern walls
@@ -94,8 +91,8 @@ pub fn display_distances(grid: &Grid, distances: &Distances) -> String {
             }
         }
 
-        writeln!(buf, "{}", top);
-        writeln!(buf, "{}", bottom);
+        buf.push_str(&format!("{}", top));
+        buf.push_str(&format!("{}", bottom));
     }
     buf
 }
