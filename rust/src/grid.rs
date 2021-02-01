@@ -18,9 +18,9 @@ use crate::solver::distances::Distances;
 #[derive(Debug)]
 pub struct Grid {
     // number of rows in this grid
-    rows: usize,
+    pub rows: usize,
     // number of columns in this grid
-    cols: usize,
+    pub cols: usize,
     // stores the cells of this grid in a 1-dimensional array
     grid: Vec<GridCell>,
     // stores the links (passages) between cells
@@ -205,34 +205,7 @@ impl Grid {
         grid
     }
 
-    /// find the distances from the `root` (cell Pos) to all other cells in the `grid`
-    pub fn distances(&self, root: Pos) -> Distances {
-        let mut distances = Distances::new(root);
-        let mut frontier = vec![root];
 
-        let mut new_frontier = vec![];
-        while !frontier.is_empty() {
-
-
-            for cur_pos in frontier.pop() {
-                // if the current cells has links to other cells...
-                if let Some(linked_cells) = self.links(&cur_pos) {
-                    // for each linked cell...
-                    for linked_pos in linked_cells {
-                        // only visit cells that have not already been visited
-                        if distances.get(linked_pos).is_none() {
-                            // the linked cells distance is 1 + the previous cell's distance
-                            distances.insert(*linked_pos, distances[cur_pos] + 1);
-                            new_frontier.push(*linked_pos);
-                        }
-                    }
-                }
-            }
-            frontier.append(&mut new_frontier);
-        }
-
-        distances
-    }
 }
 
 /// allows indexing into this grid using a `Pos` struct
@@ -288,6 +261,8 @@ impl Display for Grid {
         Ok(())
     }
 }
+
+
 
 
 #[cfg(test)]

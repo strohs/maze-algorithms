@@ -8,6 +8,8 @@ use crate::generator::{binary_tree, sidewinder};
 use crate::grid::Grid;
 use std::env;
 use crate::position::Pos;
+use crate::solver::distances::display_distances;
+use crate::solver::dijkstras::{distances, find_shortest_path, display_shortest_path};
 
 /// use this to configure the maze dimensions and launch the maze generation algorithm(s)
 /// To run from the command line:  `cargo run <width> <height>`
@@ -24,33 +26,17 @@ fn main() {
     };
 
     // generate a maze using binary tree algorithm
-    println!("binary tree {} {}", &width, &height);
+    println!("binary tree {}x{}", &width, &height);
     let mut grid = binary_tree::generate(height, width);
     println!("{}", &grid);
 
 
-    // println!("sidewinder {} {}", &width, &height);
-    // let grid = sidewinder::generate(height, width);
-    // println!("{}", &grid);
-
-    // // binary tree
-    // let maze = binary_tree::generate(width, height);
-    // print!("{}", &maze);
-    // println!("binary tree {}x{}\n", width, height);
-    //
-    // // recursive backtracking
-    // let maze = recursive_backtracking::recursive_backtracking(width, height);
-    // print!("{}", &maze);
-    // println!("recursive backtracking {}x{}\n", width, height);
-    //
-    // // recursive division
-    // let maze = recursive_division::recursive_divide(width, height);
-    // //print!("{}", &maze);
-    // recursive_division::display_maze(&maze);
-    // println!("recursive division {}x{}\n", width, height);
-    //
-    // // prims algorithm
-    // let maze = prims::prims(width, height);
-    // print!("{}", &maze);
-    // println!("prim's {}x{}\n", width, height);
+    println!("sidewinder {}x{}", &width, &height);
+    let grid = sidewinder::generate(height, width);
+    println!("{}", &grid);
+    // find shortest path
+    let start = Pos::new(0, 0);
+    let goal = Pos::new(9, 0);
+    let shortest_path = find_shortest_path(&grid, start, goal);
+    println!("{}", display_shortest_path(&grid, &shortest_path));
 }
