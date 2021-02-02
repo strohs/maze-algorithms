@@ -16,10 +16,10 @@ fn distances(grid: &Grid, root: Pos) -> Distances {
                 // for each linked cell...
                 for linked_pos in linked_cells {
                     // only visit cells that have not already been visited
-                    if distances.get(linked_pos).is_none() {
+                    if distances.get(&linked_pos).is_none() {
                         // the linked cells distance is 1 + the previous cell's distance
-                        distances.insert(*linked_pos, distances[cur_pos] + 1);
-                        new_frontier.push(*linked_pos);
+                        distances.insert(linked_pos, distances[cur_pos] + 1);
+                        new_frontier.push(linked_pos);
                     }
                 }
             }
@@ -54,9 +54,9 @@ pub fn find_shortest_path(maze: &Grid, start: Pos, goal: Pos) -> Distances {
             for neighbor_pos in neighbor_links {
                 // if the neighbor's distance is less than the current cell's distance, insert
                 // the neighbor cell into curr_path, and make that neighbor the current cell
-                if maze_dist[*neighbor_pos] < maze_dist[current] {
-                    curr_path.insert(*neighbor_pos, maze_dist[*neighbor_pos]);
-                    current = *neighbor_pos;
+                if maze_dist[neighbor_pos] < maze_dist[current] {
+                    curr_path.insert(neighbor_pos, maze_dist[neighbor_pos]);
+                    current = neighbor_pos;
                     break;
                 }
             }

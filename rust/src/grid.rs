@@ -17,8 +17,8 @@ pub struct Grid {
     pub cols: usize,
     // stores the cells of this grid in a 1-dimensional array
     grid: Vec<GridCell>,
-    // stores the links (passages) between cells
-    links: HashMap<Pos, Vec<Pos>>,
+    // stores the links (passages) between the GridCells in grid
+    links: HashMap<usize, Vec<usize>>,
 }
 
 impl Grid {
@@ -62,8 +62,9 @@ impl Grid {
     /// `bidi` (bi-directional) parameter is true, then another link is created from the
     /// `to` cell to the `from` cell.
     fn link_by_pos(&mut self, from: &Pos, to: &Pos) {
-        let links = self.links.entry(*from).or_insert_with(|| vec![]);
-        links.push(*to);
+        let (from, to) = (self.idx1d(from), self.idx1d(to));
+        let links = self.links.entry(from).or_insert_with(|| vec![]);
+        links.push(to);
     }
 
     /// removes the link between `from` and `to`, if there is one. If `bidi` is `true`,
@@ -79,14 +80,15 @@ impl Grid {
     /// remove the link between `from` cell and `to` cell. If `bidi` (bi-directional) is true,
     /// then the link between `to` and `from` is removed.
     fn unlink_by_pos(&mut self, from: &Pos, to: &Pos) {
-        if let Some(to_links) = self.links.get_mut(from) {
+        let (from, to) = (self.idx1d(from), self.idx1d(to));
+        if let Some(to_links) = self.links.get_mut(&from) {
             // search for the to Pos index within from's vec of links
-            if let Some((to_idx, _p)) = to_links.iter().enumerate().find(|&(_i, p)| *p == *to) {
+            if let Some((to_idx, _p)) = to_links.iter().enumerate().find(|&(_i, p)| *p == to) {
                 // remove the to_pos from the vec of links
                 to_links.remove(to_idx);
                 // if there are no more links that from is pointing to, then remove from from the HashMap
                 if to_links.is_empty() {
-                    self.links.remove(from);
+                    self.links.remove(&from);
                 }
             }
         }
@@ -94,12 +96,18 @@ impl Grid {
 
     /// returns `true` if there is a link from `from`, to `to`
     pub fn has_link(&self, from: &Pos, to: &Pos) -> bool {
-        self.links.get(from).map_or(false, |tos| tos.contains(to))
+        let (from, to) = (self.idx1d(from), self.idx1d(to));
+        self.links.get(&from).map_or(false, |tos| tos.contains(&to))
     }
 
     /// returns a borrowed Vector of `Pos`, that the given `pos` links to.
-    pub fn links(&self, pos: &Pos) -> Option<&Vec<Pos>> {
-        self.links.get(pos)
+    pub fn links(&self, pos: &Pos) -> Option<Vec<Pos>> {
+        let idx = self.idx1d(pos);
+        self.links.get(&idx).map(|links|
+            links.iter()
+                .map(|i| self.idx2d(*i))
+                .collect::<Vec<Pos>>()
+        )
     }
 
     /// returns a the position of a random cell in the grid
@@ -246,7 +254,6 @@ impl Display for Grid {
 #[cfg(test)]
 mod tests {
     use crate::grid::{Grid, Pos};
-    use std::path::Path;
 
     #[test]
     fn should_create_new_grid() {
@@ -260,7 +267,7 @@ mod tests {
     fn pos_0_0_should_not_have_north_neighbor() {
         let grid = Grid::new(3, 3);
         let pos = Pos::new(0, 0);
-        assert_eq!(grid.grid[0].north(), None);
+        assert_eq!(grid[pos].north(), None);
     }
 
     #[test]
@@ -313,11 +320,13 @@ mod tests {
         let mut grid = Grid::new(3, 3);
         let from = Pos::new(0, 0);
         let to = Pos::new(0, 1);
+        let from_idx = grid.idx1d(&from);
+        let to_idx = grid.idx1d(&to);
         grid.link(&from, &to, true);
-        assert!(grid.links.contains_key(&from));
-        assert!(grid.links.get(&from).unwrap().contains(&to));
-        assert!(grid.links.contains_key(&to));
-        assert!(grid.links.get(&to).unwrap().contains(&from));
+        assert!(grid.links.contains_key(&from_idx));
+        assert!(grid.links.get(&from_idx).unwrap().contains(&to_idx));
+        assert!(grid.links.contains_key(&to_idx));
+        assert!(grid.links.get(&to_idx).unwrap().contains(&from_idx));
     }
 
     #[test]
@@ -328,12 +337,12 @@ mod tests {
         let to2 = Pos::new(1, 0);
         grid.link(&from, &to1, true);
         grid.link(&from, &to2, true);
-        assert!(grid.links.contains_key(&from));
-        assert!(grid.links.get(&from).unwrap().contains(&to1));
-        assert!(grid.links.get(&from).unwrap().contains(&to2));
-        assert!(grid.links.contains_key(&to1));
-        assert!(grid.links.get(&to1).unwrap().contains(&from));
-        assert!(grid.links.get(&to2).unwrap().contains(&from));
+        assert!(grid.links.contains_key(&grid.idx1d(&from)));
+        assert!(grid.links.get(&grid.idx1d(&from)).unwrap().contains(&grid.idx1d(&to1)));
+        assert!(grid.links.get(&grid.idx1d(&from)).unwrap().contains(&grid.idx1d(&to2)));
+        assert!(grid.links.contains_key(&grid.idx1d(&to1)));
+        assert!(grid.links.get(&grid.idx1d(&to1)).unwrap().contains(&grid.idx1d(&from)));
+        assert!(grid.links.get(&grid.idx1d(&to2)).unwrap().contains(&grid.idx1d(&from)));
     }
 
     #[test]
@@ -342,13 +351,13 @@ mod tests {
         let from = Pos::new(0, 0);
         let to = Pos::new(0, 1);
         grid.link(&from, &to, true);
-        assert!(grid.links.contains_key(&from));
-        assert!(grid.links.get(&from).unwrap().contains(&to));
-        assert!(grid.links.contains_key(&to));
-        assert!(grid.links.get(&to).unwrap().contains(&from));
+        assert!(grid.links.contains_key(&grid.idx1d(&from)));
+        assert!(grid.links.get(&grid.idx1d(&from)).unwrap().contains(&grid.idx1d(&to)));
+        assert!(grid.links.contains_key(&grid.idx1d(&to)));
+        assert!(grid.links.get(&grid.idx1d(&to)).unwrap().contains(&grid.idx1d(&from)));
         grid.unlink(&from, &to, true);
-        assert_eq!(grid.links.contains_key(&from), false);
-        assert_eq!(grid.links.contains_key(&to), false);
+        assert_eq!(grid.links.contains_key(&grid.idx1d(&from)), false);
+        assert_eq!(grid.links.contains_key(&grid.idx1d(&to)), false);
     }
 
     #[test]
@@ -359,12 +368,12 @@ mod tests {
         let to2 = Pos::new(1, 0);
         grid.link(&from, &to1, true);
         grid.link(&from, &to2, true);
-        assert!(grid.links.contains_key(&from));
-        assert!(grid.links.get(&from).unwrap().contains(&to1));
-        assert!(grid.links.get(&from).unwrap().contains(&to2));
+        assert!(grid.links.contains_key(&grid.idx1d(&from)));
+        assert!(grid.links.get(&grid.idx1d(&from)).unwrap().contains(&grid.idx1d(&to1)));
+        assert!(grid.links.get(&grid.idx1d(&from)).unwrap().contains(&grid.idx1d(&to2)));
         grid.unlink(&from, &to1, true);
         // the grid should still contain a link from `from` to `to2`
-        assert!(grid.links.contains_key(&from));
-        assert!(grid.links.get(&from).unwrap().contains(&to2));
+        assert!(grid.links.contains_key(&grid.idx1d(&from)));
+        assert!(grid.links.get(&grid.idx1d(&from)).unwrap().contains(&grid.idx1d(&to2)));
     }
 }

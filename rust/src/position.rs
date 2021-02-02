@@ -30,6 +30,8 @@ impl From<(usize, usize)> for Pos {
     }
 }
 
+
+/// helper struct the holds the Position iterator's state
 pub struct PositionIter {
     max_col: usize,
     cur_idx: usize,
@@ -47,7 +49,7 @@ impl PositionIter {
     }
 }
 
-/// an iterator which generates positions from `Pos(0,0)` to `Pos(max_row-1, max_col-1)`
+/// an iterator which generates positions, in row order, from `Pos(0,0)` to `Pos(max_row-1, max_col-1)`
 impl Iterator for PositionIter {
     type Item = Pos;
 

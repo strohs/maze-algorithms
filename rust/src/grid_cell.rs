@@ -6,7 +6,7 @@ use crate::position::Pos;
 /// Two grid cells are considered equal if their respective positions (row,col values) are equal
 #[derive(Debug, Copy, Clone)]
 pub struct GridCell {
-    // position of this cell within a grid
+    // row,col position of this cell within a grid
     pos: Pos,
 
     // positions of any neighboring cells
