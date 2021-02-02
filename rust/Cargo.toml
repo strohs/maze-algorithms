@@ -1,5 +1,5 @@
 [package]
-name = "maze-algorithms"
+name = "mazes"
 version = "0.1.0"
 authors = ["CliffS <strohs1@gmail.com>"]
 edition = "2018"

@@ -113,20 +113,12 @@ impl Grid {
         self.grid.iter()
     }
 
-    // /// returns a mutable iterator over all the GridCells in this Grid, in row order
-    // pub fn iter_cells_mut(&mut self) -> IterMut<'_, GridCell> {
-    //     self.grid.iter_mut()
-    // }
 
     /// returns an immutable iterator over the *rows* of this grid
     pub fn row_iter(&self) -> ChunksExact<'_, GridCell> {
         self.grid.chunks_exact(self.cols)
     }
 
-    /// returns an mutable iterator over the *rows* of this grid
-    // pub fn row_iter_mut(&mut self) -> ChunksExactMut<'_, GridCell> {
-    //     self.grid.chunks_exact_mut(self.cols)
-    // }
 
     /// returns a one-dimensional index based on the given row, col in `Pos`
     /// panics if any row,col in pos is negative

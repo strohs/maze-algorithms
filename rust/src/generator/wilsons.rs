@@ -2,7 +2,6 @@ use crate::grid::Grid;
 use crate::position::Pos;
 use rand::seq::SliceRandom;
 use rand::thread_rng;
-use std::ops::Index;
 
 /// Generates a random maze using Wilson's algorithm:
 /// Like Aldous-Broder, this algorithm depends on the idea of a random walk, but with a twist.

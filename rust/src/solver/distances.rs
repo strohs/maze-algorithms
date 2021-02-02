@@ -53,8 +53,10 @@ impl Index<Pos> for Distances {
     }
 }
 
-/// pretty prints the `grid` with each cells distance amount displayed within the Cell.
-/// returns a `String` that can then be printed
+/// Returns a "pretty printed" String containing the distance amounts of each cell of the grid
+/// displayed within the cells as a Hexa-Decimal amount.
+/// Useful for debugging purposes
+#[allow(dead_code)]
 pub fn display_distances(grid: &Grid, distances: &Distances) -> String {
     let mut buf = String::new();
     // write the top wall of the grid
