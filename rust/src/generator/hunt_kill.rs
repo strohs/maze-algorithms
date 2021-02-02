@@ -11,6 +11,9 @@ use crate::position::Pos;
 /// you start from the top of the maze, look for the first cell that is a neighbor of the cells in
 /// the current walk you are performing, and then link into the walk. Then repeat the random walk
 /// until all cells are visited
+///
+/// Hunt-and-Kill is known to produce mazes with longer winding and meandering corridors than
+/// other algorithms. That is to say, hunt-and-kill produces mazes with fewer dead ends.
 pub fn generate(height: usize, width: usize) -> Grid {
     let mut grid = Grid::new(height, width);
 

@@ -6,7 +6,7 @@ use rand::thread_rng;
 /// The idea behind it is as follows:
 ///
 /// 1. Start anywhere in the grid you want, and choose a random neighbor.
-/// 2. Move to that neighbor, and if it hasn’t previously been visited, link it to the prior cell.
+/// 2. Move to that neighbor, and if it has not previously been visited, link it to the prior cell.
 /// 3. Repeat until every cell has been visited.
 pub fn generate(height: usize, width: usize) -> Grid {
     let mut grid = Grid::new(height, width);
@@ -22,7 +22,8 @@ pub fn generate(height: usize, width: usize) -> Grid {
             .choose(&mut thread_rng())
             .expect("cells in a grid will have at least 2 neighbors");
 
-        // if the neighbor pos is not linked to anything, then link it to the current cell
+        // if the neighbor_pos is not linked to anything (i.e. it is unvisited), then link it
+        // to the current cell
         if grid.links(&neighbor_pos).is_none() {
             grid.link(&curr_pos, &neighbor_pos, true);
             unvisited -= 1;
