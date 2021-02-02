@@ -117,11 +117,11 @@ impl Grid {
         self.idx2d(ridx)
     }
 
-    // /// returns an immutable iterator over this Grid's GridCells in row order
-    // pub fn iter_cells(&self) -> Iter<'_, GridCell> {
-    //     self.grid.iter()
-    // }
-    //
+    /// returns an immutable iterator over this Grid's GridCells in row order
+    pub fn iter_cells(&self) -> Iter<'_, GridCell> {
+        self.grid.iter()
+    }
+
     // /// returns a mutable iterator over all the GridCells in this Grid, in row order
     // pub fn iter_cells_mut(&mut self) -> IterMut<'_, GridCell> {
     //     self.grid.iter_mut()
