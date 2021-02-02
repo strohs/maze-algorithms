@@ -1,7 +1,7 @@
 use crate::grid::Grid;
 use crate::position::Pos;
 use rand::seq::SliceRandom;
-use rand::{thread_rng};
+use rand::thread_rng;
 
 /// Generates a random maze using the Binary Tree algorithm.
 ///
@@ -16,18 +16,22 @@ pub fn generate(height: usize, width: usize) -> Grid {
     for pos in Pos::iter(height, width) {
         let cell = grid[pos];
 
-        let mut neigbors = vec![];
+        let mut neighbors = vec![];
 
         // if current cell has a south neighbor, add that neighbors position to neighbors
-        cell.south().map(|p| neigbors.push(p));
+        if let Some(p) = cell.south() {
+            neighbors.push(p);
+        }
 
         // if current cell has a east neighbor, add that neighbors position to neighbors
-        cell.east().map(|p| neigbors.push(p));
+        if let Some(p) = cell.east() {
+            neighbors.push(p);
+        }
 
-        // choose a random east or west neighbor and create a link to it
-        neigbors
-            .choose(&mut thread_rng())
-            .map(|neigh_pos| grid.link(&cell.pos(), neigh_pos, true));
+        // choose a random neighbor from neighbors and create a link to it
+        if let Some(neigh_pos) = neighbors.choose(&mut thread_rng()) {
+            grid.link(&cell.pos(), neigh_pos, true);
+        }
     }
 
     grid

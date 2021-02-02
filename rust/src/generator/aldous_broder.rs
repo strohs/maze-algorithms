@@ -1,6 +1,6 @@
 use crate::grid::Grid;
-use rand::{thread_rng};
 use rand::seq::SliceRandom;
+use rand::thread_rng;
 
 /// Generates a random maze using the Aldous-Broder algorithm.
 /// The idea behind it is as follows:

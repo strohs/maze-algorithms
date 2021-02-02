@@ -1,7 +1,7 @@
 use crate::grid::Grid;
-use rand::{thread_rng};
-use rand::seq::SliceRandom;
 use crate::position::Pos;
+use rand::seq::SliceRandom;
+use rand::thread_rng;
 use std::ops::Index;
 
 /// Generates a random maze using Wilson's algorithm:
@@ -23,7 +23,8 @@ pub fn generate(height: usize, width: usize) -> Grid {
     // initialize unvisited to contain all positions in the grid except for first
     let mut unvisited: Vec<Pos> = grid
         .iter_cells()
-        .map(|c| c.pos()).filter(|p| *p != first)
+        .map(|c| c.pos())
+        .filter(|p| *p != first)
         .collect();
 
     // while there are still unvisited cells
@@ -64,4 +65,3 @@ pub fn generate(height: usize, width: usize) -> Grid {
 
     grid
 }
-

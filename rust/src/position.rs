@@ -1,4 +1,3 @@
-
 /// `Pos`ition holds a (row, column) index within a rectangular Grid.
 /// Positions are 0-based indices
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]

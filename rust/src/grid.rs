@@ -1,11 +1,10 @@
 use crate::grid_cell::GridCell;
 use crate::position::Pos;
 use rand::{thread_rng, Rng};
-use std::collections::{HashMap};
+use std::collections::HashMap;
 use std::fmt::{Display, Formatter};
 use std::ops::{Index, IndexMut};
 use std::slice::{ChunksExact, Iter};
-
 
 /// Grid represents a two-dimensional grid of `GridCell`s.
 /// It also contains a hashmap of "links", or passages, between cells. If two cells are linked,
@@ -23,18 +22,15 @@ pub struct Grid {
 }
 
 impl Grid {
-    
     /// returns a grid with capacity for rows * cols  GridCells
     pub fn new(rows: usize, cols: usize) -> Self {
         let cells = Grid::build_grid_cells(rows, cols);
-        let grid = Self {
+        Self {
             rows,
             cols,
             grid: cells,
             links: HashMap::new(),
-        };
-
-        grid
+        }
     }
 
     /// returns the total number of GridCells in the grid. (size = rows * cols)
@@ -53,7 +49,6 @@ impl Grid {
     //     }
     // }
 
-
     /// links (carves a passage between) `from` to `to`. If bidi (bidirectional) is `true` than
     /// an additional link is created between `to` and `from`
     pub fn link(&mut self, from: &Pos, to: &Pos, bidi: bool) {
@@ -67,8 +62,7 @@ impl Grid {
     /// `bidi` (bi-directional) parameter is true, then another link is created from the
     /// `to` cell to the `from` cell.
     fn link_by_pos(&mut self, from: &Pos, to: &Pos) {
-        let links = self.links.entry(*from)
-            .or_insert(vec![]);
+        let links = self.links.entry(*from).or_insert_with(|| vec![]);
         links.push(*to);
     }
 
@@ -100,11 +94,8 @@ impl Grid {
 
     /// returns `true` if there is a link from `from`, to `to`
     pub fn has_link(&self, from: &Pos, to: &Pos) -> bool {
-        self.links
-            .get(from)
-            .map_or(false, |tos| tos.contains(to))
+        self.links.get(from).map_or(false, |tos| tos.contains(to))
     }
-
 
     /// returns a borrowed Vector of `Pos`, that the given `pos` links to.
     pub fn links(&self, pos: &Pos) -> Option<&Vec<Pos>> {
@@ -205,8 +196,6 @@ impl Grid {
         }
         grid
     }
-
-
 }
 
 /// allows indexing into this grid using a `Pos` struct
@@ -225,7 +214,6 @@ impl IndexMut<Pos> for Grid {
         &mut self.grid[idx]
     }
 }
-
 
 /// pretty prints the grid to standard out
 impl Display for Grid {
@@ -262,9 +250,6 @@ impl Display for Grid {
         Ok(())
     }
 }
-
-
-
 
 #[cfg(test)]
 mod tests {
@@ -374,7 +359,6 @@ mod tests {
         assert_eq!(grid.links.contains_key(&to), false);
     }
 
-
     #[test]
     fn should_unlink_a_pos_containing_two_pos() {
         let mut grid = Grid::new(3, 3);
@@ -391,5 +375,4 @@ mod tests {
         assert!(grid.links.contains_key(&from));
         assert!(grid.links.get(&from).unwrap().contains(&to2));
     }
-
 }

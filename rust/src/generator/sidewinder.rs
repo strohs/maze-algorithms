@@ -34,9 +34,9 @@ pub fn generate(height: usize, width: usize) -> Grid {
             // if the random_member has a north neighbor, carve a passage from the random cell
             // to it's north neighbor
             if let Some(rand_cell) = rand_member {
-                rand_cell
-                    .north()
-                    .map(|north_pos| grid.link(&rand_cell.pos(), &north_pos, true));
+                if let Some(north_pos) = rand_cell.north() {
+                    grid.link(&rand_cell.pos(), &north_pos, true);
+                }
             }
             runs.clear();
         } else {

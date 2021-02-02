@@ -1,8 +1,7 @@
+use crate::grid::Grid;
 use crate::position::Pos;
 use std::collections::HashMap;
-use std::ops::{Index};
-use crate::grid::Grid;
-
+use std::ops::Index;
 
 /// Distances is a helper struct that holds how far every cell in a Grid os from a `root` cell.
 /// These distances are used by certain shortest-path algorithms (like Dijkstra's)
@@ -16,7 +15,6 @@ pub struct Distances {
     cells: HashMap<Pos, u32>,
 }
 
-
 impl Distances {
     /// returns a new Distance struct with the specified `root` Position as the root of
     /// the returned distance struct.
@@ -25,10 +23,7 @@ impl Distances {
         // the root is inserted into the hashmap with a distance of 0 from itself
         cells.insert(root, 0);
 
-        Self {
-            root,
-            cells,
-        }
+        Self { root, cells }
     }
 
     /// returns the distance information for the cell at the specified `pos`. Returns `None` if
@@ -58,8 +53,6 @@ impl Index<Pos> for Distances {
     }
 }
 
-
-
 /// pretty prints the `grid` with each cells distance amount displayed within the Cell.
 /// returns a `String` that can then be printed
 pub fn display_distances(grid: &Grid, distances: &Distances) -> String {
@@ -78,8 +71,10 @@ pub fn display_distances(grid: &Grid, distances: &Distances) -> String {
             // the body of the cell will display the distance from the root
             // determine if an eastern wall should be drawn
             match cell.east() {
-                Some(east_pos) if grid.has_link(&cell.pos(), &east_pos) => top.push_str(&format!(" {:2x} ", dist )),
-                _ => top.push_str(&format!(" {:2x}|", dist )),
+                Some(east_pos) if grid.has_link(&cell.pos(), &east_pos) => {
+                    top.push_str(&format!(" {:2x} ", dist))
+                }
+                _ => top.push_str(&format!(" {:2x}|", dist)),
             }
 
             // determine if a southern wall should be drawn
@@ -91,8 +86,8 @@ pub fn display_distances(grid: &Grid, distances: &Distances) -> String {
             }
         }
 
-        buf.push_str(&format!("{}", top));
-        buf.push_str(&format!("{}", bottom));
+        buf.push_str(&top.to_string());
+        buf.push_str(&bottom.to_string());
     }
     buf
 }
