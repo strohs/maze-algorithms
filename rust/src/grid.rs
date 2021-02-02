@@ -49,8 +49,8 @@ impl Grid {
     //     }
     // }
 
-    /// links (carves a passage between) `from` to `to`. If bidi (bidirectional) is `true` than
-    /// an additional link is created between `to` and `from`
+    /// links (carves a passage between) `from` and `to`. If `bidi` (bidirectional) is `true` than
+    /// an another link is created between `to` and `from`
     pub fn link(&mut self, from: &Pos, to: &Pos, bidi: bool) {
         self.link_by_pos(from, to);
         if bidi {
@@ -100,7 +100,7 @@ impl Grid {
         self.links.get(&from).map_or(false, |tos| tos.contains(&to))
     }
 
-    /// returns a borrowed Vector of `Pos`, that the given `pos` links to.
+    /// returns a Vector of `Pos`itions, that the given `pos` has links to.
     pub fn links(&self, pos: &Pos) -> Option<Vec<Pos>> {
         let idx = self.idx1d(pos);
         self.links.get(&idx).map(|links|
