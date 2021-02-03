@@ -42,6 +42,17 @@ public class Grid implements Iterable<Cell> {
 
     /**
      *
+     * @param row row index into the grid
+     * @param col column index into the grid
+     * @return the Cell at the specified row and col.
+     * @throws IndexOutOfBoundsException if the provided row or col is out of bounds of this Grid
+     */
+    public Cell get(int row, int col) {
+        return this.grid[row][col];
+    }
+
+    /**
+     *
      * @return a random cell in this Grid
      */
     public Cell randomCell() {
@@ -140,6 +151,49 @@ public class Grid implements Iterable<Cell> {
                 }
                 else {
                     top.append("   |"); // east wall is drawn
+                }
+
+                // determine if south wall should be drawn
+                if (cell.south.isPresent() && cell.is_linked(cell.south.get())) {
+                    bottom.append("   +");
+                } else {
+                    bottom.append("---+");
+                }
+            }
+            sb.append(top).append("\n");
+            sb.append(bottom).append("\n");
+        }
+
+        return sb.toString();
+    }
+
+    /**
+     * pretty prints this Grid to a String, with the provided distance information printed into
+     * the Cells of the grid.
+     * @param distances a Distances object to display on this Grid
+     * @return a String containing pretty-printed Grid
+     */
+    public String printDistances(Distances distances) {
+        StringBuilder sb = new StringBuilder();
+        // build the top wall of the grid
+        sb.append("+").append("---+".repeat(this.cols)).append("\n");
+
+        Iterator<Cell[]> rowIter = this.row_iterator();
+        while (rowIter.hasNext()) {
+            StringBuilder top = new StringBuilder("|");
+            StringBuilder bottom = new StringBuilder("+");
+
+            Cell[] row = rowIter.next();
+            for (Cell cell: row) {
+                // if the current cell is contained in the Distance object, print its distance info in the cell
+                // as a hexa-decimal number, else print 2 spaces
+                String body = distances.contains(cell) ? String.format("%2x", distances.get(cell)) : "  ";
+                // determine if an eastern wall should be drawn
+                if (cell.east.isPresent() && cell.is_linked(cell.east.get())) {
+                    top.append(" ").append(body).append(" "); // no east wall drawn
+                }
+                else {
+                    top.append(" ").append(body).append("|"); // east wall is drawn
                 }
 
                 // determine if south wall should be drawn

@@ -152,11 +152,47 @@ public class Cell {
         return neighbors;
     }
 
+    /**
+     * computes the distances between this cell and every other cell that is linked to this cell
+     * @return a Distances object, with this cell as the root, and with distances computed to every other linked cell
+     */
+    public Distances distances() {
+        Distances distances = new Distances(this);
+        // frontier contains cells that are linked to, by this cell
+        List<Cell> frontier = new ArrayList<>();
+        // new frontier holds the neighboring linked cells of the current cell
+        List<Cell> newFrontier = new ArrayList<>();
+        frontier.add(this);
+
+        while (!frontier.isEmpty()) {
+            newFrontier.clear();
+
+            for (Cell cell: frontier) {
+                for (Cell linked: cell.links()) {
+                    if (!distances.contains(linked)) {
+                        // every linked cell is 1 more cell away from this cell
+                        distances.put(linked, distances.get(cell) + 1);
+                        newFrontier.add(linked);
+                    }
+                }
+            }
+            frontier.clear();
+            frontier.addAll(newFrontier);
+        }
+
+        return distances;
+    }
+
     @Override
     public String toString() {
         return "Cell{" +
                 "row=" + row +
                 ", col=" + col +
+                ", north=" + north.isPresent() +
+                ", south=" + south.isPresent() +
+                ", east=" + east.isPresent() +
+                ", west=" + west.isPresent() +
+                ", linkCount=" + this.links.size() +
                 '}';
     }
 

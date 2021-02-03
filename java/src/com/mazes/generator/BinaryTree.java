@@ -23,7 +23,7 @@ public class BinaryTree {
      * @param width number of columns in the generated maze
      * @return a Grid containing the random maze
      */
-    public static Grid generate(int height, int width) {
+    public Grid generate(int height, int width) {
         Grid grid = new Grid(height, width);
 
         for (Cell cell: grid) {
@@ -49,7 +49,7 @@ public class BinaryTree {
 
     public static void main(String[] args) {
         // generate and print a random maze 10x20
-        Grid grid = BinaryTree.generate(10, 20);
-        System.out.println(grid);
+        Grid maze = new BinaryTree().generate(10, 20);
+        System.out.println(maze);
     }
 }
