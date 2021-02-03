@@ -18,7 +18,11 @@ public class Util {
         return (int) (Math.random() * max);
     }
 
-    // shuffles the elements of the passed in array in place
+    /**
+     * shuffles the elements of the passed in array in place
+     * @param arr - array of elements to shuffle
+     * @param <T> - the type of array element
+     */
     public static<T> void shuffle(T [] arr) {
         for (int i = arr.length - 1; i > 0; i--) {
             var rand = rand(i+1);

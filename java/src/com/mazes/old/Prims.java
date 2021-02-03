@@ -1,8 +1,9 @@
-package com.mazes;
+package com.mazes.old;
 
 import java.util.ArrayList;
 import java.util.List;
-import com.mazes.Direction;
+
+import com.mazes.Util;
 
 /**
  * Generates a maze using Prim's algorithm

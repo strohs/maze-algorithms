@@ -1,4 +1,4 @@
-package com.mazes;
+package com.mazes.old;
 
 /**
  * Direction encodes a North, South, East, West direction as an integer value. These values are stored in the cells

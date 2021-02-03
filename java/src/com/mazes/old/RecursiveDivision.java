@@ -1,4 +1,6 @@
-package com.mazes;
+package com.mazes.old;
+
+import com.mazes.Util;
 
 /**
  * Direction encodes a South, East, direction as an integer value.

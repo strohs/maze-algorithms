@@ -1,4 +1,6 @@
-package com.mazes;
+package com.mazes.old;
+
+import com.mazes.Util;
 
 /**
  * Encapsulates the recursive backtracking maze generation algorithm.
