@@ -2,12 +2,13 @@ package com.mazes;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 /**
  * Grid is a wrapper around a two-dimensional "grid" of Cells.
  */
-public class Grid {
+public class Grid implements Iterable<Cell> {
 
     // total number of rows in this grid
     public final int rows;
@@ -58,14 +59,6 @@ public class Grid {
         return Arrays.stream(this.grid).iterator();
     }
 
-
-    /**
-     *
-     * @return an iterator over the Cells of this grid in row order
-     */
-    public Iterator<Cell> iterator() {
-        return Arrays.stream(this.grid).flatMap(Arrays::stream).iterator();
-    }
 
 
     /**
@@ -124,14 +117,73 @@ public class Grid {
         }
     }
 
+    /**
+     * pretty prints the Grid into a String
+     * @return a pretty printed version of the Grid
+     */
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        // build the top wall of the grid
+        sb.append("+").append("---+".repeat(this.cols)).append("\n");
 
-    public static void main(String[] args) {
-        Grid g = new Grid(3, 3);
-        Iterator<Cell> iter = g.iterator();
+        Iterator<Cell[]> rowIter = this.row_iterator();
+        while (rowIter.hasNext()) {
+            StringBuilder top = new StringBuilder("|");
+            StringBuilder bottom = new StringBuilder("+");
 
-        while (iter.hasNext()) {
-            Cell c = iter.next();
-            System.out.println(c);
+            Cell[] row = rowIter.next();
+            for (Cell cell: row) {
+                // determine if an eastern wall should be drawn
+                if (cell.east.isPresent() && cell.is_linked(cell.east.get())) {
+                    top.append("    "); // no east wall drawn
+                }
+                else {
+                    top.append("   |"); // east wall is drawn
+                }
+
+                // determine if south wall should be drawn
+                if (cell.south.isPresent() && cell.is_linked(cell.south.get())) {
+                    bottom.append("   +");
+                } else {
+                    bottom.append("---+");
+                }
+            }
+            sb.append(top).append("\n");
+            sb.append(bottom).append("\n");
+        }
+
+        return sb.toString();
+    }
+
+    @Override
+    public Iterator<Cell> iterator() {
+        return new GridIterator();
+    }
+
+    /**
+     * An iterator implementation that iterates over the Cells of a Grid in row order
+     */
+    class GridIterator implements Iterator<Cell> {
+        // one-dimensional index into Grid cells array
+        int idx = 0;
+
+        @Override
+        public boolean hasNext() {
+            return idx < Grid.this.size();
+        }
+
+        @Override
+        public Cell next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
+            // convert one-dimensional index into row,col indices
+            int cur_row = idx / Grid.this.cols;
+            int cur_col = idx % Grid.this.cols;
+            idx++;
+            return grid[cur_row][cur_col];
         }
     }
+
 }
