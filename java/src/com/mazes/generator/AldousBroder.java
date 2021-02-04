@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Aldous-Broder maze generation. Aldous-Broder generates mazes using "random-walks". This avoids creating mazes
- * with biases (like Binary Tree) and instead produces mazes with lots of winding passages.
+ * Aldous-Broder maze generation. Aldous-Broder generates perfect mazes, (mazes without loops), using "random-walks".
+ * This avoids creating mazes with biases (like Binary Tree) and instead produces mazes with lots of winding passages.
  *
  * The idea behind it is as follows:
  * 1. Start anywhere in the grid you want, and choose a random neighbor.

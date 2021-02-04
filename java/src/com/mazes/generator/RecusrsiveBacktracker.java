@@ -7,7 +7,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Recursive Backtracker
+ * Recursive Backtracker for generating perfect mazes, (mazes without loops).
  *
  * Here’s the mile-high view of recursive backtracker:
  * 1. Choose a random starting point in the grid.

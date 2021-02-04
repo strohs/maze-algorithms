@@ -8,10 +8,11 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 /**
- * Hunt and Kill maze generation algorithm
- * Hunt-and-kill is similar to Aldous-Broder but slightly different. Where Aldous-Broder allows
- * you to step into any cell (even previously visited ones), hunt-and-kill requires you to walk
- * on only unvisited cells. If you walk into a corner, you begin the "hunt" mode, which is where
+ * Hunt and Kill maze generation algorithm.
+ *
+ * Hunt-and-kill is similar to Aldous-Broder but slightly different. It generates perfect mazes, (mazes without loops),
+ * but Aldous-Broder allows you to step into any cell (even previously visited ones), while hunt-and-kill requires
+ * you to walk on only unvisited cells. If you walk into a corner, you begin the "hunt" mode, which is where
  * you start from the top of the maze, look for the first cell that is a neighbor of the cells in
  * the current walk you are performing, and then link into the walk. Then repeat the random walk
  * until all cells are visited.

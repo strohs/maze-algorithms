@@ -8,7 +8,9 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Sidewinder is similar to binary tree but does have some differences. In a nutshell, it goes like this:
+ * Sidewinder is similar to binary tree but does have some differences.
+ *
+ * In a nutshell, it goes like this:
  *
  * 1. Work through the grid row-wise, starting with the cell at 0,0. Initialize the “run” set to be empty.
  * 2. Add the current cell to the “run” set.

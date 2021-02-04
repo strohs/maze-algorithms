@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Wilson's Algorithm for generating random mazes.
+ * Wilson's Algorithm for generates perfect mazes, (mazes without loops).
  *
  * Like Aldous-Broder, this algorithm depends on the idea of a random walk, but with a twist.
  * It performs what is called a loop-erased random walk, which means that as it goes, if the path
