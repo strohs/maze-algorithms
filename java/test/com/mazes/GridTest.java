@@ -2,8 +2,6 @@ package com.mazes;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.Iterator;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class GridTest {
@@ -22,7 +20,7 @@ class GridTest {
     void iterator_should_iterate_over_20_elements() {
         Grid g = new Grid(4, 5);
         int iterCount = 0;
-        for (Cell c: g) {
+        for ( Cell c: g) {
             iterCount++;
         }
         assertEquals(iterCount, 20);

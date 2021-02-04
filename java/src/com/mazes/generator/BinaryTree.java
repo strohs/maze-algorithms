@@ -2,10 +2,10 @@ package com.mazes.generator;
 
 import com.mazes.Cell;
 import com.mazes.Grid;
-import com.mazes.Util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  *
@@ -16,7 +16,7 @@ import java.util.List;
  * 4. repeat until all cells have been visited
  */
 public class BinaryTree {
-
+    
     /**
      * generates a random maze using binary tree algorithm
      * @param height number of rows in the generated maze
@@ -24,9 +24,10 @@ public class BinaryTree {
      * @return a Grid containing the random maze
      */
     public Grid generate(int height, int width) {
+        Random random = new Random();
         Grid grid = new Grid(height, width);
 
-        for (Cell cell: grid) {
+        for ( Cell cell: grid) {
             List<Cell> neighbors = new ArrayList<>();
 
 
@@ -38,7 +39,7 @@ public class BinaryTree {
 
             // choose a random neighbor from neighbors and create a link to it
             if (!neighbors.isEmpty()) {
-                int randIdx = Util.rand(neighbors.size());
+                int randIdx = random.nextInt(neighbors.size());
                 cell.link(neighbors.get(randIdx), true);
             }
 

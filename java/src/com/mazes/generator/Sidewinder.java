@@ -1,13 +1,11 @@
 package com.mazes.generator;
 
-import com.mazes.Cell;
 import com.mazes.Grid;
-import com.mazes.Util;
+import com.mazes.Cell;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.function.Predicate;
 
 /**
  * Sidewinder is similar to binary tree but does have some differences. In a nutshell, it goes like this:

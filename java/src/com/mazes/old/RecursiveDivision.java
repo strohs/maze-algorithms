@@ -110,7 +110,7 @@ public class RecursiveDivision {
         } else if (height < width) {
             return Orientation.VERTICAL;
         } else {
-            if (Util.rand(2) == 0) {
+            if ( Util.rand(2) == 0) {
                 return Orientation.HORIZONTAL;
             } else {
                 return Orientation.VERTICAL;

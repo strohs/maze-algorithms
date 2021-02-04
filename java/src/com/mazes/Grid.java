@@ -1,12 +1,11 @@
 package com.mazes;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 
 /**
- * Grid is a wrapper around a two-dimensional "grid" of Cells.
+ * Grid is a wrapper object around a two-dimensional "grid" of Cells.
+ * Grid's are used by maze generation algorithms to hold the "carved" passages between cells. Passages
+ * are created by calling the cell's link() method.
  */
 public class Grid implements Iterable<Cell> {
 
@@ -19,6 +18,9 @@ public class Grid implements Iterable<Cell> {
     // holds the cells of this grid in a two-dimensional array
     Cell [][] grid;
 
+    // random number generator
+    Random random;
+
     /**
      * builds a new Grid containing the specified rows and columns.
      * @param rows the number of rows the grid should contain (i.e. its height)
@@ -28,6 +30,7 @@ public class Grid implements Iterable<Cell> {
         this.rows = rows;
         this.cols = cols;
         this.grid = buildCells(rows, cols);
+        this.random = new Random();
     }
 
 
@@ -56,8 +59,8 @@ public class Grid implements Iterable<Cell> {
      * @return a random cell in this Grid
      */
     public Cell randomCell() {
-        int row = Util.rand(this.rows);
-        int col = Util.rand(this.cols);
+        int row = random.nextInt(this.rows);
+        int col = random.nextInt(this.cols);
         return this.grid[row][col];
     }
 
@@ -130,7 +133,7 @@ public class Grid implements Iterable<Cell> {
 
     /**
      * pretty prints the Grid into a String
-     * @return a pretty printed version of the Grid
+     * @return a pretty printed version of the Grid suitable for display to STDOUT
      */
     @Override
     public String toString() {
@@ -138,6 +141,7 @@ public class Grid implements Iterable<Cell> {
         // build the top wall of the grid
         sb.append("+").append("---+".repeat(this.cols)).append("\n");
 
+        // iterate row by row and only check if an east wall needs to be drawn or a south wall
         Iterator<Cell[]> rowIter = this.row_iterator();
         while (rowIter.hasNext()) {
             StringBuilder top = new StringBuilder("|");
@@ -155,9 +159,9 @@ public class Grid implements Iterable<Cell> {
 
                 // determine if south wall should be drawn
                 if (cell.south.isPresent() && cell.is_linked(cell.south.get())) {
-                    bottom.append("   +");
+                    bottom.append("   +");  // no south wall
                 } else {
-                    bottom.append("---+");
+                    bottom.append("---+");  // draw a south wall
                 }
             }
             sb.append(top).append("\n");
@@ -188,6 +192,7 @@ public class Grid implements Iterable<Cell> {
                 // if the current cell is contained in the Distance object, print its distance info in the cell
                 // as a hexa-decimal number, else print 2 spaces
                 String body = distances.contains(cell) ? String.format("%2x", distances.get(cell)) : "  ";
+
                 // determine if an eastern wall should be drawn
                 if (cell.east.isPresent() && cell.is_linked(cell.east.get())) {
                     top.append(" ").append(body).append(" "); // no east wall drawn
