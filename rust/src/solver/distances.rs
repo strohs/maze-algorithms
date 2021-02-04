@@ -12,7 +12,7 @@ pub struct Distances {
     // root is the starting position in the grid
     root: Pos,
     // stores the 'distance' from the cell at `Pos`, to the `root` cell.
-    cells: HashMap<Pos, u32>,
+    cells: HashMap<Pos, i32>,
 }
 
 
@@ -31,13 +31,13 @@ impl Distances {
 
     /// returns the distance information for the cell at the specified `pos`. Returns `None` if
     /// the cell is not contained within Distances
-    pub fn get(&self, pos: &Pos) -> Option<&u32> {
+    pub fn get(&self, pos: &Pos) -> Option<&i32> {
         self.cells.get(pos)
     }
 
 
     /// insert the cell position and distance
-    pub fn insert(&mut self, cell_pos: Pos, distance: u32) {
+    pub fn insert(&mut self, cell_pos: Pos, distance: i32) {
         self.cells.insert(cell_pos, distance);
     }
 
@@ -50,7 +50,7 @@ impl Distances {
 /// index Distances using a `Pos`ition struct.
 /// This implementation passes to a cell's HashMap `Index` implementation
 impl Index<Pos> for Distances {
-    type Output = u32;
+    type Output = i32;
 
     fn index(&self, pos: Pos) -> &Self::Output {
         &self.cells[&pos]

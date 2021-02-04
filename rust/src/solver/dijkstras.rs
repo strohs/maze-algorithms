@@ -10,7 +10,7 @@ fn distances(grid: &Grid, root: Pos) -> Distances {
     // weights holds the Positions and current costs (weights) of the shortest path
     let mut weights = Distances::new(root);
 
-    // pending is a vector of position that could be moved to
+    // pending holds positions that need to be visited
     let mut pending = vec![root];
 
     while !pending.is_empty() {
@@ -19,7 +19,7 @@ fn distances(grid: &Grid, root: Pos) -> Distances {
         pending.sort_unstable_by(|ap, bp| grid[*bp].weight().cmp(&grid[*ap].weight()) );
 
         if !pending.is_empty() {
-            // remove the last position from pending, it has the lowest weight
+            // pop the last position from pending, it has the lowest weight
             let cur_pos = pending.pop().unwrap();
 
             if let Some(linked_neighbors) = grid.links(&cur_pos) {
@@ -30,11 +30,11 @@ fn distances(grid: &Grid, root: Pos) -> Distances {
 
                     // the total weight of moving into a neighboring cell is the total weight
                     // of the current path so far, plus the weight of the neighbor
-                    let total_weight = weights.get(&cur_pos).unwrap() + grid[neighbor].weight() as u32;
+                    let total_weight = weights.get(&cur_pos).unwrap() + grid[neighbor].weight();
 
                     // if the cost of moving into neighbor has not been recorded in the weights vec
                     // OR the total cost of moving to neighbor is less than the current weight
-                    if weights.get(&neighbor).is_none() || total_weight < *weights.get(&neighbor).unwrap() as u32 {
+                    if weights.get(&neighbor).is_none() || total_weight < *weights.get(&neighbor).unwrap() {
                         pending.push(neighbor);
                         weights.insert(neighbor, total_weight);
                     }
