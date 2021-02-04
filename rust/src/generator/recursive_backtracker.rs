@@ -32,7 +32,7 @@ pub fn generate(height: usize, width: usize) -> Grid {
         let neighbors = grid[*current_pos]
             .neighbors()
             .iter()
-            .filter(|&pos| grid.links(pos).is_none())
+            .filter(|&pos| grid.links(pos).is_empty())
             .map(|pos| *pos)
             .collect::<Vec<Pos>>();
 

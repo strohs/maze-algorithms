@@ -22,22 +22,19 @@ fn distances(grid: &Grid, root: Pos) -> Distances {
             // pop the last position from pending, it has the lowest weight
             let cur_pos = pending.pop().unwrap();
 
-            if let Some(linked_neighbors) = grid.links(&cur_pos) {
+            // iterate thru the linked neighbors and compute the cost of moving into
+            // each of them
+            for neighbor in grid.links(&cur_pos) {
 
-                // iterate thru the linked neighbors and compute the cost of moving into
-                // each of them
-                for neighbor in linked_neighbors {
+                // the total weight of moving into a neighboring cell is the total weight
+                // of the current path so far, plus the weight of the neighbor
+                let total_weight = weights.get(&cur_pos).unwrap() + grid[neighbor].weight();
 
-                    // the total weight of moving into a neighboring cell is the total weight
-                    // of the current path so far, plus the weight of the neighbor
-                    let total_weight = weights.get(&cur_pos).unwrap() + grid[neighbor].weight();
-
-                    // if the cost of moving into neighbor has not been recorded in the weights vec
-                    // OR the total cost of moving to neighbor is less than the current weight
-                    if weights.get(&neighbor).is_none() || total_weight < *weights.get(&neighbor).unwrap() {
-                        pending.push(neighbor);
-                        weights.insert(neighbor, total_weight);
-                    }
+                // if the cost of moving into neighbor has not been recorded in the weights vec
+                // OR the total cost of moving to neighbor is less than the current weight
+                if weights.get(&neighbor).is_none() || total_weight < *weights.get(&neighbor).unwrap() {
+                    pending.push(neighbor);
+                    weights.insert(neighbor, total_weight);
                 }
             }
         }
@@ -64,16 +61,15 @@ pub fn find_shortest_path(maze: &Grid, start: Pos, goal: Pos) -> Distances {
         if current == start {
             break;
         }
+
         // get the positions of all neighbors to the current cell's position
-        if let Some(neighbor_links) = maze.links(&current) {
-            for neighbor_pos in neighbor_links {
-                // if the neighbor's distance is less than the current cell's distance, insert
-                // the neighbor cell into curr_path, and make that neighbor the current cell
-                if maze_dist[neighbor_pos] < maze_dist[current] {
-                    curr_path.insert(neighbor_pos, maze_dist[neighbor_pos]);
-                    current = neighbor_pos;
-                    break;
-                }
+        for neighbor_pos in maze.links(&current) {
+            // if the neighbor's distance is less than the current cell's distance, insert
+            // the neighbor cell into curr_path, and make that neighbor the current cell
+            if maze_dist[neighbor_pos] < maze_dist[current] {
+                curr_path.insert(neighbor_pos, maze_dist[neighbor_pos]);
+                current = neighbor_pos;
+                break;
             }
         }
     }

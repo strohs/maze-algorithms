@@ -27,7 +27,7 @@ pub fn generate(height: usize, width: usize) -> Grid {
 
         // if the neighbor_pos is not linked to anything (i.e. it is unvisited), then link it
         // to the current cell
-        if grid.links(&neighbor_pos).is_none() {
+        if grid.links(&neighbor_pos).is_empty() {
             grid.link(&curr_pos, &neighbor_pos, true);
             unvisited -= 1;
         }

@@ -47,7 +47,7 @@ pub fn generate(height: usize, width: usize) -> Grid {
 
                 // if position is unvisited BUT one of its neighbors is, then link pos to a
                 // to a random neighbor and set current to pos
-                if grid.links(&pos).is_none() && !visited_neighbors.is_empty() {
+                if grid.links(&pos).is_empty() && !visited_neighbors.is_empty() {
                     current = Some(pos);
 
                     if let Some(neighbor_pos) = visited_neighbors.choose(&mut thread_rng()) {
@@ -69,7 +69,7 @@ fn unvisited_neighbors(grid: &Grid, pos: Pos) -> Vec<Pos> {
     grid[pos]
         .neighbors()
         .iter()
-        .filter(|&p| grid.links(p).is_none())
+        .filter(|&p| grid.links(p).is_empty())
         .map(|p| *p)
         .collect()
 }
@@ -81,7 +81,7 @@ fn visited_neighbors(grid: &Grid, pos: Pos) -> Vec<Pos> {
     grid[pos]
         .neighbors()
         .iter()
-        .filter(|&p| grid.links(p).is_some())
+        .filter(|&p| !grid.links(p).is_empty())
         .map(|p| *p)
         .collect()
 }
