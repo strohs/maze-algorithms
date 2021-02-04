@@ -14,6 +14,9 @@ pub struct GridCell {
     south: Option<Pos>,
     east: Option<Pos>,
     west: Option<Pos>,
+
+    // the weight (or cost) of this cell
+    weight: i32,
 }
 
 impl GridCell {
@@ -23,6 +26,7 @@ impl GridCell {
         south: Option<Pos>,
         east: Option<Pos>,
         west: Option<Pos>,
+        weight: i32,
     ) -> Self {
         Self {
             pos,
@@ -30,11 +34,12 @@ impl GridCell {
             south,
             east,
             west,
+            weight,
         }
     }
 
     /// constructs a GridCell with the specified position, but with option fields set to None
-    /// and an empty links HashSet
+    /// and an empty links HashSet. The initial weight of the GridCell is set to 1
     pub fn empty(pos: Pos) -> Self {
         Self {
             pos,
@@ -42,6 +47,7 @@ impl GridCell {
             south: None,
             east: None,
             west: None,
+            weight: 1,
         }
     }
 
@@ -86,6 +92,16 @@ impl GridCell {
             neighbors.push(self.west.unwrap());
         }
         neighbors
+    }
+
+    /// returns the weight of this GridCell
+    pub fn weight(&self) -> i32 {
+        self.weight
+    }
+
+    /// sets the weight of this grid cell
+    pub fn set_weight(&mut self, weight: i32) {
+        self.weight = weight;
     }
 }
 

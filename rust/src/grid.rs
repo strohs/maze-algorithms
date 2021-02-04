@@ -38,16 +38,6 @@ impl Grid {
         self.rows * self.cols
     }
 
-    /// returns the grid cell at the specified row, col. If row or col are out of bounds
-    /// then None is returned.
-    /// TODO may not need this function
-    // pub fn get(&self, row: isize, col: isize) -> Option<&GridCell> {
-    //     if row < 0 || col < 0 {
-    //         None
-    //     } else {
-    //         self.grid.get(self.idx1d(&Pos::from((row as usize, col as usize))))
-    //     }
-    // }
 
     /// links (carves a passage between) `from` and `to`. If `bidi` (bidirectional) is `true` than
     /// an another link is created between `to` and `from`
@@ -108,6 +98,14 @@ impl Grid {
                 .map(|i| self.idx2d(*i))
                 .collect::<Vec<Pos>>()
         )
+    }
+
+    /// returns the positions in thia Grid that are dead-ends. Dead-ends are Cells that only
+    /// have one link into/out-of them
+    pub fn dead_ends(&self) -> Vec<Pos> {
+        Pos::iter(self.rows, self.cols)
+            .filter(|p| self.links(p).is_some() && self.links(p).unwrap().len() == 1)
+            .collect()
     }
 
     /// returns a the position of a random cell in the grid
@@ -190,6 +188,7 @@ impl Grid {
                     Grid::has_south(&pos, rows),
                     Grid::has_east(&pos, cols),
                     Grid::has_west(&pos),
+                    1,
                 );
                 grid.push(gc);
             }

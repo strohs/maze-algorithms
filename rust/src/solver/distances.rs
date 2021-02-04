@@ -15,7 +15,9 @@ pub struct Distances {
     cells: HashMap<Pos, u32>,
 }
 
+
 impl Distances {
+
     /// returns a new Distance struct with the specified `root` Position as the root of
     /// the returned distance struct.
     pub fn new(root: Pos) -> Self {
@@ -26,11 +28,13 @@ impl Distances {
         Self { root, cells }
     }
 
+
     /// returns the distance information for the cell at the specified `pos`. Returns `None` if
     /// the cell is not contained within Distances
     pub fn get(&self, pos: &Pos) -> Option<&u32> {
         self.cells.get(pos)
     }
+
 
     /// insert the cell position and distance
     pub fn insert(&mut self, cell_pos: Pos, distance: u32) {

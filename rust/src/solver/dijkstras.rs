@@ -3,31 +3,46 @@ use crate::position::Pos;
 use crate::solver::distances::Distances;
 
 /// find the distances from a `root` (cell Pos) to all other cells in the `grid`
-/// returns a `Distances` struct containing the computed distances for each cell
+/// returns a `Distances` struct containing the computed distances for each GridCell.
+/// Uses the GridCell's weight property to compute the distance
 fn distances(grid: &Grid, root: Pos) -> Distances {
-    let mut distances = Distances::new(root);
-    let mut frontier = vec![root];
 
-    let mut new_frontier = vec![];
-    while !frontier.is_empty() {
-        if let Some(cur_pos) = frontier.pop() {
-            // if the current cells has links to other cells...
-            if let Some(linked_cells) = grid.links(&cur_pos) {
-                // for each linked cell...
-                for linked_pos in linked_cells {
-                    // only visit cells that have not already been visited
-                    if distances.get(&linked_pos).is_none() {
-                        // the linked cells distance is 1 + the previous cell's distance
-                        distances.insert(linked_pos, distances[cur_pos] + 1);
-                        new_frontier.push(linked_pos);
+    // weights holds the Positions and current costs (weights) of the shortest path
+    let mut weights = Distances::new(root);
+
+    // pending is a vector of position that could be moved to
+    let mut pending = vec![root];
+
+    while !pending.is_empty() {
+
+        // sort pending so that cells with lowest weight are at the end of pending
+        pending.sort_unstable_by(|ap, bp| grid[*bp].weight().cmp(&grid[*ap].weight()) );
+
+        if !pending.is_empty() {
+            // remove the last position from pending, it has the lowest weight
+            let cur_pos = pending.pop().unwrap();
+
+            if let Some(linked_neighbors) = grid.links(&cur_pos) {
+
+                // iterate thru the linked neighbors and compute the cost of moving into
+                // each of them
+                for neighbor in linked_neighbors {
+
+                    // the total weight of moving into a neighboring cell is the total weight
+                    // of the current path so far, plus the weight of the neighbor
+                    let total_weight = weights.get(&cur_pos).unwrap() + grid[neighbor].weight() as u32;
+
+                    // if the cost of moving into neighbor has not been recorded in the weights vec
+                    // OR the total cost of moving to neighbor is less than the current weight
+                    if weights.get(&neighbor).is_none() || total_weight < *weights.get(&neighbor).unwrap() as u32 {
+                        pending.push(neighbor);
+                        weights.insert(neighbor, total_weight);
                     }
                 }
             }
         }
-        frontier.append(&mut new_frontier);
     }
-
-    distances
+    weights
 }
 
 /// finds the shortest path in the `maze`, beginning at `start` and finishing at `goal`
@@ -66,8 +81,9 @@ pub fn find_shortest_path(maze: &Grid, start: Pos, goal: Pos) -> Distances {
     curr_path
 }
 
-/// pretty prints the path (as asterisks) on top of the passed in `grid` and returns
-/// it as a String
+
+/// pretty prints the path as hexadecimal values showing the current weight, on top of
+/// the passed in `grid` and returns it as a String
 pub fn display_path(grid: &Grid, path: &Distances) -> String {
     let mut buf = String::new();
     // write the top wall of the grid
@@ -80,16 +96,19 @@ pub fn display_path(grid: &Grid, path: &Distances) -> String {
         let mut bottom = String::from("+");
 
         for cell in row.iter() {
-            // if the current cell is part of the path, we want to display a "*" else a " "
-            let body = path.get(&cell.pos()).map_or(" ", |_p| "*");
+            // if the current cell is part of the path, we want to display the weight else a "  "
+            let body = match path.get(&cell.pos()) {
+                Some(weight) => format!("{:2x}", weight),
+                _ => String::from("  "),
+            };
 
             // the body of the cell will display the distance from the root
             // determine if an eastern wall should be drawn
             match cell.east() {
                 Some(east_pos) if grid.has_link(&cell.pos(), &east_pos) => {
-                    top.push_str(&format!(" {}  ", body))
+                    top.push_str(&format!(" {} ", body))
                 }
-                _ => top.push_str(&format!(" {} |", body)),
+                _ => top.push_str(&format!(" {}|", body)),
             }
 
             // determine if a southern wall should be drawn
