@@ -1,6 +1,7 @@
 package com.mazes;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Grid is a wrapper object around a two-dimensional "grid" of Cells.
@@ -64,6 +65,46 @@ public class Grid implements Iterable<Cell> {
         return this.grid[row][col];
     }
 
+    /**
+     * get dead-end cells
+     * @return a List containing all the cells of this grid that are dead-ends. Dead-ends are cells that
+     * only have one link into/out of them.
+     */
+    public List<Cell> deadEnds() {
+        return Arrays.stream(this.grid)
+                .flatMap(Arrays::stream)
+                .filter(cell -> cell.links().size() == 1)
+                .collect(Collectors.toList());
+    }
+
+    public void braid(float p) {
+        List<Cell> deadEnds = this.deadEnds();
+        Collections.shuffle(deadEnds);
+
+        for (Cell cell: deadEnds) {
+            if (cell.links().size() == 1 && random.nextFloat() <= p) {
+                // get neighbors that are NOT linked to the current pos
+                List<Cell> neighbors = cell.neighbors()
+                        .stream()
+                        .filter(nbr -> !cell.is_linked(nbr))
+                        .collect(Collectors.toList());
+
+                // try to find neighbors that are also a dead end, if possible
+                List<Cell> best = neighbors.stream()
+                        .filter(nbr -> nbr.links().size() == 1)
+                        .collect(Collectors.toList());
+
+                // otherwise just use the original neigbors list
+                if (best.isEmpty()) {
+                    best = neighbors;
+                }
+
+                // choose a random neighbor and link to it
+                Cell randNbr = best.get(random.nextInt(best.size()));
+                cell.link(randNbr, true);
+            }
+        }
+    }
 
     /**
      *
