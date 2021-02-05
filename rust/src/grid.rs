@@ -117,33 +117,39 @@ impl Grid {
         self.idx2d(ridx)
     }
 
-    // /// Adds braids to this maze.
-    // /// `p` is a value between 0.0 and 1.0 and is the percentage amount of dead-ends to remove.
-    // /// 1.0 = remove all dead-ends, while a value of 0.5 would remove 50 percent of dead-ends
-    // pub fn braid(&mut self, p: f64) {
-    //     let mut dead_ends = self.dead_ends();
-    //     dead_ends.shuffle(&mut thread_rng());
-    //
-    //     for cell in self.grid.iter_mut() {
-    //         match self.links(&cell.pos()) {
-    //             Some(links) if links.len() == 1 && thread_rng().gen_bool(p) => {
-    //                 let neighbors = cell
-    //                     .neighbors()
-    //                     .iter()
-    //                     .filter(|&p| !self.has_link(&cell.pos(), p))
-    //                     .map(|p| *p)
-    //                     .collect::<Vec<Pos>>();
-    //
-    //                 let best = neighbors
-    //                     .iter()
-    //                     .filter_map(|p| self.links(p))
-    //                     .filter(|p|)
-    //             },
-    //             _ => (),
-    //         }
-    //
-    //     }
-    // }
+    /// Adds braids to this maze.
+    /// `p` is a value between 0.0 and 1.0 and is the percentage amount of dead-ends to remove.
+    /// 1.0 = remove all dead-ends, while a value of 0.5 would remove 50 percent of dead-ends
+    pub fn braid(&mut self, p: f64) {
+        let mut dead_ends = self.dead_ends();
+        dead_ends.shuffle(&mut thread_rng());
+
+        for pos in Pos::iter(self.rows, self.cols) {
+
+            if self.links(&pos).len() == 1 && thread_rng().gen_bool(p) {
+                let neighbors = self[pos]
+                    .neighbors()
+                    .iter()
+                    .filter(|&p| !self.has_link(&pos, p))
+                    .map(|p| *p)
+                    .collect::<Vec<Pos>>();
+
+                let mut best = neighbors
+                    .iter()
+                    .filter(|&p| self.links(p).len() == 1)
+                    .map(|p| *p)
+                    .collect::<Vec<Pos>>();
+
+                if best.is_empty() {
+                    best = neighbors;
+                }
+
+                if let Some(neighbor) = best.choose(&mut thread_rng()) {
+                    self.link(&pos, neighbor, true);
+                }
+            }
+        }
+    }
 
     /// returns an immutable iterator over this Grid's GridCells in row order
     pub fn iter_cells(&self) -> Iter<'_, GridCell> {
