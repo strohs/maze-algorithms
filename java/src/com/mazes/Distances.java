@@ -67,7 +67,5 @@ public class Distances {
     public Set<Cell> cells() {
         return this.cells.keySet();
     }
-
-
-
+    
 }
