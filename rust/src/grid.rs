@@ -124,9 +124,13 @@ impl Grid {
         let mut dead_ends = self.dead_ends();
         dead_ends.shuffle(&mut thread_rng());
 
-        for pos in Pos::iter(self.rows, self.cols) {
-
-            if self.links(&pos).len() == 1 && thread_rng().gen_bool(p) {
+        for pos in dead_ends {
+            // make sure the position is still a dead-end, as it may have been changed in a
+            // previous iteration of the loop
+            if self.links(&pos).len() != 1 || !thread_rng().gen_bool(p) {
+                continue
+            } else {
+                // get neighbors that are NOT linked to the current pos
                 let neighbors = self[pos]
                     .neighbors()
                     .iter()
@@ -134,16 +138,19 @@ impl Grid {
                     .map(|p| *p)
                     .collect::<Vec<Pos>>();
 
+                // try to select a neighbor that is also a dead end, if possible
                 let mut best = neighbors
                     .iter()
                     .filter(|&p| self.links(p).len() == 1)
                     .map(|p| *p)
                     .collect::<Vec<Pos>>();
 
+                // otherwise just use the original neighbors list
                 if best.is_empty() {
                     best = neighbors;
                 }
 
+                // choose a random neighbor and link to it
                 if let Some(neighbor) = best.choose(&mut thread_rng()) {
                     self.link(&pos, neighbor, true);
                 }
