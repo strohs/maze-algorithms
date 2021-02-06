@@ -4,7 +4,6 @@ package com.mazes.solver;
 import com.mazes.Cell;
 import com.mazes.Distances;
 import com.mazes.Grid;
-import com.mazes.generator.BinaryTree;
 import com.mazes.generator.RecusrsiveBacktracker;
 
 public class Dijkstras {
@@ -30,7 +29,7 @@ public class Dijkstras {
         // put the goal cell on the current path, this is where the search begins
         curPath.put(current, mazeDistances.get(current));
 
-        // the search is done once the current cell is the start cell
+        // the search is done once the current cell reaches the start cell
         while (current != start) {
             for (Cell neighbor : current.links()) {
                 // if the neighbor's distance is less than the current cell's distance, insert

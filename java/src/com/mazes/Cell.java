@@ -33,6 +33,9 @@ public class Cell {
     // a link to this cells western neighbor, if one exists
     Optional<Cell> west;
 
+    // the weight (or cost) of this cell
+    int weight;
+
     /**
      * constructs a new Cell with the specified row,col index. The cells neighbors will be set to
      * Optional.empty() and the Cell's links HashMap will be empty. The cells neighbors must be set individually
@@ -48,6 +51,7 @@ public class Cell {
         this.east = Optional.empty();
         this.west = Optional.empty();
         this.links = new HashMap<>();
+        this.weight = 1;
     }
 
     /**
@@ -92,6 +96,15 @@ public class Cell {
 
     void setWest(Optional<Cell> west) {
         this.west = west;
+    }
+
+
+    public int getWeight () {
+        return weight;
+    }
+
+    public void setWeight (int weight) {
+        this.weight = weight;
     }
 
     /**
@@ -153,34 +166,39 @@ public class Cell {
     }
 
     /**
-     * computes the distances between this cell and every other cell that is linked to this cell
-     * @return a Distances object, with this cell as the root, and with distances computed to every other linked cell
+     * computes the distances (i.e. the cost of moving into linked cells), using this cell
+     * as the root cell.
+     * @return a Distances object, with this cell as the root, and with distances (costs) computed for every other
+     * cell in the grid.
      */
     public Distances distances() {
-        Distances distances = new Distances(this);
-        // frontier contains cells that are linked to, by this cell
-        List<Cell> frontier = new ArrayList<>();
-        // new frontier holds the neighboring linked cells of the current cell
-        List<Cell> newFrontier = new ArrayList<>();
-        frontier.add(this);
 
-        while (!frontier.isEmpty()) {
-            newFrontier.clear();
+        // weights holds the current weights for each cell in the grid
+        Distances weights = new Distances(this);
 
-            for (Cell cell: frontier) {
-                for (Cell linked: cell.links()) {
-                    if (!distances.contains(linked)) {
-                        // every linked cell is 1 more cell away from this cell
-                        distances.put(linked, distances.get(cell) + 1);
-                        newFrontier.add(linked);
-                    }
+        // pending holds the cell of the grid that need to be visited
+        List<Cell> pending = new ArrayList<>();
+        pending.add(this);
+
+        while (!pending.isEmpty()) {
+            // sort the pending cells by weight,
+            pending.sort(Comparator.comparingInt(cell -> cell.weight));
+            // NOTE may want to use a stack here for more efficient removal
+            Cell current = pending.remove(0);
+
+            // iterate through the linked neighbors of current and choose the neighbor with the lowest cost
+            for (Cell neighbor: current.links()) {
+                // the total weight of moving into a neighboring cell is the total weight
+                // of the current path so far, plus the weight of the neighbor
+                int totalWeight = weights.get(current) + neighbor.weight;
+
+                if (!weights.contains(neighbor) || totalWeight < weights.get(neighbor)) {
+                    pending.add(neighbor);
+                    weights.put(neighbor, totalWeight);
                 }
             }
-            frontier.clear();
-            frontier.addAll(newFrontier);
         }
-
-        return distances;
+        return weights;
     }
 
     @Override
