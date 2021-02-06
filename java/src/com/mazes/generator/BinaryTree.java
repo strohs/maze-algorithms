@@ -27,7 +27,7 @@ public class BinaryTree {
         Random random = new Random();
         Grid grid = new Grid(height, width);
 
-        for ( Cell cell: grid) {
+        for (Cell cell: grid) {
             List<Cell> neighbors = new ArrayList<>();
 
 

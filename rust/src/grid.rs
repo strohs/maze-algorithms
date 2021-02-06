@@ -117,7 +117,8 @@ impl Grid {
         self.idx2d(ridx)
     }
 
-    /// Adds braids to this maze.
+    /// Adds braids to this maze by removing dead-end cells and turning them into loops
+    ///
     /// `p` is a value between 0.0 and 1.0 and is the percentage amount of dead-ends to remove.
     /// 1.0 = remove all dead-ends, while a value of 0.5 would remove 50 percent of dead-ends
     pub fn braid(&mut self, p: f64) {

@@ -77,6 +77,12 @@ public class Grid implements Iterable<Cell> {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Adds braids to this maze by removing dead-end cells and turning them into loops
+     *
+     * @param p a float value where 0.0 <= p <= 1.0, that is the percentage amount of dead-ends to remove.
+     *          1.0 = remove all dead-ends, while a value of 0.5 would remove 50 percent of dead-ends
+     */
     public void braid(float p) {
         List<Cell> deadEnds = this.deadEnds();
         Collections.shuffle(deadEnds);
