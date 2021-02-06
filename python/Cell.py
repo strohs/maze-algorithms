@@ -8,7 +8,7 @@ class Cell:
     Cell represents a cell in a two-dimensional Grid. Every cell knows its row and column position in the Grid,
     as well as if it has neighboring cells to the North, South, East or West. Cells also keep track of any "links"
     to those neighboring Cells. A link means that a "passage" has been "carved" between this cell and another cell,
-    connecting them in a maze.
+    connecting them in a maze.  Each cell also has a weight, or cost, associated with moving into the cell.
     Two Cells are considered equal if their corresponding row,col indices are equal.
     """
 
@@ -20,6 +20,7 @@ class Cell:
         self.east: Optional[Cell] = None
         self.west: Optional[Cell] = None
         self.links = {}
+        self.weight = 1
 
     def link(self, other, bidi=True):
         """
@@ -75,25 +76,29 @@ class Cell:
 
     def distances(self) -> Distances:
         """
-        computes the distances between this cell and every other cell that is linked to this cell
-        :return: a Distances object, with this cell as the root, and with distances computed to every other linked cell
+        computes the distances (i.e. the cost of moving into linked cells), using this cell as the root cell.
+        :return: a Distances object, with this cell as the root, and with distances (costs) computed for every other
+        cell in the grid.
         """
-        distances = Distances(self)
-        frontier = [self]
+        weights = Distances(self)
+        pending = [self]
 
-        while frontier:
-            new_frontier = []
+        while pending:
+            # sort pending cells by weight
+            pending.sort(key=lambda cell: cell.weight)
+            current = pending.pop(0)
 
-            for cell in frontier:
-                for linked_cell in cell.linked_cells():
-                    if linked_cell not in distances.cells:
-                        distances.cells[linked_cell] = distances.cells[cell] + 1
-                        new_frontier.append(linked_cell)
+            # iterate through the linked neighbors of current and choose the neighbor with the lowest cost
+            for neighbor in current.linked_cells():
+                # the total weight of moving into a neighboring cell is the total weight
+                # of the current path so far, plus the weight of the neighbor
+                total_weight = weights.cells[current] + neighbor.weight
 
-            frontier.clear()
-            frontier.extend(new_frontier)
+                if neighbor not in weights.cells or total_weight < weights.cells[neighbor]:
+                    pending.append(neighbor)
+                    weights.cells[neighbor] = total_weight
 
-        return distances
+        return weights
 
     def __str__(self):
         return "({},{}) N:{} S:{} E:{} W:{} links:{}".format(

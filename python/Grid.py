@@ -16,8 +16,52 @@ class Grid:
         self.grid = [[Cell(r, c) for c in range(cols)] for r in range(rows)]
         self._build_cell_neighbors()
 
+    def size(self):
+        """return the dimension of this grid, which is  grid.rows * grid.cols"""
+        return self.rows * self.cols
+
+    def get(self, row: int, col: int) -> Cell:
+        return self.grid[row][col]
+
+    def random_cell(self):
+        """returns a random cell in this grid"""
+        return random.choice(random.choice(self.grid))
+
+    def dead_ends(self) -> list:
+        """
+        returns a list of cells in this grid that are dead end cells. Dead-end cells only have one link
+        into/out of them
+        """
+        return [cell for cell in self.cell_iterator() if len(cell.linked_cells()) == 1]
+
+    def braid(self, p: float):
+        """
+        Adds braids to this maze by removing dead-end cells and turning them into loops
+        :param p: a float value where 0.0 <= p <= 1.0, that is the percentage amount of dead-ends to remove.
+        1.0 = remove all dead-ends, while a value of 0.5 would remove 50 percent of dead-ends
+        :return: None, the grid is mutated in-place
+        """
+        # get all dead-ends in the grid and shuffle them
+        dead_ends = self.dead_ends()
+        random.shuffle(dead_ends)
+
+        for cell in dead_ends:
+            if len(cell.linked_cells()) == 1 and random.random() <= p:
+                # get neighbors that are not linked to cell
+                neighbors = list(filter(lambda c: not cell.is_linked(c), cell.linked_cells()))
+
+                # try to find neighbors that are also dead-ends, if possible
+                best = list(filter(lambda c: len(c.linked_cells()) == 1))
+
+                # if no best cells could be found, then just use neighbors
+                if not best:
+                    best = neighbors
+
+                # choose a random neighbor and link to it
+                cell.link(random.choice(best))
+
     def _build_cell_neighbors(self):
-        """sets the neighbor pointers for each cell in the grid"""
+        """sets the neighbor cells for each cell in the grid"""
         for r in range(self.rows):
             for c in range(self.cols):
                 # cell will have a north neighbor
@@ -31,7 +75,7 @@ class Grid:
                     self.grid[r][c].east = self.grid[r][c + 1]
                 # cell will have west neighbor
                 if c > 0:
-                    self.grid[r][c].east = self.grid[r][c - 1]
+                    self.grid[r][c].west = self.grid[r][c - 1]
 
     def row_iterator(self):
         """iterates over the rows of this grid"""

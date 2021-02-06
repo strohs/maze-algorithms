@@ -72,3 +72,13 @@ class TestCell(TestCase):
         cols = 5
         grid = [[(j, i) for i in range(cols)] for j in range(rows)]
         print(grid)
+
+    def test_distances_is_2(self):
+        """cell2 is 2 'units' away from cell0"""
+        cell0 = Cell(1, 0)
+        cell1 = Cell(1, 1)
+        cell2 = Cell(1, 2)
+        cell0.link(cell1)
+        cell1.link(cell2)
+        dist = cell0.distances()
+        self.assertEqual(dist.cells[cell2], 2)
