@@ -48,10 +48,10 @@ class Grid:
         for cell in dead_ends:
             if len(cell.linked_cells()) == 1 and random.random() <= p:
                 # get neighbors that are not linked to cell
-                neighbors = list(filter(lambda c: not cell.is_linked(c), cell.linked_cells()))
+                neighbors = list(filter(lambda c: not cell.is_linked(c), cell.neighbors()))
 
                 # try to find neighbors that are also dead-ends, if possible
-                best = list(filter(lambda c: len(c.linked_cells()) == 1))
+                best = list(filter(lambda c: len(c.linked_cells()) == 1, neighbors))
 
                 # if no best cells could be found, then just use neighbors
                 if not best:
@@ -88,8 +88,17 @@ class Grid:
             for c in range(self.cols):
                 yield self.grid[r][c]
 
-    def __str__(self) -> str:
-        """pretty prints the cells of the grid into a String"""
+    def print_grid(self, distances=None) -> str:
+        """
+        pretty prints the cells and walls of the grid into a String. if distances is passed,then the cells
+        distance information will be printed inside the cell body as a hexadecimal number
+        """
+
+        def cell_body(cell, distances):
+            if distances and cell in distances.cells:
+                return "{:02x}".format(distances.cells[cell])
+            else:
+                return "  "
 
         # build the top wall
         out = "+" + ("---+" * self.cols) + "\n"
@@ -100,13 +109,16 @@ class Grid:
 
             # for each cell only need to check if an east or a south wall should be drawn
             for cell in row:
+                # body contains what should be printed within a cell of the grid
+                body = cell_body(cell, distances)
+
                 # determine if eastern wall should be drawn
                 if cell.east and cell.is_linked(cell.east):
                     # don't draw a east wall
-                    top += "    "
+                    top += f" {body} "
                 else:
                     # draw the east wall
-                    top += "   |"
+                    top += f" {body}|"
 
                 # determine if south wall should be drawn
                 if cell.south and cell.is_linked(cell.south):
@@ -120,4 +132,8 @@ class Grid:
             out += bottom + "\n"
 
         return out
+
+    def __str__(self) -> str:
+        return self.print_grid()
+
 

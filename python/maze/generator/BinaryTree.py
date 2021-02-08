@@ -1,12 +1,11 @@
 import random
-import sys
 
 from maze.Grid import Grid
 
 
 def generate(height: int, width: int) -> Grid:
     """
-    generates a random maze using binary tree algorithm.
+    generates a random, perfect, maze using binary tree algorithm.
     Binary Tree algorithm is one of the simplest maze generation algorithms:
     1. start at a corner of the maze (in this case it will be the North West)
     2. iterate through the cells row by row

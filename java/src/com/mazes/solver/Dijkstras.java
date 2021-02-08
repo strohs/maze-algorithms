@@ -13,12 +13,11 @@ public class Dijkstras {
      * finds the shortest path in the `maze`, beginning at `start` and finishing at `goal`
      * returns a `Distances` struct that only contains the positions of cells on the shortest
      * path
-     * @param maze the maze to operate on
      * @param start the starting Cell in the maze to begin at
      * @param goal the starting Cell in the maze to end at
      * @return a Distances object containing Cells on the shortest path
      */
-    public static Distances pathToGoal(Grid maze, Cell start, Cell goal) {
+    public static Distances pathToGoal(Cell start, Cell goal) {
         // compute the distances from start Cell to all other cells in the maze.
         Distances mazeDistances = start.distances();
 
@@ -54,7 +53,7 @@ public class Dijkstras {
         // set goal to SouthEast corner of the maze
         Cell goal = maze.get(maze.rows - 1, maze.cols - 1);
         // find the shortest path
-        Distances shortestPath = Dijkstras.pathToGoal(maze, start, goal);
+        Distances shortestPath = Dijkstras.pathToGoal(start, goal);
 
         // print the grid to STDOUT and overlay the shortest path information on top of it
         System.out.println(maze.printDistances(shortestPath));

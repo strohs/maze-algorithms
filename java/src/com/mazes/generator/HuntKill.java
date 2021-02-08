@@ -66,7 +66,6 @@ public class HuntKill {
                         current = cell;
                         Cell randNeighbor = sample(visitedNeighbors);
                         current.link(randNeighbor, true);
-
                         break;
                     }
                 }

@@ -13,14 +13,66 @@ class Cell:
     """
 
     def __init__(self, row: int, col: int):
-        self.row = row
-        self.col = col
-        self.north: Optional[Cell] = None
-        self.south: Optional[Cell] = None
-        self.east: Optional[Cell] = None
-        self.west: Optional[Cell] = None
-        self.links = {}
-        self.weight = 1
+        self._row = row
+        self._col = col
+        self._north: Optional[Cell] = None
+        self._south: Optional[Cell] = None
+        self._east: Optional[Cell] = None
+        self._west: Optional[Cell] = None
+        self._links = {}
+        self._weight = 1
+
+    @property
+    def row(self):
+        return self._row
+
+    @property
+    def col(self):
+        return self._col
+
+    @property
+    def north(self):
+        return self._north
+
+    @north.setter
+    def north(self, value):
+        self._north = value
+
+    @property
+    def south(self):
+        return self._south
+
+    @south.setter
+    def south(self, value):
+        self._south = value
+
+    @property
+    def east(self):
+        return self._east
+
+    @east.setter
+    def east(self, value):
+        self._east = value
+
+    @property
+    def west(self):
+        return self._west
+
+    @west.setter
+    def west(self, value):
+        self._west = value
+
+    @property
+    def weight(self):
+        return self._weight
+
+    @weight.setter
+    def weight(self, value):
+        self._weight = value
+
+    @property
+    def links(self):
+        return self._links
 
     def link(self, other, bidi=True):
         """
@@ -29,7 +81,7 @@ class Cell:
         :param bidi: bidirectional, if True, than also carve a passage between other and self
         :return:
         """
-        self.links[other] = True
+        self._links[other] = True
         if bidi:
             other.links[self] = True
 
@@ -40,7 +92,7 @@ class Cell:
         :param bidi: bidirectional, if True, then also remove the link from other to self
         :return:
         """
-        del self.links[other]
+        del self._links[other]
         if bidi:
             del other.links[self]
 
@@ -48,7 +100,7 @@ class Cell:
         """
         :return: a list of all keys currently in this Cell's links dictionary
         """
-        return list(self.links)
+        return list(self._links)
 
     def is_linked(self, other):
         """
@@ -56,7 +108,7 @@ class Cell:
         :param other: the other Cell to test
         :return: True if there is a link from this Cell to other, else False
         """
-        return other in self.links
+        return other in self._links
 
     def neighbors(self):
         """
@@ -64,14 +116,14 @@ class Cell:
         are not returned
         """
         neighbors = []
-        if self.north is not None:
-            neighbors.append(self.north)
-        if self.south is not None:
-            neighbors.append(self.south)
-        if self.east is not None:
-            neighbors.append(self.east)
-        if self.west is not None:
-            neighbors.append(self.west)
+        if self._north is not None:
+            neighbors.append(self._north)
+        if self._south is not None:
+            neighbors.append(self._south)
+        if self._east is not None:
+            neighbors.append(self._east)
+        if self._west is not None:
+            neighbors.append(self._west)
         return neighbors
 
     def distances(self) -> Distances:
@@ -102,26 +154,26 @@ class Cell:
 
     def __str__(self):
         return "({},{}) N:{} S:{} E:{} W:{} links:{}".format(
-            self.row,
-            self.col,
-            self.north is not None,
-            self.south is not None,
-            self.east is not None,
-            self.west is not None,
-            len(self.links)
+            self._row,
+            self._col,
+            self._north is not None,
+            self._south is not None,
+            self._east is not None,
+            self._west is not None,
+            len(self._links)
         )
 
     def __eq__(self, other: object) -> bool:
-        """ two cells are equal of their respective row and column values are equal"""
+        """ two cells are equal if their respective row and column values are equal"""
         if not isinstance(other, Cell):
             return NotImplemented
-        return self.row == other.row and self.col == other.col
+        return self._row == other.row and self._col == other.col
 
     def __ne__(self, other: object) -> bool:
         if not isinstance(other, Cell):
             return NotImplemented
-        return self.row != other.row or self.col != other.col
+        return self._row != other.row or self._col != other.col
 
     def __hash__(self) -> int:
-        return self.row.__hash__() + self.col.__hash__()
+        return self._row.__hash__() + self._col.__hash__()
 

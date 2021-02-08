@@ -1,12 +1,11 @@
 import random
-import sys
 
 from maze.Grid import Grid
 
 
 def generate(height: int, width: int) -> Grid:
     """
-    generates a random maze using recursive backtracker algorithm
+    generates a random, perfect, maze using recursive backtracker algorithm
 
     Here’s how the recursive backtracker algorithm works:
     1. Choose a random starting point in the grid.
