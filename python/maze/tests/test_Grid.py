@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from Grid import Grid
+from maze.Grid import Grid
 
 
 class TestGrid(TestCase):

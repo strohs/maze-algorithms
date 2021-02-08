@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from Cell import Cell
+from maze.Cell import Cell
 
 
 class TestCell(TestCase):

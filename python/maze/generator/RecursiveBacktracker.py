@@ -1,7 +1,7 @@
 import random
 import sys
 
-from Grid import Grid
+from maze.Grid import Grid
 
 
 def generate(height: int, width: int) -> Grid:
@@ -44,20 +44,3 @@ def generate(height: int, width: int) -> Grid:
             stack.append(neighbor)
 
     return grid
-
-
-# example of generating a maze using recursive-backtracker
-if __name__ == "__main__":
-    def parse_input(argv):
-        """parses height and width from STDIN"""
-        height, width = 10, 15
-        if len(argv) > 1:
-            height = int(argv[1])
-        if len(argv) > 2:
-            width = int(argv[2])
-        return height, width
-
-    (height, width) = parse_input(sys.argv)
-    maze = generate(height, width)
-    print(f"recursive-backtracker {height}x{width}")
-    print(maze)

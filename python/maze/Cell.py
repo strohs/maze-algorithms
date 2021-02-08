@@ -1,6 +1,6 @@
 from typing import Optional
 
-from Distances import Distances
+from maze.Distances import Distances
 
 
 class Cell:

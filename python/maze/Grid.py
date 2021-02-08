@@ -1,5 +1,5 @@
 import random
-from Cell import Cell
+from maze.Cell import Cell
 
 
 class Grid:
