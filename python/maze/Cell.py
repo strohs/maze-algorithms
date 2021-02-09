@@ -98,7 +98,7 @@ class Cell:
 
     def linked_cells(self):
         """
-        :return: a list of all keys currently in this Cell's links dictionary
+        :return: a list of all cells that this cell has a link to
         """
         return list(self._links)
 
@@ -173,6 +173,8 @@ class Cell:
         if not isinstance(other, Cell):
             return NotImplemented
         return self._row != other.row or self._col != other.col
+
+
 
     def __hash__(self) -> int:
         return self._row.__hash__() + self._col.__hash__()

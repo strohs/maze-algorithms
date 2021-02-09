@@ -30,8 +30,8 @@ def generate(height: int, width: int) -> Grid:
         # get the last element of the stack
         current = stack[-1]
 
-        # get all linked neighbors of current that are NOT linked to other cells
-        neighbors = list(filter(lambda c: not c.linked_cells(), current.neighbors()))
+        # get all linked neighbors of current that are NOT linked to any other cells
+        neighbors = list(filter(lambda nbr: not nbr.linked_cells(), current.neighbors()))
 
         if not neighbors:
             # we are in a corner, so backtrack by popping the current cell off of the stack
