@@ -27,6 +27,12 @@ public class Prims {
 
     Random random = new Random();
 
+    /**
+     * generate a random maze using Prims algorithm
+     * @param height
+     * @param width
+     * @return
+     */
     public Grid generate(int height, int width) {
 
         Grid grid = new Grid(height, width);

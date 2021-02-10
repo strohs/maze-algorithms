@@ -4,7 +4,7 @@ use rand::{thread_rng, Rng};
 use std::collections::HashMap;
 use std::fmt::{Display, Formatter};
 use std::ops::{Index, IndexMut};
-use std::slice::{ChunksExact, Iter};
+use std::slice::{ChunksExact, Iter, IterMut};
 use rand::seq::SliceRandom;
 
 /// Grid represents a two-dimensional grid of `GridCell`s.
@@ -164,6 +164,10 @@ impl Grid {
         self.grid.iter()
     }
 
+    /// returns a mutable iterator over the cells of this grid
+    pub fn iter_mut_cells(&mut self) -> IterMut<'_, GridCell> {
+        self.grid.iter_mut()
+    }
 
     /// returns an immutable iterator over the *rows* of this grid
     pub fn row_iter(&self) -> ChunksExact<'_, GridCell> {
@@ -263,7 +267,7 @@ impl IndexMut<Pos> for Grid {
 impl Display for Grid {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         // write the top wall of the grid
-        writeln!(f, "+{}", "---+".repeat(self.cols))?;
+        writeln!(f, "+{}", "----+".repeat(self.cols))?;
 
         for row in self.row_iter() {
             // top holds the cell 'bodies' (blank spaces) and eastern walls
@@ -274,16 +278,16 @@ impl Display for Grid {
             for cell in row.iter() {
                 // determine if an eastern wall should be drawn
                 match cell.east() {
-                    Some(east_pos) if self.has_link(&cell.pos(), &east_pos) => top.push_str("    "),
-                    _ => top.push_str("   |"),
+                    Some(east_pos) if self.has_link(&cell.pos(), &east_pos) => top.push_str("     "),
+                    _ => top.push_str("    |"),
                 }
 
                 // determine if a southern wall should be drawn
                 match cell.south() {
                     Some(south_pos) if self.has_link(&cell.pos(), &south_pos) => {
-                        bottom.push_str("   +")
+                        bottom.push_str("    +")
                     }
-                    _ => bottom.push_str("---+"),
+                    _ => bottom.push_str("----+"),
                 }
             }
 

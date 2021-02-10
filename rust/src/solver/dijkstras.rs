@@ -76,12 +76,12 @@ pub fn find_shortest_path(maze: &Grid, start: Pos, goal: Pos) -> Distances {
 }
 
 
-/// pretty prints the path as hexadecimal values showing the current weight, on top of
-/// the passed in `grid` and returns it as a String
+/// pretty prints the `grid` and also displays each cell of `path` within its corresponding
+/// GridCell by printing its weight as a hexadecimal value.
 pub fn display_path(grid: &Grid, path: &Distances) -> String {
     let mut buf = String::new();
     // write the top wall of the grid
-    buf.push_str(&format!("+{}\n", "---+".repeat(grid.cols)));
+    buf.push_str(&format!("+{} \n", "----+".repeat(grid.cols)));
 
     for row in grid.row_iter() {
         // top holds the cell 'bodies' (blank spaces) and eastern walls
@@ -92,25 +92,24 @@ pub fn display_path(grid: &Grid, path: &Distances) -> String {
         for cell in row.iter() {
             // if the current cell is part of the path, we want to display the weight else a "  "
             let body = match path.get(&cell.pos()) {
-                Some(weight) => format!("{:2x}", weight),
-                _ => String::from("  "),
+                Some(weight) => format!("{:3x}", weight),
+                _ => String::from("   "),
             };
 
-            // the body of the cell will display the distance from the root
             // determine if an eastern wall should be drawn
             match cell.east() {
                 Some(east_pos) if grid.has_link(&cell.pos(), &east_pos) => {
-                    top.push_str(&format!(" {} ", body))
+                    top.push_str(&format!("{}  ", body))
                 }
-                _ => top.push_str(&format!(" {}|", body)),
+                _ => top.push_str(&format!("{} |", body)),
             }
 
             // determine if a southern wall should be drawn
             match cell.south() {
                 Some(south_pos) if grid.has_link(&cell.pos(), &south_pos) => {
-                    bottom.push_str("   +")
+                    bottom.push_str("    +")
                 }
-                _ => bottom.push_str("---+"),
+                _ => bottom.push_str("----+"),
             }
         }
 
