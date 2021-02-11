@@ -78,7 +78,7 @@ public class Prims {
 
     // example of generating a random maze of 10 rows and 15 columns
     public static void main(String[] args) {
-        Grid maze = new Prims().generate(10, 15);
+        Grid maze = new Prims().generate(20, 25);
         System.out.println(maze);
     }
 }

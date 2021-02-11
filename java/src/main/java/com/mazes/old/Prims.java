@@ -2,8 +2,7 @@ package com.mazes.old;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import com.mazes.Util;
+import java.util.Random;
 
 /**
  * Generates a maze using Prim's algorithm
@@ -188,22 +187,22 @@ public class Prims {
      * generate a maze using Prim's algorithm
      */
     public Maze prims() {
-
+        Random rand = new Random();
         // pick a random cell to start at
-        int xs = Util.rand(this.maze.width);
-        int ys = Util.rand(this.maze.height);
+        int xs = rand.nextInt(this.maze.width);
+        int ys = rand.nextInt(this.maze.height);
         mark(xs, ys);
 
         while (this.maze.frontier.size() != 0) {
             // choose a random element in the frontier and remove it
-            int ridx = Util.rand(this.maze.frontier.size());
+            int ridx = rand.nextInt(this.maze.frontier.size());
             Coord rCoord = maze.frontier.remove(ridx);
             int x = rCoord.x;
             int y = rCoord.y;
 
             // choose a random neighbor to the current frontier cell
             List<Coord> ns = neighbors(x,y);
-            int nidx = Util.rand(ns.size());
+            int nidx = rand.nextInt(ns.size());
             Coord rn = ns.get(nidx);
 
             // carve a path from the current frontier cell to the random neighbor cell

@@ -1,6 +1,8 @@
 package com.mazes.old;
 
-import com.mazes.Util;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Encapsulates the recursive backtracking maze generation algorithm.
@@ -83,8 +85,8 @@ public class RecursiveBacktracking {
      * cx,cy is the row/col index of the current cell being visited
      */
     void carvePassage(int cx, int cy, int[][] grid) {
-        Direction [] dirs = { Direction.N, Direction.S, Direction.E, Direction.W };
-        Util.shuffle(dirs);
+        List<Direction> dirs = Arrays.asList(Direction.N, Direction.S, Direction.E, Direction.W);
+        Collections.shuffle(dirs);
 
         for (Direction direction: dirs) {
             var nx = cx + Direction.dx(direction);

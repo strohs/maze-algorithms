@@ -1,6 +1,6 @@
 package com.mazes.old;
 
-import com.mazes.Util;
+import java.util.Random;
 
 /**
  * Direction encodes a South, East, direction as an integer value.
@@ -104,13 +104,15 @@ class Maze {
  */
 public class RecursiveDivision {
 
-    static Orientation chooseOrientation(int width, int height) {
+    Random rand = new Random();
+
+    Orientation chooseOrientation(int width, int height) {
         if (width < height) {
             return Orientation.HORIZONTAL;
         } else if (height < width) {
             return Orientation.VERTICAL;
         } else {
-            if ( Util.rand(2) == 0) {
+            if ( rand.nextInt(2) == 0) {
                 return Orientation.HORIZONTAL;
             } else {
                 return Orientation.VERTICAL;
@@ -119,7 +121,8 @@ public class RecursiveDivision {
     }
 
     // this is the recursive division algorithm
-    static void divide(Maze maze, int x, int y, int width, int height, Orientation orientation) {
+    void divide(Maze maze, int x, int y, int width, int height, Orientation orientation) {
+
         if (width < 2 || height < 2) {
             return;
         }
@@ -127,12 +130,12 @@ public class RecursiveDivision {
         var horizontal = orientation == Orientation.HORIZONTAL;
 
         // determine where a wall will be drawn first
-        var wx = horizontal ? x : x + Util.rand(width - 2);
-        var wy = horizontal ? y + Util.rand(height - 2) : y;
+        var wx = horizontal ? x : x + rand.nextInt(width - 1);
+        var wy = horizontal ? y + rand.nextInt(height - 1) : y;
 
         // determine where to place a passage thru the wall
-        var px = horizontal ? wx + Util.rand(width) : wx;
-        var py = horizontal ? wy : wy + Util.rand(height);
+        var px = horizontal ? wx + rand.nextInt(width) : wx;
+        var py = horizontal ? wy : wy + rand.nextInt(height);
 
         // determine direction to draw the wall
         var dx = horizontal ? 1 : 0;
@@ -167,7 +170,8 @@ public class RecursiveDivision {
 
     public static void main(String[] args) {
         var maze = new Maze(15, 15);
-        RecursiveDivision.divide(maze, 0, 0, maze.width, maze.height, chooseOrientation(maze.width, maze.height));
+        RecursiveDivision rd = new RecursiveDivision();
+        rd.divide(maze, 0, 0, maze.width, maze.height, rd.chooseOrientation(maze.width, maze.height));
         maze.displayMaze();
     }
 }
