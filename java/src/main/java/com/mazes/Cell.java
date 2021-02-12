@@ -176,7 +176,7 @@ public class Cell {
         // weights holds the current weights for each cell in the grid
         Distances weights = new Distances(this);
 
-        // pending holds the cell of the grid that need to be visited
+        // pending holds the cells of the grid that need to be visited
         List<Cell> pending = new ArrayList<>();
         pending.add(this);
 
