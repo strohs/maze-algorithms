@@ -1,4 +1,4 @@
-const Cell = require("../Cell.js");
+const Cell = require("../src/Cell.js");
 
 let should = require('chai').should() //actually call the function
 
