@@ -33,22 +33,25 @@ function generate(height, width) {
 
   const grid = new Grid(height, width);
 
-  for (const cell of Grid) {
+  for (const cell of grid) {
     // holds the current "run" of cells we are collecting
     let runs = [cell];
 
     // if a run should be closed out, then choose a random cell from the run, and link to that cells
     // northern neighbor
     if (shouldCloseOut(cell) && runs.length > 0) {
+
       const randCell = runs[randomInt(runs.length)];
 
       if (randCell.north) {
         randCell.north.link(randCell);
-        // clear the runs after we link to a cell
-        runs = [];
-      } else if (cell.east) {
-        cell.link(cell.east);
       }
+      // clear the runs after we link to a cell
+      runs = [];
+
+    } else if (cell.east) {
+      // else just link to the east cell
+      cell.east.link(cell);
     }
   }
 

@@ -38,6 +38,16 @@ function randomBoolean() {
   return Math.random() > 0.5;
 }
 
+/**
+ * returns (but does not remove) a random element from the passed in Array
+ * @param array
+ * @returns {*}
+ */
+function sample(array) {
+  return array[randomInt(array.length)];
+}
+
 exports.randomInt = randomInt;
 exports.shuffle = shuffle;
 exports.randomBoolean = randomBoolean;
+exports.sample = sample;
