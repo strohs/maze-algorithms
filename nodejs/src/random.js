@@ -30,5 +30,14 @@ function shuffle(array) {
   return array;
 }
 
+/**
+ * returns a random boolean
+ * @returns {boolean}
+ */
+function randomBoolean() {
+  return Math.random() > 0.5;
+}
+
 exports.randomInt = randomInt;
 exports.shuffle = shuffle;
+exports.randomBoolean = randomBoolean;
