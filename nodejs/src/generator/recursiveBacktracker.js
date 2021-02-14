@@ -1,4 +1,4 @@
-const {randomInt} = require("../random.js");
+const {sample} = require("../random.js");
 const Grid = require("../Grid.js");
 
 /**
@@ -38,7 +38,7 @@ function generate(height, width) {
       stack.pop();
     } else {
       // choose a random neighbor, link to it, and make it the next current by pushing it on the stack
-      const neighbor = neighbors[randomInt(neighbors.length)];
+      const neighbor = sample(neighbors);
       currentCell.link(neighbor);
       stack.push(neighbor);
     }

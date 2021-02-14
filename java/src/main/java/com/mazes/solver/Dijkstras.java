@@ -10,11 +10,11 @@ public class Dijkstras {
 
 
     /**
-     * finds the shortest path in the `maze`, beginning at `start` and finishing at `goal`
-     * returns a `Distances` struct that only contains the positions of cells on the shortest
-     * path
-     * @param start the starting Cell in the maze to begin at
-     * @param goal the starting Cell in the maze to end at
+     * finds the shortest path in a `maze` using Dijkstra's Algorithm. The path will begin at `start`
+     * and finish at `goal`.
+     *
+     * @param start the starting Cell of a maze to begin at
+     * @param goal  the starting Cell of a maze to end at
      * @return a Distances object containing Cells on the shortest path
      */
     public static Distances pathToGoal(Cell start, Cell goal) {

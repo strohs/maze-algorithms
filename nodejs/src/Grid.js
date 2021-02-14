@@ -58,7 +58,7 @@ class Grid {
 
   /**
    * returns the number of rows in this grid
-   * @returns {*}
+   * @returns {number}
    */
   get rows() {
     return this._rows;
@@ -66,7 +66,7 @@ class Grid {
 
   /**
    * the number of columns in this grid
-   * @returns {*}
+   * @returns {number}
    */
   get cols() {
     return this._cols;
@@ -165,6 +165,12 @@ class Grid {
     return out;
   }
 
+  /**
+   * pretty prints this Grid, but also prints the distance value for each cell of this grid
+   * @param distances {Distances} a distances object for cells in this grid.
+   * @returns {string} a string representation of this grid, with the distance information from Distances printed
+   * into the cells.
+   */
   printDistances(distances) {
     // build the top most border
     let out = "+" + "----+".repeat(this.cols) + "\n";
@@ -177,7 +183,7 @@ class Grid {
       for(const cell of row) {
         // if the current cell is contained in the Distance object, print its distance info in the cell
         // as a hexa-decimal number, else print 2 spaces
-        let body = distances.contains(cell) ? distances.getCell(cell).toString(16) : "  ";
+        let body = distances.contains(cell) ? distances.distanceOf(cell).toString(16).padStart(2, "0") : "  ";
         if (cell.east && cell.isLinked(cell.east)) {
           top += " " + body + "  ";
         } else {
@@ -185,9 +191,9 @@ class Grid {
         }
 
         if (cell.south && cell.isLinked(cell.south)) {
-          bottom += "     +";
+          bottom += "    +";
         } else {
-          bottom += "-----+";
+          bottom += "----+";
         }
       }
       out += top + "\n";

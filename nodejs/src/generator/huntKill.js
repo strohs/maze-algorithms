@@ -19,7 +19,7 @@ const Grid = require("../Grid.js");
  * @returns a Grid representing the random maze that was generated
  */
 function generate(height, width) {
-  const grid = new Grid(width, height);
+  const grid = new Grid(height, width);
 
   let currentCell = grid.randomCell();
 
