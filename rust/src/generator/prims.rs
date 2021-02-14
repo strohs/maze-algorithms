@@ -1,10 +1,32 @@
 use crate::grid::Grid;
 use rand::{thread_rng, Rng};
 use crate::position::Pos;
-use crate::grid_cell::GridCell;
 
+///
+/// generates a random maze using Prims algorithm.
+///
+/// Prim’s approaches maze generation from a different angle. Rather than working edgewise across the
+/// entire graph, it starts at one point, and grows outward from that point.
+/// The standard version of the algorithm works something like this:
+///   1. Choose an arbitrary cell from G (the grid), and add it to some (initially empty) set V (toVisit).
+///   2. select a cell (currCell) from V with the lowest weight
+///   3. get all unlinked neighbors of currCell and select the neighbor with the lowest weight (neighbor)
+///   4. if a neighbor was found:
+///   5.   link currentCell to it
+///   6.   add neighbor to V
+///   7. else (backed into a corner of the maze)
+///   8.   remove current from V
+///   9. repeat steps 2 thru 9 until there are no longer cells in V
+///
+/// # Params
+/// `height` - the number of rows to generate
+/// `width` - the number of columns to generate
+/// # Returns
+/// a `grid` containing the randomly generated maze
+///
 pub fn generate(height: usize, width: usize) -> Grid {
     let mut grid = Grid::new(height, width);
+
     // assign random weights to all cells in the grid
     for cell in grid.iter_mut_cells() {
         cell.set_weight(thread_rng().gen_range(1, 101));
