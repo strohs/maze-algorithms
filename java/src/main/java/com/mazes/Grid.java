@@ -242,10 +242,10 @@ public class Grid implements Iterable<Cell> {
 
                 // determine if an eastern wall should be drawn
                 if (cell.east.isPresent() && cell.is_linked(cell.east.get())) {
-                    top.append(" ").append(body).append(" "); // no east wall drawn
+                    top.append(body).append("  "); // no east wall drawn
                 }
                 else {
-                    top.append(" ").append(body).append("|"); // east wall is drawn
+                    top.append(body).append(" |"); // east wall is drawn
                 }
 
                 // determine if south wall should be drawn

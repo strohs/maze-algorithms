@@ -20,14 +20,8 @@ public class BraidedMaze {
      * @return a braided maze creating from a perfect maze using Recursive Backtracker
      */
     public Grid generate(int height, int width, float p) {
-        Grid maze = new RecusrsiveBacktracker().generate(height, width);
+        Grid maze = new RecursiveBacktracker().generate(height, width);
         maze.braid(p);
         return maze;
-    }
-
-    // generates a braided maze, 10x20, with 50% of dead-ends removed
-    public static void main (String[] args) {
-        Grid maze = new BraidedMaze().generate(10, 20, 0.5f);
-        System.out.println(maze);
     }
 }

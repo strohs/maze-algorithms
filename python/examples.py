@@ -1,3 +1,4 @@
+import sys
 import maze.generator.RecursiveBacktracker
 import maze.generator.BinaryTree
 import maze.generator.Sidewinder
@@ -7,11 +8,19 @@ import maze.generator.Wilsons
 import maze.generator.Prims
 from maze.solver.Dijkstras import path_to_goal
 
-# height and width of the generated mazes
+# default height and width of the generated mazes
 height = 10
 width = 15
 
-# Maze Generation Algorithms
+# try to parse height and width from command line
+if len(sys.argv) > 1:
+    height = int(sys.argv[1])
+
+if len(sys.argv) > 2:
+    width = int(sys.argv[2])
+
+
+# Maze Generation Algorithms start here
 
 # generate a random maze using BinaryTree algorithm
 bt_maze = maze.generator.BinaryTree.generate(height, width)

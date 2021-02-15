@@ -83,11 +83,4 @@ public class HuntKill {
         int size = cells.size();
         return cells.get(random.nextInt(size));
     }
-
-
-    // generate a random maze of 10 rows and 15 columns
-    public static void main (String[] args) {
-        Grid maze = new HuntKill().generate(10, 15);
-        System.out.println(maze);
-    }
 }

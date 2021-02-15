@@ -1,11 +1,13 @@
 use crate::grid_cell::GridCell;
 use crate::position::Pos;
+use crate::solver::distances::Distances;
 use rand::{thread_rng, Rng};
 use std::collections::HashMap;
 use std::fmt::{Display, Formatter};
 use std::ops::{Index, IndexMut};
 use std::slice::{ChunksExact, Iter, IterMut};
 use rand::seq::SliceRandom;
+
 
 /// Grid represents a two-dimensional grid of `GridCell`s.
 /// It also contains a hashmap of "links", or passages, between cells. If two cells are linked,
@@ -243,6 +245,49 @@ impl Grid {
             }
         }
         grid
+    }
+
+    /// pretty prints the `grid` and also displays each cell of `path` within its corresponding
+    /// GridCell by printing its weight as a hexadecimal value.
+    pub fn display_path(&self, path: &Distances) -> String {
+        let mut buf = String::new();
+        // write the top wall of the grid
+        buf.push_str(&format!("+{} \n", "----+".repeat(self.cols)));
+
+        for row in self.row_iter() {
+            // top holds the cell 'bodies' (blank spaces) and eastern walls
+            let mut top = String::from("|");
+            // bottom holds the cell's southern wall and corners ('+') sign
+            let mut bottom = String::from("+");
+
+            for cell in row.iter() {
+                // if the current cell is part of the path, we want to display the weight else a "  "
+                let body = match path.get(&cell.pos()) {
+                    Some(weight) => format!("{:3x}", weight),
+                    _ => String::from("   "),
+                };
+
+                // determine if an eastern wall should be drawn
+                match cell.east() {
+                    Some(east_pos) if self.has_link(&cell.pos(), &east_pos) => {
+                        top.push_str(&format!("{}  ", body))
+                    }
+                    _ => top.push_str(&format!("{} |", body)),
+                }
+
+                // determine if a southern wall should be drawn
+                match cell.south() {
+                    Some(south_pos) if self.has_link(&cell.pos(), &south_pos) => {
+                        bottom.push_str("    +")
+                    }
+                    _ => bottom.push_str("----+"),
+                }
+            }
+
+            buf.push_str(&format!("{}\n", top));
+            buf.push_str(&format!("{}\n", bottom));
+        }
+        buf
     }
 }
 

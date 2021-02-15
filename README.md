@@ -2,9 +2,10 @@
 
 Examples of various [maze generation algorithms](https://en.wikipedia.org/wiki/Maze_generation_algorithm) written
 in Rust, Java, JavaScript (NodeJS) and Python.  All these algorithms were inspired by the book
-[Mazes for Programmers](https://pragprog.com/titles/jbmaze/mazes-for-programmers/).
+[Mazes for Programmers](https://pragprog.com/titles/jbmaze/mazes-for-programmers/). They will each generate 
+a random, perfect maze, which can then be printed to the terminal as ASCII characters.
 
-The code is intended to be run from the command line and will pretty print the generated maze to the terminal.
+
 
 The implemented algorithms include:
 - [Binary Tree Algorithm](http://weblog.jamisbuck.org/2011/2/1/maze-generation-binary-tree-algorithm)
@@ -15,21 +16,21 @@ The implemented algorithms include:
 - [Hunt and Kill Algorithm](https://weblog.jamisbuck.org/2011/1/24/maze-generation-hunt-and-kill-algorithm)
 - [Sidewinder Algorithm](http://weblog.jamisbuck.org/2011/2/3/maze-generation-sidewinder-algorithm)
 
-And [Dijkstra's Algorithm](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm) to find the shortest path between
-two points in a maze.
+Also provided is an example of using [Dijkstra's Algorithm](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm), to
+find the shortest path between two cells in a maze.
 
 
 ### Prerequisites
-- Java 14 if you want to run the Java algorithms (although any Java version >= Java 8 should work)
-- Python 3 (at least 3.8) for the python algorithms
+- Java 8 (or higher) if you want to run the Java code
+- Python 3 (at least 3.8) for the python code
 - NodeJs (at least version 11, but older versions may work) for the javascript algorithms
 - Rust (at least version 1.4, but older versions may work) and cargo
 
 
 ### Running
 - Java
-    - all java code is located in the `java` directory. Each algorithm is in its own Java class with a main method,
-      so just run the class directly
+    - all java code is located in the `java` directory. The `com.mazes.Examples` class contains examples of how to
+      run each algorithm, plus how to find the shortest path through a maze.
 
 - JavaScript (NodeJs)
     - all javascript code is located in the `nodejs` directory, run the main.js file:  `node main.js` to kick off
@@ -37,8 +38,9 @@ two points in a maze.
     
 - Python
     - all Python code is located in the `python` directory. 
-    - Run the `example.py` file via the python 3 interpreter: `python example.py`. This will generate 10x15 mazes
-    using the various algorithms
+    - Run the `example.py` file via your python 3 interpreter: `python example.py <height> <width>`. height and width
+      are optional integer values that will set the height and width of the generated mazes. If not passed, they 
+      default to 10 x 15.
       
 - Rust
     - located in the `rust` directory. Example files have been provided for each maze algorithm in the `examples`

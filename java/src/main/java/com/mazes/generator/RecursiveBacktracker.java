@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  * into a corner. Also, like hunt-and-kill, recursive-backtracker also produces mazes that are full
  * of long and meandering passages.
  */
-public class RecusrsiveBacktracker {
+public class RecursiveBacktracker {
 
     Random random = new Random();
 
@@ -61,12 +61,5 @@ public class RecusrsiveBacktracker {
             }
         }
         return grid;
-    }
-
-
-    // example of generating a random maze of 10 rows and 15 columns
-    public static void main(String[] args) {
-        Grid maze = new RecusrsiveBacktracker().generate(10, 15);
-        System.out.println(maze);
     }
 }

@@ -41,11 +41,4 @@ public class AldousBroder {
 
         return grid;
     }
-
-
-    // example of generating a maze with 10 rows and 15 columns
-    public static void main (String[] args) {
-        Grid maze = new AldousBroder().generate(10, 15);
-        System.out.println(maze);
-    }
 }

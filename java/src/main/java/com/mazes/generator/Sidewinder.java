@@ -67,10 +67,4 @@ public class Sidewinder {
         return (cell.getEast().isEmpty() || (cell.getNorth().isPresent() && rd.nextBoolean()));
     }
 
-
-    // example of generating a random maze of 10 rows and 15 columns
-    public static void main(String[] args) {
-        Grid maze = new Sidewinder().generate(10, 15);
-        System.out.println(maze);
-    }
 }

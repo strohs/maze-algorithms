@@ -81,10 +81,4 @@ public class Wilsons {
         return cells.get(random.nextInt(size));
     }
 
-
-    // example of generating a maze of 10 rows and 15 columns
-    public static void main (String[] args) {
-        Grid maze = new Wilsons().generate(10, 15);
-        System.out.println(maze);
-    }
 }

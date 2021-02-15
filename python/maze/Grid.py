@@ -115,10 +115,10 @@ class Grid:
                 # determine if eastern wall should be drawn
                 if cell.east and cell.is_linked(cell.east):
                     # don't draw a east wall
-                    top += f" {body} "
+                    top += f"{body}  "
                 else:
                     # draw the east wall
-                    top += f" {body}|"
+                    top += f"{body} |"
 
                 # determine if south wall should be drawn
                 if cell.south and cell.is_linked(cell.south):

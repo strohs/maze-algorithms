@@ -4,7 +4,7 @@ package com.mazes.solver;
 import com.mazes.Cell;
 import com.mazes.Distances;
 import com.mazes.Grid;
-import com.mazes.generator.RecusrsiveBacktracker;
+import com.mazes.generator.RecursiveBacktracker;
 
 public class Dijkstras {
 
@@ -46,7 +46,7 @@ public class Dijkstras {
 
     // example of using dijkstras to find shortest path in a maze
     public static void main(String[] args) {
-        Grid maze = new RecusrsiveBacktracker().generate(10, 15);
+        Grid maze = new RecursiveBacktracker().generate(10, 15);
 
         // set start to NorthWest corner of the maze
         Cell start = maze.get(0, 0);

@@ -47,10 +47,4 @@ public class BinaryTree {
 
         return grid;
     }
-
-    public static void main(String[] args) {
-        // generate and print a random maze 10x20
-        Grid maze = new BinaryTree().generate(10, 20);
-        System.out.println(maze);
-    }
 }
