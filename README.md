@@ -21,15 +21,15 @@ find the shortest path between two cells in a maze.
 
 
 ### Prerequisites
-- Java 8 (or higher) if you want to run the Java code
-- Python 3 (at least 3.8) for the python code
-- NodeJs (at least version 11, but older versions may work) for the javascript algorithms
-- Rust (at least version 1.4, but older versions may work) and cargo
+- Java 8 (or higher) if you want to run the Java examples
+- Python 3 (at least 3.8) for the python examples
+- NodeJs (at least version 11, but older versions may work) for the javascript examples
+- Rust (at least version 1.4, but older versions may work) and Cargo for the Rust examples
 
 
 ### Running
 - Java
-    - all java code is located in the `java` directory. The `com.mazes.Examples` class contains examples of how to
+    - the java code is located in the `java` directory. The `com.mazes.Examples` class contains examples of how to
       run each algorithm, plus how to find the shortest path through a maze.
 
 - JavaScript (NodeJs)

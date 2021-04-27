@@ -1,6 +1,6 @@
 /**
- * Distances is a helper class that is used to hold distance information between a "root" cell and other cells
- * in a Grid. It manages an internal Map that maps cell objects to number values, where the number is that cells
+ * Distances is a helper class that holds distance information between a "root" cell and other "linked" cells.
+ * It manages an internal Map that maps cell objects to number values, where the number is that cells
  * distance from the root cell.
  */
 class Distances {

@@ -1,14 +1,14 @@
 const Distances = require("./Distances");
 
 /**
- * Cell is the main object used in building mazes.
- * Cell's know their row and column position in a Grid. They know if they have a neighboring cell (or not) to the
- * North, South, East, and West. Most importantly, Cells keep track of any "links" to those neighbors.
- * A link means that a passageway has been carved between this cell and a neighboring cell. Once multiple Cells are
- * linked together they will form a maze
+ * Cell is the main class used in building mazes.
+ * Cell's know their row and column position in a Grid. They know if they have a neighboring cell to the
+ * North, South, East, and West. Most importantly, Cells keep track of any "links" to those neighbors. In fact,
+ * each cell is a kind of linked list, where each link to a neighboring cells represents a "carved passageway" to
+ * that cell.
  *
  */
-class Cell {
+module.exports = class Cell {
 
     /**
      * constructs a new Cell at the specified row and column index. All neighbors are set to null, the cell's links
@@ -63,6 +63,7 @@ class Cell {
 
     /**
      * returns an Array containing all the cells that this cell links to
+     * @returns {Cell[]}
      */
     links() {
         return [...this._links.keys()];
@@ -78,7 +79,7 @@ class Cell {
     }
 
     /**
-     * @returns {*[]} an array containing the Cells that are neighbors of this Cell. Neighbors that are null,
+     * @returns {Cell[]} an array containing the Cells that are neighbors of this Cell. Neighbors that are null,
      * are NOT returned
      */
     neighbors() {
@@ -199,5 +200,3 @@ class Cell {
     //     return this._row === cell.row && this._col === cell.col;
     // }
 }
-
-module.exports = Cell;
