@@ -105,7 +105,7 @@ impl Grid {
         )
     }
 
-    /// returns the positions in thia Grid that are dead-ends. Dead-ends are Cells that only
+    /// returns the positions in this Grid that are dead-ends. Dead-ends are Cells that only
     /// have one link into/out-of them
     pub fn dead_ends(&self) -> Vec<Pos> {
         Pos::iter(self.rows, self.cols)
