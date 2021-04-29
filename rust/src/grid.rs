@@ -9,23 +9,23 @@ use std::slice::{ChunksExact, Iter, IterMut};
 use rand::seq::SliceRandom;
 
 
-/// Grid represents a two-dimensional grid of `GridCell`s.
+/// Grid represents a two-dimensional maze of `GridCell`s.
 /// It also contains a hashmap of "links", or passages, between cells. If two cells are linked,
 /// then there is a passage between them (the wall is removed)
 #[derive(Debug)]
 pub struct Grid {
-    // number of rows in this grid
+    // number of rows in this maze
     pub rows: usize,
-    // number of columns in this grid
+    // number of columns in this maze
     pub cols: usize,
-    // stores the cells of this grid in a 1-dimensional array
+    // stores the cells of this maze in a 1-dimensional array
     grid: Vec<GridCell>,
-    // stores the links (passages) between the GridCells in grid
+    // stores the links (passages) between the GridCells in maze
     links: HashMap<usize, Vec<usize>>,
 }
 
 impl Grid {
-    /// returns a grid with capacity for rows * cols  GridCells
+    /// returns a maze with capacity for rows * cols  GridCells
     pub fn new(rows: usize, cols: usize) -> Self {
         let cells = Grid::build_grid_cells(rows, cols);
         Self {
@@ -36,7 +36,7 @@ impl Grid {
         }
     }
 
-    /// returns the total number of GridCells in the grid. (size = rows * cols)
+    /// returns the total number of GridCells in the maze. (size = rows * cols)
     pub fn size(&self) -> usize {
         self.rows * self.cols
     }
@@ -113,7 +113,7 @@ impl Grid {
             .collect()
     }
 
-    /// returns a the position of a random cell in the grid
+    /// returns a the position of a random cell in the maze
     pub fn random_pos(&self) -> Pos {
         let ridx = thread_rng().gen_range(0, self.grid.len());
         self.idx2d(ridx)
@@ -166,12 +166,12 @@ impl Grid {
         self.grid.iter()
     }
 
-    /// returns a mutable iterator over the cells of this grid
+    /// returns a mutable iterator over the cells of this maze
     pub fn iter_mut_cells(&mut self) -> IterMut<'_, GridCell> {
         self.grid.iter_mut()
     }
 
-    /// returns an immutable iterator over the *rows* of this grid
+    /// returns an immutable iterator over the *rows* of this maze
     pub fn row_iter(&self) -> ChunksExact<'_, GridCell> {
         self.grid.chunks_exact(self.cols)
     }
@@ -226,7 +226,7 @@ impl Grid {
         }
     }
 
-    /// Helper that builds a vector of grid cells for the dimensions of this grid. It ensures
+    /// Helper that builds a vector of maze cells for the dimensions of this maze. It ensures
     /// that each GridCell struct has links to neighboring cells, set.
     fn build_grid_cells(rows: usize, cols: usize) -> Vec<GridCell> {
         let mut grid = Vec::with_capacity(rows * cols);
@@ -247,51 +247,51 @@ impl Grid {
         grid
     }
 
-    /// pretty prints the `grid` and also displays each cell of `path` within its corresponding
-    /// GridCell by printing its weight as a hexadecimal value.
-    pub fn display_path(&self, path: &Distances) -> String {
-        let mut buf = String::new();
-        // write the top wall of the grid
-        buf.push_str(&format!("+{} \n", "----+".repeat(self.cols)));
-
-        for row in self.row_iter() {
-            // top holds the cell 'bodies' (blank spaces) and eastern walls
-            let mut top = String::from("|");
-            // bottom holds the cell's southern wall and corners ('+') sign
-            let mut bottom = String::from("+");
-
-            for cell in row.iter() {
-                // if the current cell is part of the path, we want to display the weight else a "  "
-                let body = match path.get(&cell.pos()) {
-                    Some(weight) => format!("{:3x}", weight),
-                    _ => String::from("   "),
-                };
-
-                // determine if an eastern wall should be drawn
-                match cell.east() {
-                    Some(east_pos) if self.has_link(&cell.pos(), &east_pos) => {
-                        top.push_str(&format!("{}  ", body))
-                    }
-                    _ => top.push_str(&format!("{} |", body)),
-                }
-
-                // determine if a southern wall should be drawn
-                match cell.south() {
-                    Some(south_pos) if self.has_link(&cell.pos(), &south_pos) => {
-                        bottom.push_str("    +")
-                    }
-                    _ => bottom.push_str("----+"),
-                }
-            }
-
-            buf.push_str(&format!("{}\n", top));
-            buf.push_str(&format!("{}\n", bottom));
-        }
-        buf
-    }
+    // /// pretty prints the `maze` and also displays each cell of `path` within its corresponding
+    // /// GridCell by printing its weight as a hexadecimal value.
+    // pub fn display_path(&self, path: &Distances) -> String {
+    //     let mut buf = String::new();
+    //     // write the top wall of the maze
+    //     buf.push_str(&format!("+{} \n", "----+".repeat(self.cols)));
+    //
+    //     for row in self.row_iter() {
+    //         // top holds the cell 'bodies' (blank spaces) and eastern walls
+    //         let mut top = String::from("|");
+    //         // bottom holds the cell's southern wall and corners ('+') sign
+    //         let mut bottom = String::from("+");
+    //
+    //         for cell in row.iter() {
+    //             // if the current cell is part of the path, we want to display the weight else a "  "
+    //             let body = match path.get(&cell.pos()) {
+    //                 Some(weight) => format!("{:3x}", weight),
+    //                 _ => String::from("   "),
+    //             };
+    //
+    //             // determine if an eastern wall should be drawn
+    //             match cell.east() {
+    //                 Some(east_pos) if self.has_link(&cell.pos(), &east_pos) => {
+    //                     top.push_str(&format!("{}  ", body))
+    //                 }
+    //                 _ => top.push_str(&format!("{} |", body)),
+    //             }
+    //
+    //             // determine if a southern wall should be drawn
+    //             match cell.south() {
+    //                 Some(south_pos) if self.has_link(&cell.pos(), &south_pos) => {
+    //                     bottom.push_str("    +")
+    //                 }
+    //                 _ => bottom.push_str("----+"),
+    //             }
+    //         }
+    //
+    //         buf.push_str(&format!("{}\n", top));
+    //         buf.push_str(&format!("{}\n", bottom));
+    //     }
+    //     buf
+    // }
 }
 
-/// allows indexing into this grid using a `Pos` struct
+/// allows indexing into this maze using a `Pos` struct
 impl Index<Pos> for Grid {
     type Output = GridCell;
 
@@ -308,10 +308,10 @@ impl IndexMut<Pos> for Grid {
     }
 }
 
-/// pretty prints the grid to standard out
+/// pretty prints the maze to standard out
 impl Display for Grid {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        // write the top wall of the grid
+        // write the top wall of the maze
         writeln!(f, "+{}", "----+".repeat(self.cols))?;
 
         for row in self.row_iter() {
@@ -465,7 +465,7 @@ mod tests {
         assert!(grid.links.get(&grid.idx1d(&from)).unwrap().contains(&grid.idx1d(&to1)));
         assert!(grid.links.get(&grid.idx1d(&from)).unwrap().contains(&grid.idx1d(&to2)));
         grid.unlink(&from, &to1, true);
-        // the grid should still contain a link from `from` to `to2`
+        // the maze should still contain a link from `from` to `to2`
         assert!(grid.links.contains_key(&grid.idx1d(&from)));
         assert!(grid.links.get(&grid.idx1d(&from)).unwrap().contains(&grid.idx1d(&to2)));
     }

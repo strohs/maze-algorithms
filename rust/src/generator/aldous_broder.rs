@@ -8,7 +8,7 @@ use rand::thread_rng;
 ///
 /// The idea behind it is as follows:
 ///
-/// 1. Start anywhere in the grid you want, and choose a random neighbor.
+/// 1. Start anywhere in the maze you want, and choose a random neighbor.
 /// 2. Move to that neighbor, and if it has not previously been visited, link it to the prior cell.
 /// 3. Repeat until every cell has been visited.
 pub fn generate(height: usize, width: usize) -> Grid {
@@ -23,7 +23,7 @@ pub fn generate(height: usize, width: usize) -> Grid {
         let neighbor_pos = *grid[curr_pos]
             .neighbors()
             .choose(&mut thread_rng())
-            .expect("cells in a grid will have at least 2 neighbors");
+            .expect("cells in a maze will have at least 2 neighbors");
 
         // if the neighbor_pos is not linked to anything (i.e. it is unvisited), then link it
         // to the current cell

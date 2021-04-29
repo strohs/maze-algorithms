@@ -1,99 +1,95 @@
-use crate::grid::Grid;
-use crate::position::Pos;
 use std::collections::HashMap;
 use std::ops::Index;
+use crate::maze::grid_node::GridNode;
+use crate::maze::grid_maze::GridMaze;
 
-/// Distances is a helper struct that holds how far every cell in a Grid os from a `root` cell.
-/// These distances are used by certain shortest-path algorithms (like Dijkstra's)
+/// Distances is a helper struct that holds how far every node in a Maze is from a `root` cell.
+/// This distance information can be used by shortest-path algorithms (like Dijkstra's)
 #[derive(Debug)]
 pub struct Distances {
-    // Distances is essentially a wrapper over a HashMap
-
-    // root is the starting position in the grid
-    root: Pos,
-    // stores the 'distance' from the cell at `Pos`, to the `root` cell.
-    cells: HashMap<Pos, i32>,
+    // root is the starting node im a maze
+    root: GridNode,
+    // stores the 'distance' from a GridNode, to the `root` cell.
+    nodes: HashMap<GridNode, i32>,
 }
 
 
 impl Distances {
 
-    /// returns a new Distance struct with the specified `root` Position as the root of
+    /// returns a new Distance struct with the specified `root` GridNode as the root of
     /// the returned distance struct.
-    pub fn new(root: Pos) -> Self {
-        let mut cells = HashMap::new();
+    pub fn new(root: GridNode) -> Self {
+        let mut nodes = HashMap::new();
         // the root is inserted into the hashmap with a distance of 0 from itself
-        cells.insert(root, 0);
+        nodes.insert(root, 0);
 
-        Self { root, cells }
+        Self { root, nodes }
     }
 
 
-    /// returns the distance information for the cell at the specified `pos`. Returns `None` if
+    /// returns the distance information for the given `node`. Returns `None` if
     /// the cell is not contained within Distances
-    pub fn get(&self, pos: &Pos) -> Option<&i32> {
-        self.cells.get(pos)
+    pub fn get(&self, node: &GridNode) -> Option<&i32> {
+        self.nodes.get(node)
     }
 
 
-    /// insert the cell position and distance
-    pub fn insert(&mut self, cell_pos: Pos, distance: i32) {
-        self.cells.insert(cell_pos, distance);
+    /// insert the given `node` with `distance` into this struct
+    pub fn insert(&mut self, node: GridNode, distance: i32) {
+        self.nodes.insert(node, distance);
     }
-
-    // /// returns an iterator over the `Pos`itions in stored within the Distances HashMap
-    // pub fn keys(&self) -> Keys<'_, Pos, u32> {
-    //     self.cells.keys()
-    // }
 }
 
-/// index Distances using a `Pos`ition struct.
-/// This implementation passes to a cell's HashMap `Index` implementation
-impl Index<Pos> for Distances {
+/// Allows indexing Distances using a `GridNode` struct and returning the distance of that
+/// GridNode from the `root` node.
+impl Index<GridNode> for Distances {
     type Output = i32;
 
-    fn index(&self, pos: Pos) -> &Self::Output {
-        &self.cells[&pos]
+    fn index(&self, node: GridNode) -> &Self::Output {
+        &self.nodes[&node]
     }
 }
 
-/// Returns a "pretty printed" String containing the distance amounts of each cell of the grid
-/// displayed within the cells as a Hexa-Decimal amount.
-/// Useful for debugging purposes
-#[allow(dead_code)]
-pub fn display_distances(grid: &Grid, distances: &Distances) -> String {
-    let mut buf = String::new();
-    // write the top wall of the grid
-    buf.push_str(&format!("+{}", "---+".repeat(grid.cols)));
 
-    for row in grid.row_iter() {
-        // top holds the cell 'bodies' (blank spaces) and eastern walls
-        let mut top = String::from("|");
-        // bottom holds the cell's southern wall and corners ('+') sign
-        let mut bottom = String::from("+");
-
-        for cell in row.iter() {
-            let dist = distances.get(&cell.pos()).unwrap();
-            // the body of the cell will display the distance from the root
-            // determine if an eastern wall should be drawn
-            match cell.east() {
-                Some(east_pos) if grid.has_link(&cell.pos(), &east_pos) => {
-                    top.push_str(&format!(" {:2x} ", dist))
-                }
-                _ => top.push_str(&format!(" {:2x}|", dist)),
-            }
-
-            // determine if a southern wall should be drawn
-            match cell.south() {
-                Some(south_pos) if grid.has_link(&cell.pos(), &south_pos) => {
-                    bottom.push_str("   +")
-                }
-                _ => bottom.push_str("---+"),
-            }
-        }
-
-        buf.push_str(&top.to_string());
-        buf.push_str(&bottom.to_string());
-    }
-    buf
-}
+// /// Returns a "pretty printed" String containing the distance amounts of each node of the maze
+// /// displayed within the node "square" as a Hexa-Decimal amount.
+// /// Useful for debugging purposes
+// #[allow(dead_code)]
+// pub fn display_distances(maze: &GridMaze, distances: &Distances) -> String {
+//     let mut buf = String::new();
+//     let (rows, cols) = maze.dimensions();
+//
+//     // write the top wall of the maze
+//     buf.push_str(&format!("+{}", "---+".repeat(cols)));
+//
+//     for row in maze.iter_rows() {
+//         // top holds the cell 'bodies' (blank spaces) and eastern walls
+//         let mut top = String::from("|");
+//         // bottom holds the cell's southern wall and corners ('+') sign
+//         let mut bottom = String::from("+");
+//
+//         for curr_node in row.iter() {
+//             let dist = distances.get(&curr_node).map_or_else()
+//             // the body of the node will display the distance from the root
+//             // determine if an eastern wall should be drawn
+//             match maze.east(curr_node) {
+//                 Some(east_pos) if maze.has_link(curr_node, &east_pos) => {
+//                     top.push_str(&format!(" {:2x} ", dist))
+//                 }
+//                 _ => top.push_str(&format!(" {:2x}|", dist)),
+//             }
+//
+//             // determine if a southern wall should be drawn
+//             match maze.south(curr_node) {
+//                 Some(south_pos) if maze.has_link(curr_node, &south_pos) => {
+//                     bottom.push_str("   +")
+//                 }
+//                 _ => bottom.push_str("---+"),
+//             }
+//         }
+//
+//         buf.push_str(&top.to_string());
+//         buf.push_str(&bottom.to_string());
+//     }
+//     buf
+// }

@@ -1,7 +1,7 @@
 use std::env;
 use mazes::generator::recursive_backtracker;
 use mazes::solver::dijkstras::{find_shortest_path};
-use mazes::position::Pos;
+use mazes::maze::grid_maze::GridMaze;
 
 fn main() {
 
@@ -21,8 +21,9 @@ fn main() {
     let maze = recursive_backtracker::generate(height, width);
     println!("{}", &maze);
 
-    // find shortest path from northwest corner to southwest corner
-    println!("recursive-backtracker {}x{} shortest path", &height, &width);
-    let shortest_path = find_shortest_path(&maze, Pos::new(0, 0), Pos::new(height-1, width-1));
+    //find shortest path from northwest corner to southeast corner
+    println!("recursive-backtracker {}x{} shortest path from NW Corner to SE Corner", &height, &width);
+    let sw_corner_idx = GridMaze::idx_1d(height - 1, width - 1, width);
+    let shortest_path = find_shortest_path(&maze, maze[0], maze[sw_corner_idx]);
     println!("{}\n\n\n", maze.display_path(&shortest_path));
 }

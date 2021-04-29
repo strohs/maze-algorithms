@@ -3,10 +3,10 @@ use std::hash::{Hash, Hasher};
 use crate::position::Pos;
 
 /// Holds the position of a cell within a Grid as well as the positions of neighboring cells.
-/// Two grid cells are considered equal if their respective positions (row,col values) are equal
+/// Two maze cells are considered equal if their respective positions (row,col values) are equal
 #[derive(Debug, Copy, Clone)]
 pub struct GridCell {
-    // row,col position of this cell within a grid
+    // row,col position of this cell within a maze
     pos: Pos,
 
     // positions of any neighboring cells
@@ -76,7 +76,7 @@ impl GridCell {
         self.west
     }
 
-    /// returns a vector containing the positions of grid cells that are neighbors of this cell
+    /// returns a vector containing the positions of maze cells that are neighbors of this cell
     pub fn neighbors(&self) -> Vec<Pos> {
         let mut neighbors = Vec::with_capacity(4);
         if self.north.is_some() {
@@ -99,7 +99,7 @@ impl GridCell {
         self.weight
     }
 
-    /// sets the weight of this grid cell
+    /// sets the weight of this maze cell
     pub fn set_weight(&mut self, weight: i32) {
         self.weight = weight;
     }

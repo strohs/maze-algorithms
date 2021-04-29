@@ -6,9 +6,9 @@ use crate::position::Pos;
 /// generates a random maze using Prims algorithm.
 ///
 /// Prim’s approaches maze generation from a different angle. Rather than working edgewise across the
-/// entire graph, it starts at one point, and grows outward from that point.
+/// entire maze, it starts at one point, and grows outward from that point.
 /// The standard version of the algorithm works something like this:
-///   1. Choose an arbitrary cell from G (the grid), and add it to some (initially empty) set V (toVisit).
+///   1. Choose an arbitrary cell from G (the maze), and add it to some (initially empty) set V (toVisit).
 ///   2. select a cell (currCell) from V with the lowest weight
 ///   3. get all unlinked neighbors of currCell and select the neighbor with the lowest weight (neighbor)
 ///   4. if a neighbor was found:
@@ -22,12 +22,12 @@ use crate::position::Pos;
 /// `height` - the number of rows to generate
 /// `width` - the number of columns to generate
 /// # Returns
-/// a `grid` containing the randomly generated maze
+/// a `maze` containing the randomly generated maze
 ///
 pub fn generate(height: usize, width: usize) -> Grid {
     let mut grid = Grid::new(height, width);
 
-    // assign random weights to all cells in the grid
+    // assign random weights to all cells in the maze
     for cell in grid.iter_mut_cells() {
         cell.set_weight(thread_rng().gen_range(1, 101));
     }

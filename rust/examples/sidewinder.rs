@@ -1,7 +1,7 @@
 use mazes::generator::sidewinder;
 use std::env;
 use mazes::solver::dijkstras::{find_shortest_path};
-use mazes::position::Pos;
+use mazes::maze::grid_maze::GridMaze;
 
 fn main() {
 
@@ -22,7 +22,8 @@ fn main() {
     println!("{}", &maze);
 
     // find shortest path from northwest corner to southwest corner
-    println!("sidewinder {}x{} shortest path", &height, &width);
-    let shortest_path = find_shortest_path(&maze, Pos::new(0, 0), Pos::new(height-1, width-1));
+    println!("sidewinder {}x{} shortest path from NW Corner to SW Corner", &height, &width);
+    let sw_corner_idx = GridMaze::idx_1d(height - 1, 0, width);
+    let shortest_path = find_shortest_path(&maze, maze[0], maze[sw_corner_idx]);
     println!("{}\n\n\n", maze.display_path(&shortest_path));
 }

@@ -9,17 +9,17 @@ use rand::thread_rng;
 /// it is forming happens to intersect with itself and form a loop, it erases that loop before
 /// continuing on.
 ///
-/// 1. choose a point on the grid and mark it visited.
-/// 2. choose any unvisited cell in the grid and perform a loop-erased random walk until you
+/// 1. choose a point on the maze and mark it visited.
+/// 2. choose any unvisited cell in the maze and perform a loop-erased random walk until you
 ///    reach a visited cell.
 /// 3. link all the cells in the current random walk to the visited cell
-/// 4. repeat step 2 until all cells in the grid have been visited
+/// 4. repeat step 2 until all cells in the maze have been visited
 pub fn generate(height: usize, width: usize) -> Grid {
     let mut grid = Grid::new(height, width);
 
-    // choose a random position in the grid, this will be the first visited position
+    // choose a random position in the maze, this will be the first visited position
     let first = grid.random_pos();
-    // initialize unvisited to contain all positions in the grid except for first
+    // initialize unvisited to contain all positions in the maze except for first
     let mut unvisited: Vec<Pos> = grid
         .iter_cells()
         .map(|c| c.pos())

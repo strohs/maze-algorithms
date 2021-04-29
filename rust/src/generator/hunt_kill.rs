@@ -34,7 +34,7 @@ pub fn generate(height: usize, width: usize) -> Grid {
                 current = Some(*neighbor_pos);
             }
         } else {
-            // else we begin the hunt phase, starting from the top of the grid, looking for the
+            // else we begin the hunt phase, starting from the top of the maze, looking for the
             // first cell that is unvisited AND has neighbors that are visited
 
             current = None;
@@ -64,7 +64,7 @@ pub fn generate(height: usize, width: usize) -> Grid {
 }
 
 /// Returns a vector of positions that are neighbors of the given `pos` AND that do not have
-/// a link to a cell in the `grid`
+/// a link to a cell in the `maze`
 fn unvisited_neighbors(grid: &Grid, pos: Pos) -> Vec<Pos> {
     grid[pos]
         .neighbors()
@@ -76,7 +76,7 @@ fn unvisited_neighbors(grid: &Grid, pos: Pos) -> Vec<Pos> {
 
 
 /// Returns a vector of positions that are neighbors of the given `pos` AND that have a link
-/// to a cell in the grid
+/// to a cell in the maze
 fn visited_neighbors(grid: &Grid, pos: Pos) -> Vec<Pos> {
     grid[pos]
         .neighbors()
