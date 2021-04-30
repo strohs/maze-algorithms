@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 use std::ops::Index;
 use crate::maze::grid_node::GridNode;
+use crate::maze::grid_maze::GridMaze;
 
 /// Distances is a helper struct that holds how far every node in a Maze is from a `root` cell.
 /// This distance information can be used by shortest-path algorithms (like Dijkstra's)
@@ -50,45 +51,45 @@ impl Index<GridNode> for Distances {
 }
 
 
-// /// Returns a "pretty printed" String containing the distance amounts of each node of the maze
-// /// displayed within the node "square" as a Hexa-Decimal amount.
-// /// Useful for debugging purposes
-// #[allow(dead_code)]
-// pub fn display_distances(maze: &GridMaze, distances: &Distances) -> String {
-//     let mut buf = String::new();
-//     let (rows, cols) = maze.dimensions();
-//
-//     // write the top wall of the maze
-//     buf.push_str(&format!("+{}", "---+".repeat(cols)));
-//
-//     for row in maze.iter_rows() {
-//         // top holds the cell 'bodies' (blank spaces) and eastern walls
-//         let mut top = String::from("|");
-//         // bottom holds the cell's southern wall and corners ('+') sign
-//         let mut bottom = String::from("+");
-//
-//         for curr_node in row.iter() {
-//             let dist = distances.get(&curr_node).map_or_else()
-//             // the body of the node will display the distance from the root
-//             // determine if an eastern wall should be drawn
-//             match maze.east(curr_node) {
-//                 Some(east_pos) if maze.has_link(curr_node, &east_pos) => {
-//                     top.push_str(&format!(" {:2x} ", dist))
-//                 }
-//                 _ => top.push_str(&format!(" {:2x}|", dist)),
-//             }
-//
-//             // determine if a southern wall should be drawn
-//             match maze.south(curr_node) {
-//                 Some(south_pos) if maze.has_link(curr_node, &south_pos) => {
-//                     bottom.push_str("   +")
-//                 }
-//                 _ => bottom.push_str("---+"),
-//             }
-//         }
-//
-//         buf.push_str(&top.to_string());
-//         buf.push_str(&bottom.to_string());
-//     }
-//     buf
-// }
+/// Returns a "pretty printed" String containing the distance amounts of each node of the maze
+/// displayed within the node "square" as a HexaDecimal amount.
+/// Useful for debugging purposes
+#[allow(dead_code)]
+pub fn overlay_distances(maze: &GridMaze, distances: &Distances) -> String {
+    let mut buf = String::new();
+    let (_rows, cols) = maze.dimensions();
+
+    // write the top wall of the maze
+    buf.push_str(&format!("+{}\n", "----+".repeat(cols)));
+
+    for row in maze.iter_rows() {
+        // top holds the cell 'bodies' (blank spaces) and eastern walls
+        let mut top = String::from("|");
+        // bottom holds the cell's southern wall and corners ('+') sign
+        let mut bottom = String::from("+");
+
+        for curr_node in row.iter() {
+            let dist = *distances.get(&curr_node).unwrap_or(&0);
+            // the body of the node will display the distance from the root
+            // determine if an eastern wall should be drawn
+            match maze.east(curr_node) {
+                Some(east_pos) if maze.has_link(curr_node, &east_pos) => {
+                    top.push_str(&format!("  {:2x} ", dist))
+                }
+                _ => top.push_str(&format!("  {:2x}|", dist)),
+            }
+
+            // determine if a southern wall should be drawn
+            match maze.south(curr_node) {
+                Some(south_pos) if maze.has_link(curr_node, &south_pos) => {
+                    bottom.push_str("    +")
+                }
+                _ => bottom.push_str("----+"),
+            }
+        }
+
+        buf.push_str(&format!("{}\n", top.to_string()));
+        buf.push_str(&format!("{}\n", bottom.to_string()));
+    }
+    buf
+}

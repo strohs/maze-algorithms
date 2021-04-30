@@ -49,8 +49,6 @@ pub fn generate(height: usize, width: usize) -> GridMaze {
         } else {
             // remove cur_node from to_visit, it should always be the first element of to_visit
             to_visit.remove(0);
-            // let rand_idx = to_visit.iter().position(|node| *node == cur_node).unwrap();
-            // to_visit.remove(rand_idx);
         }
     }
 

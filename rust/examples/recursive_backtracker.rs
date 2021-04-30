@@ -2,6 +2,7 @@ use std::env;
 use mazes::generator::recursive_backtracker;
 use mazes::solver::dijkstras::{find_shortest_path};
 use mazes::maze::grid_maze::GridMaze;
+use mazes::solver::distances::overlay_distances;
 
 fn main() {
 
@@ -26,4 +27,8 @@ fn main() {
     let sw_corner_idx = GridMaze::idx_1d(height - 1, width - 1, width);
     let shortest_path = find_shortest_path(&maze, maze[0], maze[sw_corner_idx]);
     println!("{}\n\n\n", maze.display_path(&shortest_path));
+
+    let distances = maze.distances(&maze[0]);
+    println!("\n\n\n{}", overlay_distances(&maze, &distances));
+
 }
