@@ -1,6 +1,7 @@
-use crate::grid::Grid;
+
 use rand::seq::SliceRandom;
 use rand::thread_rng;
+use crate::maze::grid_maze::GridMaze;
 
 /// Generates a random maze using the Aldous-Broder algorithm.
 /// Aldous-Broder generates mazes using "random-walks". This avoids creating mazes
@@ -9,31 +10,31 @@ use rand::thread_rng;
 /// The idea behind it is as follows:
 ///
 /// 1. Start anywhere in the maze you want, and choose a random neighbor.
-/// 2. Move to that neighbor, and if it has not previously been visited, link it to the prior cell.
-/// 3. Repeat until every cell has been visited.
-pub fn generate(height: usize, width: usize) -> Grid {
-    let mut grid = Grid::new(height, width);
+/// 2. Move to that neighbor, and if it has not previously been visited, link it to the prior node.
+/// 3. Repeat until every node has been visited.
+pub fn generate(height: usize, width: usize) -> GridMaze {
+    let mut maze = GridMaze::new(height, width);
 
-    // start at a random cell position
-    let mut curr_pos = grid.random_pos();
-    let mut unvisited = grid.size() - 1;
+    // start at a random node position
+    let mut cur_node = maze.random_node();
+    let mut unvisited = maze.len() - 1;
 
     while unvisited > 0 {
-        // choose a random neighbor of the current_cell
-        let neighbor_pos = *grid[curr_pos]
-            .neighbors()
+        // choose a random neighbor of the current_node
+        let rand_neighbor = *maze
+            .neighbors(&cur_node)
             .choose(&mut thread_rng())
-            .expect("cells in a maze will have at least 2 neighbors");
+            .expect("all nodes in a maze will have at least 2 neighbors");
 
-        // if the neighbor_pos is not linked to anything (i.e. it is unvisited), then link it
-        // to the current cell
-        if grid.links(&neighbor_pos).is_empty() {
-            grid.link(&curr_pos, &neighbor_pos, true);
+        // if the rand_neighbor is not linked to anything (i.e. it is unvisited), then link it
+        // to the current node
+        if maze.get_links(&rand_neighbor).is_empty() {
+            maze.link(&cur_node, &rand_neighbor, true);
             unvisited -= 1;
         }
 
-        curr_pos = grid[neighbor_pos].pos();
+        cur_node = rand_neighbor;
     }
 
-    grid
+    maze
 }

@@ -1,7 +1,7 @@
 use crate::maze::grid_node::{GridNode};
 use std::collections::HashMap;
 use rand::{thread_rng, Rng};
-use std::slice::{ChunksExact, Iter};
+use std::slice::{ChunksExact, Iter, IterMut};
 use std::ops::Index;
 use std::fmt::{Display, Formatter};
 use rand::seq::SliceRandom;
@@ -119,6 +119,11 @@ impl GridMaze {
         self.nodes.iter()
     }
 
+    /// returns a mutable iterator over this maze's nodes in row order
+    pub fn iter_mut_nodes(&mut self) -> IterMut<'_, GridNode> {
+        self.nodes.iter_mut()
+    }
+
 
     pub fn north(&self, node: &GridNode) -> Option<GridNode> {
         let node_index = node.pos();
@@ -208,7 +213,7 @@ impl GridMaze {
 
     /// returns copies of the GridNodes in the Maze that are dead-ends. Dead-ends are Nodes that only
     /// have one link into/out-of them
-    fn dead_ends(&self) -> Vec<GridNode> {
+    pub fn dead_ends(&self) -> Vec<GridNode> {
         self.links
             .iter()
             .filter(|(_pos, links)| links.len() == 1)

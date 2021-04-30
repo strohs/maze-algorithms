@@ -1,7 +1,7 @@
 use std::env;
 use mazes::generator::hunt_kill;
 use mazes::solver::dijkstras::{find_shortest_path};
-use mazes::position::Pos;
+use mazes::maze::grid_maze::GridMaze;
 
 fn main() {
 
@@ -23,6 +23,7 @@ fn main() {
 
     // find shortest path from northwest corner to southwest corner
     println!("hunt-and-kill {}x{} shortest path", &height, &width);
-    let shortest_path = find_shortest_path(&maze, Pos::new(0, 0), Pos::new(height-1, width-1));
+    let se_corner_idx = GridMaze::idx_1d(height - 1, width - 1, width);
+    let shortest_path = find_shortest_path(&maze, maze[0], maze[se_corner_idx]);
     println!("{}\n\n\n", maze.display_path(&shortest_path));
 }

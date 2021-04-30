@@ -1,7 +1,6 @@
 use std::collections::HashMap;
 use std::ops::Index;
 use crate::maze::grid_node::GridNode;
-use crate::maze::grid_maze::GridMaze;
 
 /// Distances is a helper struct that holds how far every node in a Maze is from a `root` cell.
 /// This distance information can be used by shortest-path algorithms (like Dijkstra's)

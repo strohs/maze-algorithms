@@ -1,9 +1,8 @@
-use crate::grid::Grid;
 use rand::{thread_rng, Rng};
-use crate::position::Pos;
+use crate::maze::grid_maze::GridMaze;
+use crate::maze::grid_node::GridNode;
 
-///
-/// generates a random maze using Prims algorithm.
+/// Generates a random maze using Prims algorithm.
 ///
 /// Prim’s approaches maze generation from a different angle. Rather than working edgewise across the
 /// entire maze, it starts at one point, and grows outward from that point.
@@ -22,44 +21,48 @@ use crate::position::Pos;
 /// `height` - the number of rows to generate
 /// `width` - the number of columns to generate
 /// # Returns
-/// a `maze` containing the randomly generated maze
+/// a `GridMaze` containing the randomly generated maze
 ///
-pub fn generate(height: usize, width: usize) -> Grid {
-    let mut grid = Grid::new(height, width);
+pub fn generate(height: usize, width: usize) -> GridMaze {
+    let mut maze = GridMaze::new(height, width);
 
     // assign random weights to all cells in the maze
-    for cell in grid.iter_mut_cells() {
-        cell.set_weight(thread_rng().gen_range(1, 101));
+    for node in maze.iter_mut_nodes() {
+        node.set_weight(thread_rng().gen_range(1, 101));
     }
 
-    let mut to_visit = vec![grid.random_pos()];
+    // holds the nodes to be visited
+    let mut to_visit = vec![maze.random_node()];
 
     while !to_visit.is_empty() {
-        // sort to_visit by cell weight
-        to_visit.sort_by_key(|p| grid[*p].weight());
-        let cell_pos = to_visit[0];
+        // sort the to_visit nodes by weight
+        to_visit.sort_by_key(|node| node.weight());
+        let cur_node = to_visit[0];
 
-        let mut neighbors = unlinked_neighbors(&grid, cell_pos);
+        let mut neighbors = unlinked_neighbors(&maze, &cur_node);
 
         if !neighbors.is_empty() {
-            neighbors.sort_by_key(|p| grid[*p].weight());
-            // link cell_pos to the lowest weighted neighbor
-            grid.link(&cell_pos, &neighbors[0], true);
+            neighbors.sort_by_key(|node| node.weight());
+            // link cur_node to the lowest weighted neighbor node
+            maze.link(&cur_node, &neighbors[0], true);
             to_visit.push(neighbors[0]);
         } else {
-            let ridx = to_visit.iter().position(|p| *p == cell_pos).unwrap();
-            to_visit.remove(ridx);
+            // remove cur_node from to_visit, it should always be the first element of to_visit
+            to_visit.remove(0);
+            // let rand_idx = to_visit.iter().position(|node| *node == cur_node).unwrap();
+            // to_visit.remove(rand_idx);
         }
     }
 
-    grid
+    maze
 }
 
-/// returns the positions of any unlinked neighbors of `pos`
-fn unlinked_neighbors(grid: &Grid, pos: Pos) -> Vec<Pos> {
-    grid[pos].neighbors()
+/// returns a vector of nodes that are unlinked neighbors of the given `node`
+fn unlinked_neighbors(maze: &GridMaze, node: &GridNode) -> Vec<GridNode> {
+    maze
+        .neighbors(node)
         .iter()
-        .filter(|&p| grid.links(p).is_empty())
-        .map(|p| *p)
-        .collect::<Vec<Pos>>()
+        .filter(|&neighbor| maze.get_links(neighbor).is_empty())
+        .copied()
+        .collect()
 }

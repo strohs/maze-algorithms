@@ -21,8 +21,8 @@ fn main() {
     println!("{}\n\n", &maze);
 
     println!("dead ends = {}", maze.dead_ends().len());
-    println!("recursive bactracker BRAIDED {}x{}", &height, &width);
+    println!("recursive back-tracker BRAIDED {}x{}", &height, &width);
     // remove 50 percent of dead ends
-    maze.braid(0.5);
+    maze.braid(0.8);
     println!("{}", &maze);
 }
