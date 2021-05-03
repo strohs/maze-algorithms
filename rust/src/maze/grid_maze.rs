@@ -61,9 +61,9 @@ impl GridMaze {
     /// `bi_link` creates a bi-directional link if it is `true`. Which means that in addition to
     /// creating a link from node1 => node2,  a link is also created from node2 => node1
     pub fn link(&mut self, node1: &GridNode, node2: &GridNode, bi_link: bool) {
-        self.links.entry(node1.pos()).or_insert(vec![]).push(node2.pos());
+        self.links.entry(node1.pos()).or_insert_with(|| vec![]).push(node2.pos());
         if bi_link {
-            self.links.entry(node2.pos()).or_insert(vec![]).push(node1.pos());
+            self.links.entry(node2.pos()).or_insert_with(|| vec![]).push(node1.pos());
         }
     }
 
@@ -93,12 +93,12 @@ impl GridMaze {
     /// returns the neighbors of the given `node`. Neighbors are the nodes adjacent to `node` but NOT
     /// necessarily linked to `node`. To get the linked nodes, use the `links()` function
     pub fn neighbors(&self, node: &GridNode) -> Vec<GridNode> {
-        let mut neighbors = vec![];
-        neighbors.push(self.north(node));
-        neighbors.push(self.east(node));
-        neighbors.push(self.south(node));
-        neighbors.push(self.west(node));
-
+        let neighbors = vec![
+            self.north(node),
+            self.east(node),
+            self.south(node),
+            self.west(node),
+        ];
 
         neighbors.into_iter().flatten().collect()
     }
@@ -128,20 +128,20 @@ impl GridMaze {
     pub fn north(&self, node: &GridNode) -> Option<GridNode> {
         let node_index = node.pos();
         if node_index > self.cols {
-            self.nodes.get(node_index - self.cols).map(|n| *n)
+            self.nodes.get(node_index - self.cols).copied()
         } else {
             None
         }
     }
 
     pub fn south(&self, node: &GridNode) -> Option<GridNode> {
-        self.nodes.get(node.pos() + self.cols).map(|n| *n)
+        self.nodes.get(node.pos() + self.cols).copied()
     }
 
     pub fn east(&self, node: &GridNode) -> Option<GridNode> {
         // if the node is not at the eastern edge of the maze
         if node.pos() % self.cols + 1 != self.cols {
-            self.nodes.get(node.pos() + 1).map(|n| *n)
+            self.nodes.get(node.pos() + 1).copied()
         } else {
             None
         }
@@ -150,7 +150,7 @@ impl GridMaze {
     pub fn west(&self, node: &GridNode) -> Option<GridNode> {
         // if node is not on the western edge of the maze
         if node.pos() % self.cols != 0 {
-            self.nodes.get(node.pos() - 1).map(|n| *n)
+            self.nodes.get(node.pos() - 1).copied()
         } else {
             None
         }
@@ -242,11 +242,11 @@ impl GridMaze {
                     .filter(|neighbor| !self.has_link(&node, neighbor))
                     .collect::<Vec<GridNode>>();
 
-                // try to select a neighbor that is also a dead end node
+                // try to select a neighbors that are also dead end nodes
                 let mut best_neighbors = unlinked_neighbors
                     .iter()
                     .filter(|&neighbor| self.get_links(neighbor).len() == 1)
-                    .map(|n| *n)
+                    .copied()
                     .collect::<Vec<GridNode>>();
 
                 // if no best neighbors found, just use the unlinked neighbors
@@ -254,7 +254,7 @@ impl GridMaze {
                     best_neighbors = unlinked_neighbors;
                 }
 
-                // choose a random neighbor and link to it
+                // finally choose a random, best, neighbor and link to it
                 if let Some(rand_neighbor) = best_neighbors.choose(&mut thread_rng()) {
                     self.link(&node, rand_neighbor, true);
                 }

@@ -73,7 +73,7 @@ fn unvisited_neighbors(maze: &GridMaze, node: &GridNode) -> Vec<GridNode> {
         .neighbors(&node)
         .iter()
         .filter(|&neighbor_node| maze.get_links(neighbor_node).is_empty())
-        .map(|unlinked_node| *unlinked_node)
+        .copied()
         .collect()
 }
 
@@ -85,6 +85,6 @@ fn visited_neighbors(maze: &GridMaze, node: &GridNode) -> Vec<GridNode> {
         .neighbors(node)
         .iter()
         .filter(|&neighbor_node| !maze.get_links(neighbor_node).is_empty())
-        .map(|linked_node| *linked_node)
+        .copied()
         .collect()
 }

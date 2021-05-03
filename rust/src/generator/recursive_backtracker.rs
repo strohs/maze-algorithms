@@ -33,7 +33,7 @@ pub fn generate(height: usize, width: usize) -> GridMaze {
             .neighbors(current_node)
             .iter()
             .filter(|&node| maze.get_links(node).is_empty())
-            .map(|node| *node)
+            .copied()
             .collect::<Vec<GridNode>>();
 
         // if there are unvisited neighbors choose a random neighbor, link to it, and push it
