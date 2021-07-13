@@ -2,7 +2,7 @@ use std::hash::{Hash, Hasher};
 
 
 /// GridNode is the default type that can be stored in a maze. GridNodes contain a `pos`ition
-/// field that is used to uniquely identify a node's position in a maze maze.  Additionally. maze
+/// field that is used to uniquely identify a node's position in a maze.  Additionally. maze
 /// nodes have a `weight` field that can be used to store cost calculations for maze solvers,
 /// path finding algorithms, etc..
 #[derive(Debug, Copy, Clone)]

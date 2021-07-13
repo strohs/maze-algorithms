@@ -62,12 +62,16 @@ impl GridMaze {
 
     /// create a link between the two nodes in the maze. This will essentially create a passageway
     /// between them.
-    /// `bi_link` creates a bi-directional link if it is `true`. Which means that in addition to
+    /// `bi_link` creates a bi-directional link, if it is `true`. Which means that in addition to
     /// creating a link from node1 => node2,  a link is also created from node2 => node1
     pub fn link(&mut self, node1: &GridNode, node2: &GridNode, bi_link: bool) {
-        self.links.entry(node1.pos()).or_insert_with(|| vec![]).push(node2.pos());
+        self.links.entry(node1.pos())
+            .or_insert_with(Vec::new)
+            .push(node2.pos());
         if bi_link {
-            self.links.entry(node2.pos()).or_insert_with(|| vec![]).push(node1.pos());
+            self.links.entry(node2.pos())
+                .or_insert_with(Vec::new)
+                .push(node1.pos());
         }
     }
 
