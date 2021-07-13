@@ -7,7 +7,11 @@ use std::fmt::{Display, Formatter};
 use rand::seq::SliceRandom;
 use crate::solver::distances::Distances;
 
-
+/// GridMaze represents a two-dimensional maze, with each node having four possible directions one
+/// can take to get to another node.
+/// If there is a link between two nodes, that indicates there is a passage "carved" between them.
+///
+/// The GridNodes are stored in tow-order within a one-dimensional Vec
 #[derive(Debug)]
 pub struct GridMaze {
     nodes: Vec<GridNode>,
@@ -208,7 +212,6 @@ impl Display for GridMaze {
 }
 
 /// Functions for converting a GridMaze into a Braided Maze
-///
 impl GridMaze {
 
     /// returns copies of the GridNodes in the Maze that are dead-ends. Dead-ends are Nodes that only

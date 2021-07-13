@@ -51,8 +51,8 @@ impl Index<GridNode> for Distances {
 }
 
 
-/// Returns a "pretty printed" String containing the distance amounts of each node of the maze
-/// displayed within the node "square" as a HexaDecimal amount.
+/// A helper function that returns a "pretty printed" String containing the distance value of each
+/// node from the root node. The distances values are printed as hexadecimal values.
 /// Useful for debugging purposes
 #[allow(dead_code)]
 pub fn overlay_distances(maze: &GridMaze, distances: &Distances) -> String {

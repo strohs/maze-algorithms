@@ -1,9 +1,10 @@
 use std::hash::{Hash, Hasher};
 
 
-/// GridNode is the default type that can be stored in a maze maze. GridNodes contain a `pos`ition
+/// GridNode is the default type that can be stored in a maze. GridNodes contain a `pos`ition
 /// field that is used to uniquely identify a node's position in a maze maze.  Additionally. maze
-/// nodes have a `weight` field that can be used to store cost calculations for maze solvers etc..
+/// nodes have a `weight` field that can be used to store cost calculations for maze solvers,
+/// path finding algorithms, etc..
 #[derive(Debug, Copy, Clone)]
 pub struct GridNode {
     pos: usize,
@@ -12,7 +13,7 @@ pub struct GridNode {
 
 impl GridNode {
 
-    // constructs a new Node with the specified `pos` and `weight`
+    /// constructs a new Node with the specified `pos` and `weight`
     pub fn new(pos: usize, weight: isize) -> Self {
         GridNode {
             pos,
@@ -20,20 +21,22 @@ impl GridNode {
         }
     }
 
-    // returns the pos of this node
+    /// returns the pos of this node
     pub fn pos(&self) -> usize {
         self.pos
     }
 
-    // returns the weight of the node
+    /// returns the weight of the node
     pub fn weight(&self) -> isize {
         self.weight
     }
 
+    /// sets the position value of this node
     pub fn set_pos(&mut self, new_pos: usize) {
         self.pos = new_pos;
     }
 
+    /// sets the weight of this node
     pub fn set_weight(&mut self, new_weight: isize) {
         self.weight = new_weight;
     }
@@ -41,7 +44,7 @@ impl GridNode {
 
 
 impl PartialEq for GridNode {
-    /// two maze nodes are considered equal if their respective `pos` are equal
+    /// two grid nodes are considered equal if their respective `pos` are equal
     fn eq(&self, other: &Self) -> bool {
         self.pos == other.pos
     }
@@ -49,7 +52,6 @@ impl PartialEq for GridNode {
 
 impl Eq for GridNode {}
 
-// HASH impl
 impl Hash for GridNode {
     fn hash<H: Hasher>(&self, state: &mut H) {
         self.pos.hash(state);
