@@ -4,16 +4,20 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "start": "http-server ./src/circular -p 8080"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "type": "module",
   "dependencies": {
-    "ansi-escape-sequences": "^5.1.2"
+    "ansi-escape-sequences": "^5.1.2",
+    "two.js": "^0.7.8"
   },
   "devDependencies": {
     "chai": "^4.3.0",
+    "http-server": "^0.12.3",
     "mocha": "^8.3.0"
   }
 }

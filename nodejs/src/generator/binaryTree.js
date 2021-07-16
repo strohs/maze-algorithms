@@ -1,5 +1,5 @@
-const {randomInt} = require("../random.js");
-const Grid = require("../Grid.js");
+import {randomInt} from "../random.js";
+import Grid from "../Grid.js";
 
 /**
  * generates a random maze using binary tree algorithm
@@ -37,4 +37,4 @@ function generate(height, width) {
   return grid;
 }
 
-module.exports.generate = generate;
+export {generate};

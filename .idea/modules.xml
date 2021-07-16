@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/java/java.iml" filepath="$PROJECT_DIR$/java/java.iml" />
-      <module fileurl="file://$PROJECT_DIR$/javascript-browser/javascript-browser.iml" filepath="$PROJECT_DIR$/javascript-browser/javascript-browser.iml" />
       <module fileurl="file://$PROJECT_DIR$/nodejs/nodejs.iml" filepath="$PROJECT_DIR$/nodejs/nodejs.iml" />
       <module fileurl="file://$PROJECT_DIR$/python/python.iml" filepath="$PROJECT_DIR$/python/python.iml" />
       <module fileurl="file://$PROJECT_DIR$/rust/rust.iml" filepath="$PROJECT_DIR$/rust/rust.iml" />

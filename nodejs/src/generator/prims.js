@@ -1,5 +1,5 @@
-const {randomInt} = require("../random.js");
-const Grid = require("../Grid.js");
+import {randomInt} from "../random.js";
+import Grid from "../Grid.js";
 
 /**
  * generates a random maze using Prims algorithm.
@@ -74,4 +74,4 @@ function buildRandomWeights(grid) {
     return randWeights;
 }
 
-exports.generate = generate;
+export {generate};

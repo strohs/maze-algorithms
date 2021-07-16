@@ -1,13 +1,24 @@
 // Make an instance of two and place it on the page.
-var elem = document.getElementById('draw-shapes');
-var params = { width: 285, height: 200 };
-var two = new Two(params).appendTo(elem);
+const elem = document.getElementById('draw-shapes');
+const params = { width: 1000, height: 1000 };
+const two = new Two(params).appendTo(elem);
 
 // two has convenience methods to create shapes.
-var circle = two.makeCircle(90, 100, 50);
-var rect = two.makeRectangle(213, 100, 100, 100);
+const circle = two.makeCircle(90, 100, 50);
+const rect = two.makeRectangle(213, 100, 100, 100);
 
-// The object returned has many stylable properties:
+// angles expressed in radians
+// 1 radian = 57.296 degrees
+// - radians draw CCW and + radians draw CW
+// 45 deg = Math.PI / 4
+// 90 deg = Math.PI / 2
+// 135 deg = 3 * Math.PI / 4
+// 180 deg = Math.PI
+//const arc = two.makeArcSegment(400, 100, 20, 30, 0, Math.PI * 3 / 4);
+
+
+
+// The object returned has many styleable properties:
 circle.fill = '#FF8000';
 circle.stroke = 'orangered'; // Accepts all valid css color
 circle.linewidth = 5;
@@ -16,10 +27,55 @@ rect.fill = 'rgb(0, 200, 255)';
 rect.opacity = 0.75;
 rect.noStroke();
 
+// arc.stroke = `grey`;
+// arc.fill = '#FF1111'
+// arc.linewidth = 2;
+
+// // draw inner wall in red
+// const iw = two.makeArcSegment(400, 100, 20, 20, 0, Math.PI * 3 / 4);
+// iw.stroke = '#fa23e4';
+// iw.linewidth = 2;
+//
+// // draw outer wall in yellow
+// const ow = two.makeArcSegment(400, 100, 30, 30, 0, Math.PI * 3 / 4);
+// ow.stroke = '#6c00b4';
+// ow.linewidth = 2;
+//
+// // draw the ccw wall
+// const ccw = two.makeArcSegment(400, 100, 20, 30, 0, 0);
+// ccw.stroke = 'rgb(0,255,59)';
+// ccw.linewidth = 2;
+//
+// // draw the cw wall
+// const cw = two.makeArcSegment(400, 100, 20, 30, Math.PI * 3 / 4, Math.PI * 3 / 4);
+// cw.stroke = '#ffeb00';
+// cw.linewidth = 2;
+
 // Don't forget to tell two to render everything
 // to the screen
-two.update();
+//two.update();
 
+
+function drawEmptyPolarGrid(rows, cols, ringHeight, ox, oy) {
+    const cell_count = rows * cols;
+    const theta = 2 * Math.PI / cols;
+
+    for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+
+            const inner_radius = r * ringHeight;
+            const outer_radius = (r + 1) * ringHeight;
+            const theta_ccw = c * theta;
+            const theta_cw = (c + 1) * theta;
+            const arc = two.makeArcSegment(ox, oy, inner_radius, outer_radius, theta_ccw, theta_cw);
+            arc.stroke = '#000000';
+            arc.linewidth = 2;
+        }
+    }
+}
+
+drawEmptyPolarGrid(8, 24, 25, 500, 500);
+two.update();
 
 
 

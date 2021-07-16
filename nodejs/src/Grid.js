@@ -1,7 +1,7 @@
-const Cell = require("./Cell.js");
-const {randomInt, shuffle} = require("./random.js");
+import Cell from "./Cell.js";
+import {randomInt, shuffle} from "./random.js";
 
-class Grid {
+export default class Grid {
 
   /**
    * constructs a Grid containing the specified amount of rows and columns
@@ -237,5 +237,3 @@ class Grid {
     }
   }
 }
-
-module.exports = Grid;

@@ -1,5 +1,5 @@
-const {randomInt, randomBoolean} = require("../random.js");
-const Grid = require("../Grid.js");
+import {randomInt, randomBoolean} from "../random.js";
+import Grid from "../Grid.js";
 
 
 /**
@@ -58,4 +58,4 @@ function generate(height, width) {
   return grid;
 }
 
-exports.generate = generate;
+export {generate};

@@ -1,54 +1,54 @@
-const binaryTree = require("./src/generator/binaryTree.js");
-const sidewinder = require("./src/generator/sidewinder.js");
-const huntKill = require("./src/generator/huntKill.js");
-const recursiveBacktracker = require("./src/generator/recursiveBacktracker.js");
-const aldousBroder = require("./src/generator/aldousBroder.js");
-const wilsons = require("./src/generator/wilsons.js");
-const prims = require("./src/generator/prims.js");
-const {shortestPathToGoal} = require("./src/solver/dijkstras.js");
+import {generate as binaryTree} from "./src/generator/binaryTree.js";
+import {generate as sidewinder} from "./src/generator/sidewinder.js";
+import {generate as huntKill} from "./src/generator/huntKill.js";
+import {generate as recursiveBacktracker} from "./src/generator/recursiveBacktracker.js";
+import {generate as aldousBroder} from "./src/generator/aldousBroder.js";
+import {generate as wilsons} from "./src/generator/wilsons.js";
+import {generate as prims} from "./src/generator/prims.js";
+import {shortestPathToGoal} from "./src/solver/dijkstras.js";
 
 const height = 10;
 const width = 15;
 
 // generate a maze using binary tree algorithm
-console.log(`binary-tree ${height}x${width}`);
-const bt_maze = binaryTree.generate(height, width);
+console.log(`binary-tree ${width}x${height}`);
+const bt_maze = binaryTree(height, width);
 console.log(bt_maze.toString(),"\n\n");
 
 // generate a maze using sidewinder algorithm
-console.log(`sidewinder ${height}x${width}`);
-const sw_maze = sidewinder.generate(height, width);
+console.log(`sidewinder ${width}x${height}`);
+const sw_maze = sidewinder(height, width);
 console.log(sw_maze.toString(), "\n\n");
 
 // generate a maze using hunt and kill algorithm
-console.log(`hunt and kill ${height}x${width}`);
-const hk_maze = huntKill.generate(height, width);
+console.log(`hunt and kill ${width}x${height}`);
+const hk_maze = huntKill(height, width);
 console.log(hk_maze.toString(), "\n\n");
 
 // generate a maze using recursive-backtracker
-console.log(`recursive backtracker ${height}x${width}`);
-const rb_maze = recursiveBacktracker.generate(height, width);
+console.log(`recursive backtracker ${width}x${height}`);
+const rb_maze = recursiveBacktracker(height, width);
 console.log(rb_maze.toString(), "\n\n");
 
 // generate a maze using aldous-broder
-console.log(`aldous-broder ${height}x${width}`);
-const ab_maze = aldousBroder.generate(height, width);
+console.log(`aldous-broder ${width}x${height}`);
+const ab_maze = aldousBroder(height, width);
 console.log(ab_maze.toString(), "\n\n");
 
 // generate a maze using wilsons
-console.log(`wilsons ${height}x${width}`);
-const w_maze = wilsons.generate(height, width);
+console.log(`wilsons ${width}x${height}`);
+const w_maze = wilsons(height, width);
 console.log(w_maze.toString(), "\n\n");
 
 // generate a maze using prims
-console.log(`prims ${height}x${width}`);
-const p_maze = prims.generate(height, width);
+console.log(`prims ${width}x${height}`);
+const p_maze = prims(height, width);
 console.log(p_maze.toString(), "\n\n");
 
 
 // generate a braided maze from the prim's maze
 p_maze.braid(0.5);
-console.log(`prims 50% braided ${height}x${width}`);
+console.log(`prims 50% braided ${width}x${height}`);
 console.log(p_maze.toString(), "\n\n");
 
 
@@ -59,5 +59,5 @@ const startCell = p_maze.getCell(0, 0);
 const goalCell = p_maze.getCell(p_maze.rows - 1, p_maze.cols - 1);
 const shortestPath = shortestPathToGoal(startCell, goalCell);
 // print the maze with the shortest path info included
-console.log(`prim's ${height}x${width} shortest path`);
+console.log(`prim's ${width}x${height} shortest path`);
 console.log(p_maze.printDistances(shortestPath));

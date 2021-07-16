@@ -47,7 +47,4 @@ function sample(array) {
   return array[randomInt(array.length)];
 }
 
-exports.randomInt = randomInt;
-exports.shuffle = shuffle;
-exports.randomBoolean = randomBoolean;
-exports.sample = sample;
+export {randomBoolean, randomInt, shuffle, sample};

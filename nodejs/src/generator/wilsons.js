@@ -1,5 +1,5 @@
-const {randomInt, sample} = require("../random.js");
-const Grid = require("../Grid.js");
+import {randomInt, sample} from "../random.js";
+import Grid from "../Grid.js";
 
 /**
  * generates a random maze using Wilson's algorithm.
@@ -65,4 +65,4 @@ function generate(height, width) {
   return grid;
 }
 
-exports.generate = generate;
+export {generate};

@@ -1,5 +1,4 @@
-
-const Distances = require("../Distances.js");
+import Distances from "../Distances.js";
 
 /**
  * finds the shortest path in a maze using Dijkstra's algorithm,  beginning at `startCell`
@@ -40,4 +39,4 @@ function shortestPathToGoal(startCell, goalCell) {
     return curPath;
 }
 
-exports.shortestPathToGoal = shortestPathToGoal;
+export {shortestPathToGoal};

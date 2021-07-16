@@ -1,5 +1,5 @@
-const {sample} = require("../random.js");
-const Grid = require("../Grid.js");
+import {sample} from "../random.js";
+import Grid from "../Grid.js";
 
 /**
  * generates a random maze using recursive backtracker algorithm.
@@ -47,4 +47,4 @@ function generate(height, width) {
   return grid;
 }
 
-exports.generate = generate;
+export {generate};

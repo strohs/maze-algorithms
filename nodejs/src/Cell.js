@@ -1,4 +1,4 @@
-const Distances = require("./Distances");
+import Distances from "./Distances.js";
 
 /**
  * Cell is the main class used in building mazes.
@@ -8,7 +8,7 @@ const Distances = require("./Distances");
  * that cell.
  *
  */
-module.exports = class Cell {
+export default class Cell {
 
     /**
      * constructs a new Cell at the specified row and column index. All neighbors are set to null, the cell's links
