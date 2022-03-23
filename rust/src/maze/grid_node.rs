@@ -2,8 +2,8 @@ use std::hash::{Hash, Hasher};
 
 
 /// GridNode is the default type that can be stored in a maze. GridNodes contain a `pos`ition
-/// field that is used to uniquely identify a node's position in a maze.  Additionally. maze
-/// nodes have a `weight` field that can be used to store cost calculations for maze solvers,
+/// field that is used to uniquely identify a node's position in a maze.
+/// Additionally, GridNodes have a `weight` field that can be used to store cost calculations; useful for maze solvers,
 /// path finding algorithms, etc..
 #[derive(Debug, Copy, Clone)]
 pub struct GridNode {
@@ -44,7 +44,7 @@ impl GridNode {
 
 
 impl PartialEq for GridNode {
-    /// two grid nodes are considered equal if their respective `pos` are equal
+    /// two grid nodes are considered equal if their respective `pos` fields are equal
     fn eq(&self, other: &Self) -> bool {
         self.pos == other.pos
     }

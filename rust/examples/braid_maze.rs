@@ -3,7 +3,7 @@ use std::env;
 
 fn main() {
 
-    // get width and height from STDIN else default them to 10
+    // get width and height from STDIN else default them to 10 x 15
     let args: Vec<String> = env::args().collect();
     let (height, width) = match args.len() {
         2 => (args[1].parse::<usize>().unwrap(), 10),
@@ -15,7 +15,7 @@ fn main() {
     };
 
     // going to use recurive backtracker as the starting maze. Any other algorithm that
-    // generates a perfect maze will work
+    // generates a perfect maze would also work
     println!("recursive bactracker unbraided {}x{}", &height, &width);
     let mut maze = recursive_backtracker::generate(height, width);
     println!("{}\n\n", &maze);

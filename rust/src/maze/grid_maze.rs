@@ -7,14 +7,15 @@ use std::fmt::{Display, Formatter};
 use rand::seq::SliceRandom;
 use crate::solver::distances::Distances;
 
-/// GridMaze represents a two-dimensional maze, with each node having four possible directions one
-/// can take to get to another node.
+/// GridMaze represents a two-dimensional maze, with each node having four possible directions that
+/// could be taken to get to another node.
 /// If there is a link between two nodes, that indicates there is a passage "carved" between them.
 ///
-/// The GridNodes are stored in tow-order within a one-dimensional Vec
+/// The GridNodes are stored in row-order within a one-dimensional Vec
 #[derive(Debug)]
 pub struct GridMaze {
     nodes: Vec<GridNode>,
+    // holds links between two nodes in the maze
     links: HashMap<usize, Vec<usize>>,
     rows: usize,
     cols: usize,
@@ -60,8 +61,8 @@ impl GridMaze {
     //     (index / col_dim, index % col_dim)
     // }
 
-    /// create a link between the two nodes in the maze. This will essentially create a passageway
-    /// between them.
+    /// create a link between two nodes in the maze.
+    /// This will essentially "carves" a passageway between them.
     /// `bi_link` creates a bi-directional link, if it is `true`. Which means that in addition to
     /// creating a link from node1 => node2,  a link is also created from node2 => node1
     pub fn link(&mut self, node1: &GridNode, node2: &GridNode, bi_link: bool) {
@@ -75,9 +76,9 @@ impl GridMaze {
         }
     }
 
-    // returns copies of GridNode(s) that the given `node` links to.
-    // In this particular maze, each node can have at most 4 links, or edges, to another Node
-    // If the given node doesn't link to anything, an empty Vector is returned
+    /// returns copies of the GridNode(s) that the given `node` links to.
+    /// In this particular maze, each node can have at most 4 links, or edges, to another Node.
+    /// If the given node doesn't link to anything, an empty Vector is returned
     pub fn get_links(&self, node: &GridNode) -> Vec<GridNode> {
         match self.links.get(&node.pos()) {
             Some(linked_pos) => {
@@ -89,8 +90,9 @@ impl GridMaze {
         }
     }
 
-    /// returns `true` if there is a link between `node1` and `node2`, else `false`. Note this
-    /// function only checks one-way links, it will not check for a link between `node2` and `node1`
+    /// returns `true` if there is a link between `node1` and `node2`, else `false`.
+    /// Note this function only checks one-way links, it will not check for a link between
+    /// `node2` and `node1`
     pub fn has_link(&self, node1: &GridNode, node2: &GridNode) -> bool {
         match self.links.get(&node1.pos()) {
             Some(node_links) => node_links.contains(&node2.pos()),
@@ -133,19 +135,27 @@ impl GridMaze {
     }
 
 
+    /// returns the node to the north of the given `node`, if there is not a node to the
+    /// north, `None` is returned
     pub fn north(&self, node: &GridNode) -> Option<GridNode> {
-        let node_index = node.pos();
-        if node_index > self.cols {
-            self.nodes.get(node_index - self.cols).copied()
+
+        if node.pos() > self.cols {
+            // the northern node should have a pos() index equal to the current nodes
+            // pos index minus the mazes column length
+            self.nodes.get(node.pos() - self.cols).copied()
         } else {
             None
         }
     }
 
+    /// returns the node to the south of the given `node`. If there is not a node to the
+    /// south, `None` is returned
     pub fn south(&self, node: &GridNode) -> Option<GridNode> {
         self.nodes.get(node.pos() + self.cols).copied()
     }
 
+    /// returns the node to the east of the given `node`. If there is not a node to the
+    /// east, `None` is returned
     pub fn east(&self, node: &GridNode) -> Option<GridNode> {
         // if the node is not at the eastern edge of the maze
         if node.pos() % self.cols + 1 != self.cols {
@@ -155,6 +165,8 @@ impl GridMaze {
         }
     }
 
+    /// returns the node to the west of the given `node`. If there is not a node to the
+    /// west, `None` is returned
     pub fn west(&self, node: &GridNode) -> Option<GridNode> {
         // if node is not on the western edge of the maze
         if node.pos() % self.cols != 0 {
@@ -166,20 +178,20 @@ impl GridMaze {
 }
 
 
-/// allows indexing into this maze using a single usize value that represents the one-dimensional
-/// index of the Node you wish to retrieve
+/// This implmentation of Rust's `Index` trait will allow indexing into this maze using a single
+/// usize value that represents the one-dimensional index of the Node you wish to retrieve
 impl Index<usize> for GridMaze {
     type Output = GridNode;
 
-    /// returns the Node at the specified index, `idx`, in this . The `idx` should be a
-    /// one-dimensional index for the node to be retrieved
+    /// returns the Node at the specified index, `idx`. The `idx` should be a
+    /// one-dimensional index of the node to be retrieved.
     fn index(&self, idx: usize) -> &Self::Output {
         &self.nodes[idx]
     }
 }
 
 
-/// pretty prints this Maze to standard out as ASCII characters
+/// pretty prints this Maze to standard out using ASCII characters
 impl Display for GridMaze {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         // write the top wall of the maze
@@ -215,7 +227,7 @@ impl Display for GridMaze {
     }
 }
 
-/// Functions for converting a GridMaze into a Braided Maze
+/// In this impl block are functions specific to converting a GridMaze into a Braided Maze
 impl GridMaze {
 
     /// returns copies of the GridNodes in the Maze that are dead-ends. Dead-ends are Nodes that only
@@ -273,7 +285,8 @@ impl GridMaze {
 
 /// Functions to compute distances between nodes of a maze
 impl GridMaze {
-    /// find the distances from a `root` node to all other nodes in this `maze`, using each node's
+
+    /// computes the distances from a `root` node to all other nodes in this `maze`, using each node's
     /// weight to compute the cost.
     /// returns a `Distances` struct containing the computed costs for each GridCell.
     pub fn distances(&self, root: &GridNode) -> Distances {

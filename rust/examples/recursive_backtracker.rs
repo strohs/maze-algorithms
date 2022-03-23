@@ -2,11 +2,10 @@ use std::env;
 use mazes::generator::recursive_backtracker;
 use mazes::solver::dijkstras::{find_shortest_path};
 use mazes::maze::grid_maze::GridMaze;
-use mazes::solver::distances::overlay_distances;
 
 fn main() {
 
-    // get width and height from STDIN else default them to 10 x 10
+    // get width and height from STDIN else default them to 10 x 15
     let args: Vec<String> = env::args().collect();
     let (height, width) = match args.len() {
         2 => (args[1].parse::<usize>().unwrap(), 10),
@@ -28,7 +27,8 @@ fn main() {
     let shortest_path = find_shortest_path(&maze, maze[0], maze[sw_corner_idx]);
     println!("{}\n\n\n", maze.display_path(&shortest_path));
 
-    let distances = maze.distances(&maze[0]);
-    println!("\n\n\n{}", overlay_distances(&maze, &distances));
+    // example of printing the current distance values of the maze
+    //let distances = maze.distances(&maze[0]);
+    //println!("\n\n\n{}", overlay_distances(&maze, &distances));
 
 }

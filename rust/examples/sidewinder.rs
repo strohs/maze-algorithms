@@ -5,7 +5,7 @@ use mazes::maze::grid_maze::GridMaze;
 
 fn main() {
 
-    // get width and height from STDIN else default them to 10 x 10
+    // get width and height from STDIN else default them to 10 x 15
     let args: Vec<String> = env::args().collect();
     let (height, width) = match args.len() {
         2 => (args[1].parse::<usize>().unwrap(), 10),
