@@ -15,7 +15,8 @@ use crate::solver::distances::Distances;
 #[derive(Debug)]
 pub struct GridMaze {
     nodes: Vec<GridNode>,
-    // holds links between two nodes in the maze
+    // holds links between two nodes in the maze, it maps a `Node.pos` to a Vec of nodes that
+    // have had passages carved between them
     links: HashMap<usize, Vec<usize>>,
     rows: usize,
     cols: usize,
@@ -24,7 +25,7 @@ pub struct GridMaze {
 impl GridMaze {
     /// constructs a new maze with the specified dimensions, using the `GridNode` type to represent
     /// each node of the maze. Nodes will be stored in row-order. Each node will have a default
-    /// weight of 1 and its default value will be its one-dimensional index within the maze
+    /// weight of 1 and its default `pos` value will be its one-dimensional index within the maze.
     pub fn new(rows: usize, cols: usize) -> Self {
         let nodes = (0..(rows * cols))
             .into_iter()
@@ -61,9 +62,19 @@ impl GridMaze {
     //     (index / col_dim, index % col_dim)
     // }
 
+    /// returns a reference to the GridNode at position row, col in the grid
+    pub fn get2d(&self, row: usize, col: usize) -> Option<GridNode> {
+        if row < self.rows && col < self.cols {
+            let pos = GridMaze::idx_1d(row, col, self.cols);
+            Some(self.nodes[pos])
+        } else {
+            None
+        }
+    }
+
     /// create a link between two nodes in the maze.
     /// This will essentially "carves" a passageway between them.
-    /// `bi_link` creates a bi-directional link, if it is `true`. Which means that in addition to
+    /// `bi_link` creates a bi-directional link. If it is `true`, then in addition to
     /// creating a link from node1 => node2,  a link is also created from node2 => node1
     pub fn link(&mut self, node1: &GridNode, node2: &GridNode, bi_link: bool) {
         self.links.entry(node1.pos())
@@ -75,6 +86,23 @@ impl GridMaze {
                 .push(node1.pos());
         }
     }
+
+    /// unlinks `node1` from `node2`.
+    /// If there was no link between then nodes, then this will do nothing
+    pub fn unlink(&mut self, node1: &GridNode, node2: &GridNode) {
+        self.links
+            .entry(node1.pos())
+            .and_modify(|ls| {
+                ls.retain(|node_pos| *node_pos != node2.pos())
+            });
+
+        self.links
+            .entry(node2.pos())
+            .and_modify(|ls| {
+                ls.retain(|node_pos| *node_pos != node1.pos())
+            });
+    }
+
 
     /// returns copies of the GridNode(s) that the given `node` links to.
     /// In this particular maze, each node can have at most 4 links, or edges, to another Node.
@@ -101,7 +129,7 @@ impl GridMaze {
     }
 
     /// returns the neighbors of the given `node`. Neighbors are the nodes adjacent to `node` but NOT
-    /// necessarily linked to `node`. To get the linked nodes, use the `links()` function
+    /// necessarily linked to `node`. To get the linked nodes, use the `get_links()` function
     pub fn neighbors(&self, node: &GridNode) -> Vec<GridNode> {
         let neighbors = vec![
             self.north(node),

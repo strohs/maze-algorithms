@@ -7,3 +7,4 @@ pub mod wilsons;
 pub mod hunt_kill;
 pub mod recursive_backtracker;
 pub mod prims;
+pub mod recursive_division;
