@@ -1,4 +1,4 @@
-use crate::solver::distances::Distances;
+use crate::solver::distances::{Distances};
 use crate::maze::grid_maze::GridMaze;
 use crate::maze::grid_node::GridNode;
 

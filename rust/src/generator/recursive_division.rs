@@ -17,7 +17,9 @@ pub fn generate(height: usize, width: usize) -> GridMaze {
     // initially link each node of the maze to all its neighbors
     for pos in 0..maze.len() {
         let node = maze[pos];
+        println!("node:{}", &node.pos());
         for nbr in maze.neighbors(&node) {
+            println!("   nbr:{:?}", &nbr.pos());
             maze.link(&node, &nbr, false);
         }
     }
@@ -28,6 +30,7 @@ pub fn generate(height: usize, width: usize) -> GridMaze {
 }
 
 fn divide(maze: &mut GridMaze, row: usize, col: usize, height: usize, width: usize) {
+    //println!("r:{row} c:{col} h:{height} w:{width} \n{maze}");
     if height <= 1 || width <= 1 {
         return
     }
@@ -39,7 +42,7 @@ fn divide(maze: &mut GridMaze, row: usize, col: usize, height: usize, width: usi
 }
 
 fn divide_horizontally(maze: &mut GridMaze, row: usize, col: usize, height: usize, width: usize) {
-    let divide_south_of = thread_rng().gen_range(0, height - 1);
+    let divide_south_of = thread_rng().gen_range(0, height-1);
     let passage_at = thread_rng().gen_range(0, width);
 
     for x in 0..width {
@@ -68,6 +71,7 @@ fn divide_vertically(maze: &mut GridMaze, row: usize, col: usize, height: usize,
         }
 
         if let Some(node) = maze.get2d(row + y, col + divide_east_of) {
+
             if let Some(east_node) = maze.east(&node) {
                 maze.unlink(&node, &east_node);
             }

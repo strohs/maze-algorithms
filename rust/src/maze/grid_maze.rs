@@ -167,7 +167,7 @@ impl GridMaze {
     /// north, `None` is returned
     pub fn north(&self, node: &GridNode) -> Option<GridNode> {
 
-        if node.pos() > self.cols {
+        if node.pos() >= self.cols {
             // the northern node should have a pos() index equal to the current nodes
             // pos index minus the mazes column length
             self.nodes.get(node.pos() - self.cols).copied()
