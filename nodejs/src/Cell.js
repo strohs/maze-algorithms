@@ -125,11 +125,11 @@ export default class Cell {
 
     /**
      * sets this Cell's north neighbor to the passed in cell
-     * @param cell {Cell} a cell to set as this cell's neighbor. If this cell does not have a neighbor then set
+     * @param otherCell cell to set as this cell's neighbor. If this cell does not have a neighbor then set
      * this to null
      */
-    set north(cell) {
-        this._north = cell;
+    set north(otherCell) {
+        this._north = otherCell;
     }
 
     get south() {
@@ -138,11 +138,11 @@ export default class Cell {
 
     /**
      * sets this Cell's south neighbor to the passed in cell
-     * @param cell {Cell} a cell to set as this cell's neighbor. If this cell does not have a neighbor then set
+     * @param otherCell a cell to set as this cell's neighbor. If this cell does not have a neighbor then set
      * this to null
      */
-    set south(cell) {
-        this._south = cell;
+    set south(otherCell) {
+        this._south = otherCell;
     }
 
     get east() {
@@ -151,11 +151,11 @@ export default class Cell {
 
     /**
      * sets this Cell's east neighbor to the passed in cell
-     * @param cell {Cell} a cell to set as this cell's neighbor. If this cell does not have a neighbor then set
+     * @param otherCell a cell to set as this cell's neighbor. If this cell does not have a neighbor then set
      * this to null
      */
-    set east(cell) {
-        this._east = cell;
+    set east(otherCell) {
+        this._east = otherCell;
     }
 
     get west() {
@@ -164,11 +164,11 @@ export default class Cell {
 
     /**
      * sets this Cell's west neighbor to the passed in cell
-     * @param cell {Cell} a cell to set as this cell's neighbor. If this cell does not have a neighbor then set
+     * @param otherCell a cell to set as this cell's neighbor. If this cell does not have a neighbor then set
      * this to null
      */
-    set west(cell) {
-        this._west = cell;
+    set west(otherCell) {
+        this._west = otherCell;
     }
 
     get weight() {
