@@ -70,7 +70,7 @@ pub fn generate(height: usize, width: usize) -> GridMaze {
 /// any other nodes in the `maze`
 fn unvisited_neighbors(maze: &GridMaze, node: &GridNode) -> Vec<GridNode> {
     maze
-        .neighbors(&node)
+        .neighbors(node)
         .iter()
         .filter(|&neighbor_node| maze.get_links(neighbor_node).is_empty())
         .copied()

@@ -2,7 +2,7 @@ use rand::{Rng, thread_rng};
 use crate::maze::grid_maze::GridMaze;
 
 /// The Recursive Division algorithm is unique among the other algorithms implemented
-/// here,for two reasons. First of all, it treats the maze as a fractal, a shape whose
+/// here, for two reasons. First of all, it treats the maze as a fractal, a shape whose
 /// component parts are all identical (or nearly so) to the whole. Second, instead
 /// of carving passages like the other algorithms have done, this one begins with
 /// a wide open space and adds walls until a maze is produced. Algorithms of

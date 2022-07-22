@@ -35,7 +35,7 @@ pub fn generate(height: usize, width: usize) -> GridMaze {
             // to it's north neighbor
             if let Some(rand_node) = rand_member {
                 if let Some(north_pos) = maze.north(rand_node) {
-                    maze.link(&rand_node, &north_pos, true);
+                    maze.link(rand_node, &north_pos, true);
                 }
             }
             runs.clear();

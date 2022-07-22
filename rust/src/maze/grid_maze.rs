@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use rand::{thread_rng, Rng};
 use std::slice::{ChunksExact, Iter, IterMut};
 use std::ops::Index;
-use std::fmt::{Display, Formatter};
+use std::fmt::{Display, Formatter, Write};
 use rand::seq::SliceRandom;
 use crate::solver::distances::Distances;
 
@@ -50,6 +50,11 @@ impl GridMaze {
     /// returns the total number of nodes stored in this maze (i.e. rows * cols)
     pub fn len(&self) -> usize {
         self.rows * self.cols
+    }
+
+    /// returns true if this GridMaze does not have any nodes in its internal rows Vector
+    pub fn is_empty(&self) -> bool {
+        self.nodes.len() == 0
     }
 
     /// returns a one-dimensional index based on the given row, col values
@@ -234,13 +239,13 @@ impl Display for GridMaze {
             for cur_node in row.iter() {
                 // determine if an eastern wall should be drawn
                 match self.east(cur_node) {
-                    Some(east_node) if self.has_link(&cur_node, &east_node) => top.push_str("     "),
+                    Some(east_node) if self.has_link(cur_node, &east_node) => top.push_str("     "),
                     _ => top.push_str("    |"),
                 }
 
                 // determine if a southern wall should be drawn
                 match self.south(cur_node) {
-                    Some(south_node) if self.has_link(&cur_node, &south_node) => {
+                    Some(south_node) if self.has_link(cur_node, &south_node) => {
                         bottom.push_str("    +")
                     }
                     _ => bottom.push_str("----+"),
@@ -358,7 +363,7 @@ impl GridMaze {
     pub fn display_path(&self, path: &Distances) -> String {
         let mut buf = String::new();
         // write the top wall of the maze
-        buf.push_str(&format!("+{} \n", "----+".repeat(self.cols)));
+        let _ = writeln!(buf, "+{}", "----+".repeat(self.cols));
 
         for row in self.iter_rows() {
             // top holds the cell 'bodies' (blank spaces) and eastern walls
@@ -375,23 +380,25 @@ impl GridMaze {
 
                 // determine if an eastern wall should be drawn
                 match self.east(cur_node) {
-                    Some(east_pos) if self.has_link(&cur_node, &east_pos) => {
-                        top.push_str(&format!("{}  ", body))
+                    Some(east_pos) if self.has_link(cur_node, &east_pos) => {
+                        let _ = write!(top, "{}  ", &body);
                     }
-                    _ => top.push_str(&format!("{} |", body)),
+                    _ => {
+                        let _ = write!(top, "{} |", &body);
+                    },
                 }
 
                 // determine if a southern wall should be drawn
                 match self.south(cur_node) {
-                    Some(south_pos) if self.has_link(&cur_node, &south_pos) => {
+                    Some(south_pos) if self.has_link(cur_node, &south_pos) => {
                         bottom.push_str("    +")
                     }
                     _ => bottom.push_str("----+"),
                 }
             }
 
-            buf.push_str(&format!("{}\n", top));
-            buf.push_str(&format!("{}\n", bottom));
+            let _ = writeln!(buf, "{}", &top);
+            let _ = writeln!(buf, "{}", &bottom);
         }
         buf
     }

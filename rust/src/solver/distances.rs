@@ -1,11 +1,11 @@
 use std::collections::HashMap;
 use std::ops::Index;
+use std::fmt::Write;
 use crate::maze::grid_node::GridNode;
 use crate::maze::grid_maze::GridMaze;
 
 /// Distances is a helper struct that holds how far every node in a Maze is from a `root` cell.
 /// This distance information can be used by shortest-path algorithms (like Dijkstra's)
-#[derive(Debug)]
 pub struct Distances {
     // root is the starting node im a maze
     root: GridNode,
@@ -60,7 +60,7 @@ pub fn overlay_distances(maze: &GridMaze, distances: &Distances) -> String {
     let (_rows, cols) = maze.dimensions();
 
     // write the top wall of the maze
-    buf.push_str(&format!("+{}\n", "----+".repeat(cols)));
+    let _ = writeln!(buf, "+{}", "----+".repeat(cols));
 
     for row in maze.iter_rows() {
         // top holds the cell 'bodies' (blank spaces) and eastern walls
@@ -69,14 +69,16 @@ pub fn overlay_distances(maze: &GridMaze, distances: &Distances) -> String {
         let mut bottom = String::from("+");
 
         for curr_node in row.iter() {
-            let dist = *distances.get(&curr_node).unwrap_or(&0);
+            let dist = *distances.get(curr_node).unwrap_or(&0);
             // the body of the node will display the distance from the root
             // determine if an eastern wall should be drawn
             match maze.east(curr_node) {
                 Some(east_pos) if maze.has_link(curr_node, &east_pos) => {
-                    top.push_str(&format!("  {:2x} ", dist))
+                    let _ = write!(top, "  {:2x} ", dist);
                 }
-                _ => top.push_str(&format!("  {:2x}|", dist)),
+                _ => {
+                    let _ = write!(top, "  {:2x}|", dist);
+                }
             }
 
             // determine if a southern wall should be drawn
@@ -88,8 +90,8 @@ pub fn overlay_distances(maze: &GridMaze, distances: &Distances) -> String {
             }
         }
 
-        buf.push_str(&format!("{}\n", top.to_string()));
-        buf.push_str(&format!("{}\n", bottom.to_string()));
+        let _ = writeln!(buf, "{}\n", &top);
+        let _ = writeln!(buf, "{}\n", &bottom);
     }
     buf
 }
