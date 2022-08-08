@@ -2,12 +2,18 @@ name: Rust
 
 on:
   push:
+    paths:
+      - 'rust/**'
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
 
 env:
   CARGO_TERM_COLOR: always
+
+defaults:
+  run:
+    working-directory: rust
 
 jobs:
   build:
