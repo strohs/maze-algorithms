@@ -27,7 +27,7 @@ find the shortest path between two cells in a maze.
 ### Prerequisites
 - Java 11 (or higher) if you want to run the Java examples
 - Python 3 (at least 3.8) for the python examples
-- NodeJs (at least version 11, but older versions may work) for the javascript examples
+- NodeJs (at least version 12, but older versions may work) for the javascript examples
 - Rust (at least version 1.4, but older versions may work) and Cargo for the Rust examples
 
 
