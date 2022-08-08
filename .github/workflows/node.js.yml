@@ -5,10 +5,16 @@ name: Node.js CI
 
 on:
   push:
+    paths:
+      - 'nodejs/**'
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
 
+defaults:
+  run:
+    working-directory: rust
+    
 jobs:
   build:
 
