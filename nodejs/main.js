@@ -11,7 +11,7 @@ const height = 10;
 const width = 15;
 
 // generate a maze using binary tree algorithm
-//
+// ...
 console.log(`binary-tree ${width}x${height}`);
 const bt_maze = binaryTree(height, width);
 console.log(bt_maze.toString(),"\n\n");
