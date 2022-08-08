@@ -1,6 +1,7 @@
-const Grid = require("../src/Grid.js");
+import Grid from "../src/Grid.js";
+import chai from "chai";
 
-let should = require('chai').should() //actually call the function
+let should = chai.should() //actually call the function
 
 describe('Grid', function() {
   describe('constructor', function() {
@@ -13,7 +14,7 @@ describe('Grid', function() {
   describe('northwest neighbors', function() {
     it('grid[0][0] should not have north and west neighbors', function() {
       let grid = new Grid(3, 3);
-;
+
       should.not.exist(grid.getCell(0, 0).north);
       should.not.exist(grid.getCell(0, 0).west);
       should.exist(grid.getCell(0, 0).east);

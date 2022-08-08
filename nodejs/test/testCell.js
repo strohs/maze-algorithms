@@ -1,6 +1,8 @@
-const Cell = require("../src/Cell.js");
+import Cell from "../src/Cell.js";
+import chai from "chai";
 
-let should = require('chai').should() //actually call the function
+let should = chai.should(); //actually call the function
+
 
 describe('Cell', function() {
     describe('north()', function() {
@@ -84,9 +86,7 @@ describe('Cell', function() {
             let cell = new Cell(1, 1);
             let cell2 = new Cell(1, 2);
             let cell3 = new Cell(2, 1);
-            let cell4 = new Cell(0, 1);
-
-            cell.north = cell4;
+            cell.north = new Cell(0, 1);
             cell.south = cell3;
             cell.east = cell2;
 

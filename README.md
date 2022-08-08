@@ -1,15 +1,19 @@
+![example workflow](https://github.com/strohs/maze-algorithms/actions/workflows/rust.yml/badge.svg)
+![example workflow](https://github.com/strohs/maze-algorithms/actions/workflows/node.js.yml/badge.svg)
+![example workflow](https://github.com/strohs/maze-algorithms/actions/workflows/maven.yml/badge.svg)
+
 # Maze Generation Algorithms
 
 Examples of various [maze generation algorithms](https://en.wikipedia.org/wiki/Maze_generation_algorithm) written
 in Rust, Java, JavaScript (NodeJS) and Python.  All these algorithms were inspired by the book
-[Mazes for Programmers](https://pragprog.com/titles/jbmaze/mazes-for-programmers/). They will each generate 
-a random, perfect maze, which can then be printed to the terminal as ASCII characters.
+[Mazes for Programmers](https://pragprog.com/titles/jbmaze/mazes-for-programmers/). They will generate 
+a random, perfect maze, and print it to the terminal as ASCII characters.
 
 
 
 The implemented algorithms include:
 - [Binary Tree Algorithm](http://weblog.jamisbuck.org/2011/2/1/maze-generation-binary-tree-algorithm)
-- [Prims's Algorithm](http://weblog.jamisbuck.org/2011/1/10/maze-generation-prim-s-algorithm)
+- [Prim's Algorithm](http://weblog.jamisbuck.org/2011/1/10/maze-generation-prim-s-algorithm)
 - [Recursive Backtracking](https://weblog.jamisbuck.org/2010/12/27/maze-generation-recursive-backtracking)
 - [Wilson's Algorithm](https://en.wikipedia.org/wiki/Maze_generation_algorithm)
 - [Aldous-Broder Algorithm](https://en.wikipedia.org/wiki/Maze_generation_algorithm)
@@ -21,7 +25,7 @@ find the shortest path between two cells in a maze.
 
 
 ### Prerequisites
-- Java 8 (or higher) if you want to run the Java examples
+- Java 11 (or higher) if you want to run the Java examples
 - Python 3 (at least 3.8) for the python examples
 - NodeJs (at least version 11, but older versions may work) for the javascript examples
 - Rust (at least version 1.4, but older versions may work) and Cargo for the Rust examples
@@ -45,4 +49,4 @@ find the shortest path between two cells in a maze.
 - Rust
     - located in the `rust` directory. Example files have been provided for each maze algorithm in the `examples`
     directory. Use the `cargo run --example`, command to see an ... "example" of each maze type:
-    - i.e.  `cargo run --example wilsons 20 30` to generate a maze of 20 columns and 30 rows using Wilson's algorithm
+    - i.e.  `cargo run --example wilsons 20 30` to generate a maze of 30 columns and 20 rows using Wilson's algorithm

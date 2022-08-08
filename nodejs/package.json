@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha",
-    "start": "http-server ./src/circular -p 8080"
+    "start": "http-server ./ -p 8080"
   },
   "keywords": [],
   "author": "",
