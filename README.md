@@ -27,7 +27,7 @@ find the shortest path between two cells in a maze.
 ### Prerequisites
 - Java 11 (or higher) if you want to run the Java examples
 - Python 3 (at least 3.8) for the python examples
-- NodeJs (at least version 12, but older versions may work) for the javascript examples
+- Node.js (at least version 12, but older versions may work) for the javascript examples
 - Rust (at least version 1.4, but older versions may work) and Cargo for the Rust examples
 
 
@@ -37,8 +37,8 @@ find the shortest path between two cells in a maze.
       run each algorithm, plus how to find the shortest path through a maze.
 
 - JavaScript (NodeJs)
-    - all javascript code is located in the `nodejs` directory, run the main.js file:  `node main.js` to kick off
-    an example script that will generate a 10x15 maze using each maze generation algorithm.
+    - all javascript code is located in the `nodejs` directory
+    - run the main.js file:  `node main.js` to kick off an example script that will generate a 10x15 maze using each maze generation algorithm.
     
 - Python
     - all Python code is located in the `python` directory. 

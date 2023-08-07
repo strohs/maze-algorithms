@@ -28,7 +28,6 @@ impl GridMaze {
     /// weight of 1 and its default `pos` value will be its one-dimensional index within the maze.
     pub fn new(rows: usize, cols: usize) -> Self {
         let nodes = (0..(rows * cols))
-            .into_iter()
             .map(|i| GridNode::new(i, 1))
             .collect();
 

@@ -21,7 +21,7 @@ fn main() {
     let maze = hunt_kill::generate(height, width);
     println!("{}", &maze);
 
-    // find shortest path from northwest corner to southwest corner
+    // find shortest path from northwest corner to southeast corner
     println!("hunt-and-kill {}x{} shortest path", &height, &width);
     let se_corner_idx = GridMaze::idx_1d(height - 1, width - 1, width);
     let shortest_path = find_shortest_path(&maze, maze[0], maze[se_corner_idx]);
