@@ -14,7 +14,7 @@ fn main() {
         _ => (10, 15),
     };
 
-    // going to use recurive backtracker as the starting maze. Any other algorithm that
+    // going to use recursive backtracker as the starting maze. Any other algorithm that
     // generates a perfect maze would also work
     println!("recursive bactracker unbraided {}x{}", &height, &width);
     let mut maze = recursive_backtracker::generate(height, width);
@@ -22,7 +22,7 @@ fn main() {
 
     println!("dead ends = {}", maze.dead_ends().len());
     println!("recursive back-tracker BRAIDED {}x{}", &height, &width);
-    // remove 50 percent of dead ends
+    // remove 80 percent of dead ends
     maze.braid(0.8);
     println!("{}", &maze);
 }

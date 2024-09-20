@@ -1,4 +1,4 @@
-//// Modules that generate random mazes
+/// Modules that generate random mazes
 
 pub mod aldous_broder;
 pub mod binary_tree;

@@ -82,11 +82,11 @@ impl GridMaze {
     /// creating a link from node1 => node2,  a link is also created from node2 => node1
     pub fn link(&mut self, node1: &GridNode, node2: &GridNode, bi_link: bool) {
         self.links.entry(node1.pos())
-            .or_insert_with(Vec::new)
+            .or_default()
             .push(node2.pos());
         if bi_link {
             self.links.entry(node2.pos())
-                .or_insert_with(Vec::new)
+                .or_default()
                 .push(node1.pos());
         }
     }
@@ -210,7 +210,7 @@ impl GridMaze {
 }
 
 
-/// This implmentation of Rust's `Index` trait will allow indexing into this maze using a single
+/// This implementation of Rust's `Index` trait will allow indexing into this maze using a single
 /// usize value that represents the one-dimensional index of the Node you wish to retrieve
 impl Index<usize> for GridMaze {
     type Output = GridNode;

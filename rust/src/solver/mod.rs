@@ -1,4 +1,4 @@
-//// modules for solving (finding a path through) a maze
+/// modules for solving (finding a path through) a maze
 
 /// holds distances between cells of a maze
 pub mod distances;
